@@ -1,0 +1,302 @@
+{
+    "File version": 60002,
+	   
+	// Komodo CXP 
+    "Device":
+	{
+	    "X": 1 // Just first dummy entry - no meaning
+		
+		,"system_capabilities" : [
+		"0x200"
+		//,"0x200000" //SYSTEM_CAPABLE_FAN_CONTROLLER
+		]
+		//,"system_capabilities_off" : "0x200"
+		
+		,"bar_memory_filtered": [
+			{"bar": -1} // Just first dummy entry
+			
+			//,{"bar": 0, "start": "0x6000", "end": "0x6003", "faked_content" : "0x00000000" } // emulating "PWM_capabilitiesReg" 
+			
+			//,{"bar": 0, "start": "0x6004", "end": "0x6007", "faked_content" : "0xA8610000" } // emulating "PWM_periodReg", 0x61A8 == 25000
+			//,{"bar": 0, "start": "0x6008", "end": "0x600B", "faked_content" : "0xC4090000" } // emulating "PWM_duty_cycleReg" 0x09C4 == 2500
+			 
+			           /* Calculation reg value: reg = (requested_temp + 265)*1024/693. */
+			           /* if we want maximum temperature threshold = 55 C, set the register to 472(472.8427128427128), i.e. reg = (55 + 265)*1024/693 */
+			//,{"bar": 0, "start": "0x600C", "end": "0x600F", "faked_content" : "0x0C020000" } // emulating "PWM_max_tempReg" 0x20C=524 (should be 90 degrees)  
+			//,{"bar": 0, "start": "0x6010", "end": "0x6014", "faked_content" : "0xD9010000" } // emulating "PWM_min_tempReg" 0x1D8=472 (should be 55 degrees)
+			
+			/* Generic filters                              */
+			/* Add to registry:                             */
+			/* "KYHW.FilteredRange.warns" (default 1)       */
+			/* "KYHW.FilteredRange.write_warns" (default 1) */
+			/* "KYHW.FilteredRange.read_warns" (default 1)  */
+			//,{"bar": 0, "start": "0x000000", "end": "0xfffffffffff" },
+			//,{"bar": 2, "start": "0x0", "end": "0x9000" }
+		]
+		
+		,"pocxp_i2c_monitor_min_rev" : 3
+		
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		,"on_board_memory" : 1024 // 1024 MB
+		,"sodimm_check_address" : "0x7100"
+		,"sodimm_required" : false
+		
+		
+		,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+		,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+		,"generation" : 1
+		
+		,"io_features_value" : "0x28008884"  // [3..0] Encoders - 4, [7..4] Timers - 8, [11..8] Stream Triggers - 8, 
+		                                     // [15..12] Camera Triggers - 8, [31..24] LineIO - 40 (Default: 0x28004444)
+
+		
+		,"InitialParameterValues": {
+			"DevicePciGenerationMin": 3
+			,"DevicePciLanesMin": 8
+		}
+		/*
+		,"CleanupSequence": [
+			{"comment": "nSupportedStreams"}
+			,{"bar": 0, "address": ["0x00402000", "0x0"], "value": 0} // stream_disable
+			,{"bar": 0, "address": ["0x00402000", "0x0"], "value": 2} // stream_reset"
+			,{"bar": 0, "address": ["0x00403000", "0x0"], "value": 0} // stream_disable
+			,{"bar": 0, "address": ["0x00403000", "0x0"], "value": 2} // stream_reset"
+			,{"bar": 0, "address": ["0x00404000", "0x0"], "value": 0} // stream_disable
+			,{"bar": 0, "address": ["0x00404000", "0x0"], "value": 2} // stream_reset"
+			,{"bar": 0, "address": ["0x00405000", "0x0"], "value": 0} // stream_disable
+			,{"bar": 0, "address": ["0x00405000", "0x0"], "value": 2} // stream_reset"
+
+			,{"comment": "DMAControllers"}
+			,{"bar": 2, "address": ["0x00008000", "0x40", "0x0"], "value": 2} //if (refKYHW_HANDLE_STRUCT.m_bDmaMetainfo) csr_base + CSR_INTERRUPT_META_DATA_OFFSET + META_CONTROL_REGISTER_OFFSET
+			,{"bar": 2, "address": ["0x00008000", "0x4"        ], "value": 1} // reconstruct 'stop_dispatcher': csr_base + CSR_CONTROL_REG => CSR_STOP_MASK
+			,{"bar": 2, "address": ["0x00008000", "0x4"        ], "value": 2} // reconstruct 'reset_dispatcher': csr_base + CSR_CONTROL_REG => CSR_RESET_MASK ( == (1<<1))
+			,{"bar": 2, "address": ["0x00008000", "0x4"        ], "value": "0x200"} // see implementation of stop_fetch for command to be send in order to stop DMA: csr_base + CSR_CONTROL_REG => CSR_STOP_FETCH_MASK ( == (1<<9))
+			
+			,{"bar": 2, "address": ["0x00008100", "0x40", "0x0"], "value": 2} 
+			,{"bar": 2, "address": ["0x00008100", "0x4"        ], "value": 1} 
+			,{"bar": 2, "address": ["0x00008100", "0x4"        ], "value": 2} 
+			,{"bar": 2, "address": ["0x00008100", "0x4"        ], "value": "0x200"}
+			
+			,{"bar": 2, "address": ["0x00008200", "0x40", "0x0"], "value": 2} 
+			,{"bar": 2, "address": ["0x00008200", "0x4"        ], "value": 1} 
+			,{"bar": 2, "address": ["0x00008200", "0x4"        ], "value": 2} 
+			,{"bar": 2, "address": ["0x00008200", "0x4"        ], "value": "0x200"}
+			
+			,{"bar": 2, "address": ["0x00008300", "0x40", "0x0"], "value": 2} 
+			,{"bar": 2, "address": ["0x00008300", "0x4"        ], "value": 1} 
+			,{"bar": 2, "address": ["0x00008300", "0x4"        ], "value": 2} 
+			,{"bar": 2, "address": ["0x00008300", "0x4"        ], "value": "0x200"}
+			
+			,{"bar": 2, "address": ["0x00008400", "0x40", "0x0"], "value": 2} 
+			,{"bar": 2, "address": ["0x00008400", "0x4"        ], "value": 1} 
+			,{"bar": 2, "address": ["0x00008400", "0x4"        ], "value": 2} 
+			,{"bar": 2, "address": ["0x00008400", "0x4"        ], "value": "0x200"}
+			
+			,{"bar": 2, "address": ["0x00008500", "0x40", "0x0"], "value": 2} 
+			,{"bar": 2, "address": ["0x00008500", "0x4"        ], "value": 1} 
+			,{"bar": 2, "address": ["0x00008500", "0x4"        ], "value": 2} 
+			,{"bar": 2, "address": ["0x00008500", "0x4"        ], "value": "0x200"}
+			
+			,{"bar": 2, "address": ["0x00008600", "0x40", "0x0"], "value": 2} 
+			,{"bar": 2, "address": ["0x00008600", "0x4"        ], "value": 1} 
+			,{"bar": 2, "address": ["0x00008600", "0x4"        ], "value": 2} 
+			,{"bar": 2, "address": ["0x00008600", "0x4"        ], "value": "0x200"}
+			
+			,{"bar": 2, "address": ["0x00008700", "0x40", "0x0"], "value": 2} 
+			,{"bar": 2, "address": ["0x00008700", "0x4"        ], "value": 1} 
+			,{"bar": 2, "address": ["0x00008700", "0x4"        ], "value": 2} 
+			,{"bar": 2, "address": ["0x00008700", "0x4"        ], "value": "0x200"}
+		]
+		*/
+	}
+	
+	,"Interrupts": [
+		{
+			"aux_base": "0x01C0"
+			,"interrupt": 11
+		}
+	]
+	
+	,"CSRController":
+	{
+		"base": "0x481000" // Valid only if bit 8 of system capabilities is set (SYSTEM_CSR_CONFIGURED)
+	}
+	
+	,"FanController": // Valid only if bit 21 of system capabilities is set (SYSTEM_CAPABLE_FAN_CONTROLLER)
+	{
+	    "bar": 0 
+		,"base_address": "0x6000" 
+		,"capabilities_address": "0x0"
+		//-----------------------------
+		,"formula_type": 1 // 1 - Calculation formula for Device type I, 2 - Calculation formula for Device type II
+	}
+	
+	,"ArbiterController":
+	{
+		"base": "0x490000" // Valid only if bit 10 of system capabilities is set (SYSTEM_ARBITER_CONFIGURED)
+		,"Mask": "0x4"
+		,"Select": "0x0"
+		,"LinkOrder": "0x8"
+		,"ResetAddr": "0xC"
+	}
+	
+	,"DecoderController":
+	{
+		"base": "0x482000" // Valid only if bit 20 of system capabilities is set (SYSTEM_DECODER_CONFIGURED)
+	}
+	
+	,"HostIPController":
+	{
+		"host_ip_bases": [
+		     "0x400000",
+		     "0x410000",
+		     "0x420000",
+		     "0x430000",
+		     "0x440000",
+		     "0x450000",
+		     "0x460000",
+		     "0x470000"
+		]
+		
+		,"supported_speeds": [
+		     "0x28" // LINK_SPEED_CXP1   1.25  Gbps
+		    ,"0x30" // LINK_SPEED_CXP2   2.5   Gbps
+		    ,"0x38" // LINK_SPEED_CXP3   3.125 Gbps
+		    ,"0x40" // LINK_SPEED_CXP5   5     Gbps
+		    ,"0x48" // LINK_SPEED_CXP6   6.25  Gbps
+		    //,"0x50" // LINK_SPEED_CXP10  10    Gbps
+		    //,"0x58" // LINK_SPEED_CXP12  12.5  Gbps
+		]
+	}
+	
+	,"DmaChannels": [
+		{
+			/* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+			"ChannelDirection": 1
+			,"csr_base": "0x8000"
+			,"interrupt": 1
+			,"dmaChannelIndex": 0
+			//,"isVirtual": true
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8100"
+			,"interrupt": 5
+			,"dmaChannelIndex": 1
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8200"
+			,"interrupt": 7
+			,"dmaChannelIndex": 2
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8300"
+			,"interrupt": 9
+			,"dmaChannelIndex": 3
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8400"
+			,"interrupt": 12
+			,"dmaChannelIndex": 4
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8500"
+			,"interrupt": 13
+			,"dmaChannelIndex": 5
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8600"
+			,"interrupt": 14
+			,"dmaChannelIndex": 6
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8700"
+			,"interrupt": 15
+			,"dmaChannelIndex": 7
+		}
+	]
+	
+	,"PoCXP_Monitoring":
+	{
+		"Channels" : [
+			 {"slave": "0x90", "volt" : "0xBC", "curr" : "0xFC"}
+			,{"slave": "0x90", "volt" : "0xAC", "curr" : "0xEC"}
+			,{"slave": "0x90", "volt" : "0x9C", "curr" : "0xDC"}
+			,{"slave": "0x90", "volt" : "0x8C", "curr" : "0xCC"}
+			,{"slave": "0x92", "volt" : "0x8C", "curr" : "0xCC"}
+			,{"slave": "0x92", "volt" : "0x9C", "curr" : "0xDC"}
+			,{"slave": "0x92", "volt" : "0xAC", "curr" : "0xEC"}
+			,{"slave": "0x92", "volt" : "0xBC", "curr" : "0xFC"}
+		],
+	    "I2CController": {"base": "0x200000", "clock_source_speed":125000000, "freq":80000, "TIPSleepTime" : 125}
+	}
+	
+	,"Sequences": [
+		{
+			"Trigger" : {"parameter" : "I2CReInit"}
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "KernelTraceCountersSet"}
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "BarWatchAdd" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "BarWatchRemove" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "InterruptReadTimeout" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "DeviceStreamControlReset" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"parameter" : ""}
+			]
+		}
+    ]
+}

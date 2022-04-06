@@ -1,0 +1,1229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RegisterDescription 
+	ModelName="Chameleon_CoaXPress_Camera_Simulator"
+	VendorName="KAYA_Instruments_Ltd"
+	ToolTip="Chameleon_CoaXPress_Camera_Simulator"
+	StandardNameSpace="None"
+	SchemaMajorVersion="1"
+	SchemaMinorVersion="1"
+	SchemaSubMinorVersion="0"
+	MajorVersion="1"
+	MinorVersion="1"
+	SubMinorVersion="0"
+	ProductGuid="AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+	VersionGuid="11111111-2222-3333-4444-555555555555"
+	xmlns="http://www.genicam.org/GenApi/Version_1_1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.genicam.org/GenApi/Version_1_1
+	http://www.genicam.org/GenApi/GenApiSchema_Version_1_1.xsd">
+	
+	<!-- Root categories -->
+	
+	<Group Comment="RootCategory">
+		<Category Name="Root" NameSpace="Standard">
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>DeviceControl</pFeature>
+			<pFeature>ImageFormatControl</pFeature>
+			<pFeature>AcquisitionControl</pFeature>
+			<pFeature>TransportLayerControl</pFeature>
+			<pFeature>Support</pFeature>
+			<pFeature>CXP</pFeature>
+		</Category>
+	</Group>
+	
+	<!-- Sub categories -->
+
+	<Group Comment="SubCategories">
+		<!-- Device Control -->
+		<Category Name="DeviceControl" NameSpace="Standard">
+			<ToolTip>Category for Device information and control.</ToolTip>
+            <Description>Category for Device information and control.</Description>
+            <DisplayName>Device Control</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>DeviceVendorName</pFeature>
+			<pFeature>DeviceModelName</pFeature>
+			<pFeature>DeviceManufacturerInfo</pFeature>
+			<pFeature>DeviceVersion</pFeature>
+			<pFeature>DeviceFirmwareVersion</pFeature>
+			<pFeature>DeviceID</pFeature>
+			<pFeature>DeviceReset</pFeature>
+		</Category>
+		
+		<!-- Image Format Control -->
+		<Category Name="ImageFormatControl" NameSpace="Standard">
+			<ToolTip>Category for Image Format Control features.</ToolTip>
+			<Description>Category for Image Format Control features.</Description>
+			<DisplayName>Image Format Control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>Width</pFeature>
+			<pFeature>Height</pFeature>
+			<pFeature>WidthMax</pFeature>
+			<pFeature>HeightMax</pFeature>
+			<pFeature>PixelFormat</pFeature>
+			<pFeature>LUTValueAll</pFeature>
+		</Category>
+		
+		<!-- Acquisition Control -->
+		<Category Name="AcquisitionControl" NameSpace="Standard">
+			<ToolTip>Category for the acquisition and trigger control features.</ToolTip>
+            <Description>Category for the acquisition and trigger control features.</Description>
+            <DisplayName>Acquisition Control</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>AcquisitionMode</pFeature>
+			<pFeature>AcquisitionStart</pFeature>
+			<pFeature>AcquisitionStop</pFeature>
+			<!-- <pFeature>AcquisitionFrameCount</pFeature>-->
+			<pFeature>AcquisitionFrameRate</pFeature>
+		</Category>
+		
+		<!-- Transport Layer Control -->
+		<Category Name="TransportLayerControl" NameSpace="Standard">
+			<ToolTip>Category that contains the transport layer control features.</ToolTip>
+			<Description>Category that contains the transport layer control features.</Description>
+			<DisplayName>Transport Layer Control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>PayloadSize</pFeature>
+			<pFeature>DeviceTapGeometry</pFeature>
+		</Category>
+		
+		<!-- Support -->
+		<Category Name="Support" NameSpace="Standard">
+			<ToolTip>Category that contains the support features.</ToolTip>
+			<Description>Category that contains the support features.</Description>
+			<DisplayName>Support</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>Standard</pFeature>
+			<pFeature>Revision</pFeature>
+			<pFeature>XmlManifestSize</pFeature>
+			<pFeature>XmlManifestSelector</pFeature>
+			<pFeature>XmlVersion</pFeature>
+			<pFeature>XmlSchemaVersion</pFeature>
+			<pFeature>XmlUrlAddress</pFeature>
+			<pFeature>lidcPointer</pFeature>
+		</Category>
+		
+		<!-- CXP -->
+		<Category Name="CXP" NameSpace="Standard">
+			<ToolTip>Category that contains the CXP features.</ToolTip>
+			<Description>Category that contains the CXP features.</Description>
+			<DisplayName>CXP</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>ConnectionReset</pFeature>
+			<pFeature>DeviceConnectionID</pFeature>
+			<pFeature>MasterHostConnectionID</pFeature>
+			<pFeature>ControlPacketDataSize</pFeature>
+			<pFeature>StreamPacketDataSize</pFeature>
+			<pFeature>ConnectionConfig</pFeature>
+			<pFeature>ConnectionConfigDefault</pFeature>
+			<pFeature>TestMode</pFeature>
+			<pFeature>TestErrorCountSelector</pFeature>
+			<pFeature>TestErrorCount</pFeature>
+			<pFeature>TestPacketCountTx</pFeature>
+			<pFeature>TestPacketCountRx</pFeature>
+			<pFeature>Image1StreamID</pFeature>
+		</Category>
+	</Group>
+	
+	<!-- DeviceControl -->
+	
+	<Group Comment="DeviceControl">
+		<!-- Device Vendor Name -->
+		<StringReg Name="DeviceVendorName" NameSpace="Standard">
+			<ToolTip>Name of the manufacturer of the device.</ToolTip>
+            <Description>Name of the manufacturer of the device.</Description>
+            <DisplayName>Device Vendor Name</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2000</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>
+		
+		<!-- Device Model Name -->
+		<StringReg Name="DeviceModelName" NameSpace="Standard">
+			<ToolTip>This feature provides the model of the device.</ToolTip>
+            <Description>This feature provides the model of the device.</Description>
+            <DisplayName>Device Model Name</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2020</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>
+
+		<!-- Device Manufacturer Info -->
+		<StringReg Name="DeviceManufacturerInfo" NameSpace="Standard">
+			<ToolTip>This feature provides extended manufacturer information about the device.</ToolTip>
+            <Description>This feature provides extended manufacturer information about the device.</Description>
+            <DisplayName>Device Manufacturer Info</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2040</Address>
+            <Length>48</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>
+		
+		<!-- Device Version -->
+		<StringReg Name="DeviceVersion" NameSpace="Standard">
+			<ToolTip>This feature provides the version of the device.</ToolTip>
+            <Description>This feature provides the version of the device.</Description>
+            <DisplayName>Device Version</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2070</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>
+		
+		<!-- Device Firmware Version -->
+		<StringReg Name="DeviceFirmwareVersion" NameSpace="Standard">
+            <ToolTip>Version of the firmware in the device.</ToolTip>
+            <Description>Version of the firmware in the device.</Description>
+            <DisplayName>Device Firmware Version</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2090</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+            <pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+        </StringReg>		
+		
+		<!-- Device ID -->
+		<StringReg Name="DeviceID" NameSpace="Standard">
+            <ToolTip>This feature stores a camera identifier.</ToolTip>
+            <Description>This feature stores a camera identifier.</Description>
+            <DisplayName>Device ID</DisplayName>
+            <Visibility>Expert</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x20B0</Address>
+            <Length>16</Length>
+            <AccessMode>RO</AccessMode>
+            <pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+        </StringReg>
+
+		<!-- Device Reset -->
+		<Command Name="DeviceReset" NameSpace="Standard">
+            <ToolTip>Resets the device to its power up state.</ToolTip>
+            <Description>Resets the device to its power up state.</Description>
+            <DisplayName>Device Reset</DisplayName>
+            <Visibility>Guru</Visibility>
+            <ImposedAccessMode>WO</ImposedAccessMode>
+            <pValue>DeviceResetReg</pValue>
+            <CommandValue>1</CommandValue>
+        </Command>
+		<IntReg Name="DeviceResetReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4000</Address>
+			<Length>4</Length>
+			<AccessMode>WO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	</Group>
+	
+	<!-- ImageFormatControl -->
+	<Group Comment="ImageFormatControl">
+		<!-- Width -->
+		<Integer Name="Width" NameSpace="Standard">
+			<ToolTip>This feature represents the actual image width expelled by the camera (in pixels).</ToolTip>
+			<Description>This feature represents the actual image width expelled by the camera (in pixels).</Description>
+			<DisplayName>Width</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>WidthReg</pValue>
+			<pMax>WidthMaxReg</pMax>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="WidthReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6000</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- WidthMax -->
+		<Integer Name="WidthMax" NameSpace="Standard">
+			<ToolTip>Maximum width of the image(in pixels).</ToolTip>
+			<Description>Maximum width of the image(in pixels).</Description>
+			<DisplayName>Width Max</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>WidthMaxReg</pValue>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="WidthMaxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x600C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Height -->
+		<Integer Name="Height" NameSpace="Standard">
+			<ToolTip>This feature represents the actual image height expelled by the camera (in pixels).</ToolTip>
+			<Description>This feature represents the actual image height expelled by the camera (in pixels).</Description>
+			<DisplayName>Height</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>HeightReg</pValue>
+			<pMax>HeightMaxReg</pMax>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="HeightReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6004</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- HeightMax -->
+		<Integer Name="HeightMax" NameSpace="Standard">
+			<ToolTip>Maximum height of the image(in pixels).</ToolTip>
+			<Description>Maximum height of the image(in pixels).</Description>
+			<DisplayName>Height Max</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>HeightMaxReg</pValue>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="HeightMaxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6010</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Pixel Format -->
+		<Enumeration Name="PixelFormat" NameSpace="Standard">
+			<ToolTip>This feature indicates the format of the pixel to use during the acquisition.</ToolTip>
+			<Description>This feature indicates the format of the pixel to use during the acquisition.</Description>
+			<DisplayName>Pixel Format</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="Mono8" NameSpace="Standard">
+				<DisplayName>Mono 8</DisplayName>
+				<Value>0x00000101</Value>
+			</EnumEntry>
+			<EnumEntry Name="Mono10" NameSpace="Standard">
+				<DisplayName>Mono 10</DisplayName>
+				<Value>0x00000102</Value>
+			</EnumEntry>
+			<EnumEntry Name="Mono12" NameSpace="Standard">
+				<DisplayName>Mono 12</DisplayName>
+				<Value>0x00000103</Value>
+			</EnumEntry>
+			<EnumEntry Name="Mono14" NameSpace="Standard">
+				<DisplayName>Mono 14</DisplayName>
+				<Value>0x00000104</Value>
+			</EnumEntry>			
+			<EnumEntry Name="Mono16" NameSpace="Standard">
+				<DisplayName>Mono 16</DisplayName>
+				<Value>0x00000105</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR8" NameSpace="Standard">
+				<DisplayName>BayerGR8</DisplayName>
+				<Value>0x00000311</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR10" NameSpace="Standard">
+				<DisplayName>BayerGR10</DisplayName>
+				<Value>0x00000312</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR12" NameSpace="Standard">
+				<DisplayName>BayerGR12</DisplayName>
+				<Value>0x00000313</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR14" NameSpace="Standard">
+				<DisplayName>BayerGR14</DisplayName>
+				<Value>0x00000314</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR16" NameSpace="Standard">
+				<DisplayName>BayerGR16</DisplayName>
+				<Value>0x00000315</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG8" NameSpace="Standard">
+				<DisplayName>BayerRG8</DisplayName>
+				<Value>0x00000321</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG10" NameSpace="Standard">
+				<DisplayName>BayerRG10</DisplayName>
+				<Value>0x00000322</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG12" NameSpace="Standard">
+				<DisplayName>BayerRG12</DisplayName>
+				<Value>0x00000323</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG14" NameSpace="Standard">
+				<DisplayName>BayerRG14</DisplayName>
+				<Value>0x00000324</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG16" NameSpace="Standard">
+				<DisplayName>BayerRG16</DisplayName>
+				<Value>0x00000325</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB8" NameSpace="Standard">
+				<DisplayName>BayerGB8</DisplayName>
+				<Value>0x00000331</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB10" NameSpace="Standard">
+				<DisplayName>BayerGB10</DisplayName>
+				<Value>0x00000332</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB12" NameSpace="Standard">
+				<DisplayName>BayerGB12</DisplayName>
+				<Value>0x00000333</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB14" NameSpace="Standard">
+				<DisplayName>BayerGB14</DisplayName>
+				<Value>0x00000334</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB16" NameSpace="Standard">
+				<DisplayName>BayerGB16</DisplayName>
+				<Value>0x00000335</Value>
+			</EnumEntry>			
+			<EnumEntry Name="BayerBG8" NameSpace="Standard">
+				<DisplayName>BayerBG8</DisplayName>
+				<Value>0x00000341</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG10" NameSpace="Standard">
+				<DisplayName>BayerBG10</DisplayName>
+				<Value>0x00000342</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG12" NameSpace="Standard">
+				<DisplayName>BayerBG12</DisplayName>
+				<Value>0x00000343</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG14" NameSpace="Standard">
+				<DisplayName>BayerBG14</DisplayName>
+				<Value>0x00000344</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG16" NameSpace="Standard">
+				<DisplayName>BayerBG16</DisplayName>
+				<Value>0x00000345</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB8" NameSpace="Standard">
+				<DisplayName>RGB8</DisplayName>
+				<Value>0x00000401</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB10" NameSpace="Standard">
+				<DisplayName>RGB10</DisplayName>
+				<Value>0x00000402</Value>
+			</EnumEntry>
+			<EnumEntry Name="RGB12" NameSpace="Standard">
+				<DisplayName>RGB12</DisplayName>
+				<Value>0x00000403</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB14" NameSpace="Standard">
+				<DisplayName>RGB14</DisplayName>
+				<Value>0x00000404</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB16" NameSpace="Standard">
+				<DisplayName>RGB16</DisplayName>
+				<Value>0x00000405</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA8" NameSpace="Standard">
+				<DisplayName>RGBA8</DisplayName>
+				<Value>0x00000501</Value>
+			</EnumEntry>
+			<EnumEntry Name="RGBA10" NameSpace="Standard">
+				<DisplayName>RGBA10</DisplayName>
+				<Value>0x00000502</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA12" NameSpace="Standard">
+				<DisplayName>RGBA12</DisplayName>
+				<Value>0x00000503</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA14" NameSpace="Standard">
+				<DisplayName>RGBA14</DisplayName>
+				<Value>0x00000504</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA16" NameSpace="Standard">
+				<DisplayName>RGBA16</DisplayName>
+				<Value>0x00000505</Value>
+			</EnumEntry>
+			<pValue>PixelFormatReg</pValue>
+		</Enumeration>
+		
+		<IntReg Name="PixelFormatReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6008</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		
+		<Register Name="LUTValueAll" NameSpace="Standard">
+            <ToolTip>Accesses all the LUT coefficients in a single access without using individual LUTIndex.</ToolTip>
+            <Description>Accesses all the LUT coefficients in a single access without using individual LUTIndex.</Description>
+            <DisplayName>LUTValue All</DisplayName>
+            <Visibility>Guru</Visibility>
+            <Address>0x800</Address>
+			<!--<pAddress>CONFIGCSR_BASE</pAddress>-->
+            <Length>1024</Length>
+            <AccessMode>RW</AccessMode>
+            <pPort>Device</pPort>
+            <Cachable>NoCache</Cachable>
+        </Register>
+		
+	</Group>
+	
+	<!-- AcquisitionControl  -->
+
+	<Group Comment="AcquisitionControl">
+		<!-- Acquisition Mode -->
+		<Enumeration Name="AcquisitionMode" NameSpace="Standard">
+			<ToolTip>This feature controls the acquisition mode of the device.</ToolTip>
+			<Description>This feature controls the acquisition mode of the device.</Description>
+			<DisplayName>Acquisition Mode</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="Continuous" NameSpace="Standard">
+				<DisplayName>Continuous</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="SingleFrame" NameSpace="Standard">
+				<DisplayName>Single Frame</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<EnumEntry Name="MultiFrame" NameSpace="Standard">
+				<DisplayName>Multi Frame</DisplayName>
+				<Value>2</Value>
+			</EnumEntry>
+			<pValue>AcquisitionModeReg</pValue>
+		</Enumeration>
+		<IntReg Name="AcquisitionModeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6018</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Acquisition Start -->
+		<Command Name="AcquisitionStart" NameSpace="Standard">
+			<ToolTip>This feature starts the Acquisition of the device.</ToolTip>
+			<Description>This feature starts the Acquisition of the device.</Description>
+			<DisplayName>Acquisition Start</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>AcquisitionStartReg</pValue>
+			<CommandValue>1</CommandValue>
+		</Command>
+		<IntReg Name="AcquisitionStartReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x601C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Acquisition Stop -->
+		<Command Name="AcquisitionStop" NameSpace="Standard">
+			<ToolTip>This feature stops the Acquisition of the device at the end of the current Frame.</ToolTip>
+			<Description>This feature stops the Acquisition of the device at the end of the current Frame.</Description>
+			<DisplayName>Acquisition Stop</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>AcquisitionStopReg</pValue>
+			<CommandValue>0</CommandValue>
+		</Command>
+		<IntReg Name="AcquisitionStopReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x601C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	
+		<!-- AcquisitionFrameCount -->
+		<!--<Integer Name="AcquisitionFrameCount" NameSpace="Standard">
+			<ToolTip>Number of frames to be sent in MultiFrame AcquisitionMode.</ToolTip>
+            <Description>Number of frames to be sent in MultiFrame AcquisitionMode.</Description>
+			<DisplayName>Acquisition Frame Count</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>AcquisitionFrameCountReg</pValue>
+			<Min>1</Min>
+		</Integer>
+		<IntReg Name="AcquisitionFrameCountReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6020</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>-->
+		
+		<!-- Acquisition Frame Rate -->
+		<Float Name="AcquisitionFrameRate" NameSpace="Standard">
+            <ToolTip>KAYA Frame rate in Hz.</ToolTip>
+            <Description>KAYA Frame rate in Hz.</Description>
+            <DisplayName>Acquisition Frame Rate</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+            <pValue>pFrameRateReg</pValue>
+			<Unit>Hz</Unit>
+			<Representation>Linear</Representation>
+        </Float>
+		<FloatReg Name="pFrameRateReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6024</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>WidthReg</pInvalidator>
+			<pInvalidator>HeightReg</pInvalidator>
+			<pInvalidator>PixelFormatReg</pInvalidator>
+			<Endianess>BigEndian</Endianess>
+   		 </FloatReg>
+	</Group>
+	
+	<!-- TransportLayerControl -->
+
+	<Group Comment="TransportLayerControl">
+		<!-- Payload Size -->
+		<Integer Name="PayloadSize" NameSpace="Standard">
+			<ToolTip>Provides the number of bytes transferred for each image or chunk on the stream channel.</ToolTip>
+            <Description>Provides the number of bytes transferred for each image or chunk on the stream channel. This includes any end-of-line, end-of-frame statistics or other stamp data. This is the total size of data payload for a data block.</Description>
+            <DisplayName>Payload Size</DisplayName>
+            <Visibility>Expert</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pPayloadSizeReg</pValue>
+		</Integer>
+		<IntSwissKnife Name="pPayloadSizeReg">
+			<pVariable Name="WIDTH">WidthReg</pVariable>
+			<pVariable Name="HEIGHT">HeightReg</pVariable>
+			<pVariable Name="PIXELIF">PixelFormatReg</pVariable>
+			<Formula>((PIXELIF &amp; 0xF) &lt;= 1) ? (WIDTH*HEIGHT) : (WIDTH*HEIGHT*2)</Formula>
+		</IntSwissKnife>
+		
+		<!-- DeviceTapGeometry -->
+		<Enumeration Name="DeviceTapGeometry" NameSpace="Standard">
+			<ToolTip>This device tap geometry feature describes the geometrical properties characterizing the taps of a camera as presented at the output of the device.</ToolTip>
+			<Description>This device tap geometry feature describes the geometrical properties characterizing the taps of a camera as presented at the output of the device.</Description>
+			<DisplayName>Device tap geometry</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<EnumEntry Name="Geometry_1X_1Y" NameSpace="Standard">
+				<DisplayName>1X-1Y</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<pValue>DeviceTapGeometryReg</pValue>
+		</Enumeration>
+		<IntReg Name="DeviceTapGeometryReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x6014</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	</Group>
+	
+	<!-- Support	-->
+	
+	<Group Comment="Support">
+		<!-- Standard -->
+		<Integer Name="Standard" NameSpace="Standard">
+			<ToolTip>Bootstrap register Standard.</ToolTip>
+			<Description>Bootstrap register Standard.</Description>
+			<DisplayName>Standard</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>StandardReg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="StandardReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0000</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Revision -->
+		<Integer Name="Revision" NameSpace="Standard">
+			<ToolTip>Bootstrap register Revision.</ToolTip>
+			<Description>Bootstrap register Revision.</Description>
+			<DisplayName>Revision</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>RevisionReg</pValue>
+		</Integer>
+		<IntReg Name="RevisionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0004</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlManifestSize -->
+		<Integer Name="XmlManifestSize" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlManifestSize.</ToolTip>
+			<Description>Bootstrap register XmlManifestSize.</Description>
+			<DisplayName>XmlManifestSize</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlManifestSizeReg</pValue>
+		</Integer>
+		<IntReg Name="XmlManifestSizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0008</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlManifestSelector -->
+		<Integer Name="XmlManifestSelector" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlManifestSelector.</ToolTip>
+			<Description>Bootstrap register XmlManifestSelector.</Description>
+			<DisplayName>XmlManifestSelector</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>XmlManifestSelectorReg</pValue>
+		</Integer>
+		<IntReg Name="XmlManifestSelectorReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x000C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlVersion -->
+		<Integer Name="XmlVersion" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlVersion.</ToolTip>
+			<Description>Bootstrap register XmlVersion.</Description>
+			<DisplayName>XmlVersion</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlVersionReg</pValue>
+		</Integer>
+		<IntReg Name="XmlVersionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0010</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlSchemaVersion -->
+		<Integer Name="XmlSchemaVersion" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlSchemaVersion.</ToolTip>
+			<Description>Bootstrap register XmlSchemaVersion.</Description>
+			<DisplayName>XmlSchemaVersion</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlSchemaVersionReg</pValue>
+		</Integer>
+		<IntReg Name="XmlSchemaVersionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0014</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlUrlAddress -->
+		<Integer Name="XmlUrlAddress" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlUrlAddress.</ToolTip>
+			<Description>Bootstrap register XmlUrlAddress.</Description>
+			<DisplayName>XmlUrlAddress</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlUrlAddressReg</pValue>
+		</Integer>
+		<IntReg Name="XmlUrlAddressReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0018</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- lidcPointer -->
+		<Integer Name="lidcPointer" NameSpace="Standard">
+			<ToolTip>Bootstrap register lidcPointer.</ToolTip>
+			<Description>Bootstrap register lidcPointer.</Description>
+			<DisplayName>lidcPointer</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>lidcPointerReg</pValue>
+		</Integer>
+		<IntReg Name="lidcPointerReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x001C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	</Group>
+	
+	<!-- CXP -->
+	<Group Comment="CXP">
+		<!-- ConnectionReset -->
+		<Integer Name="ConnectionReset" NameSpace="Standard">
+			<ToolTip>Bootstrap register ConnectionReset.</ToolTip>
+			<Description>Bootstrap register ConnectionReset.</Description>
+			<DisplayName>ConnectionReset</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>ConnectionResetReg</pValue>
+		</Integer>
+		<IntReg Name="ConnectionResetReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4000</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- DeviceConnectionID -->
+		<Integer Name="DeviceConnectionID" NameSpace="Standard">
+			<ToolTip>Bootstrap register DeviceConnectionID.</ToolTip>
+			<Description>Bootstrap register DeviceConnectionID.</Description>
+			<DisplayName>DeviceConnectionID</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>DeviceConnectionIDReg</pValue>
+		</Integer>
+		<IntReg Name="DeviceConnectionIDReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4004</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- MasterHostConnectionID -->
+		<Integer Name="MasterHostConnectionID" NameSpace="Standard">
+			<ToolTip>Bootstrap register MasterHostConnectionID.</ToolTip>
+			<Description>Bootstrap register MasterHostConnectionID.</Description>
+			<DisplayName>MasterHostConnectionID</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>MasterHostConnectionIDReg</pValue>
+		</Integer>
+		<IntReg Name="MasterHostConnectionIDReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4008</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- ControlPacketDataSize -->
+		<Integer Name="ControlPacketDataSize" NameSpace="Standard">
+			<ToolTip>Bootstrap register ControlPacketDataSize.</ToolTip>
+			<Description>Bootstrap register ControlPacketDataSize.</Description>
+			<DisplayName>ControlPacketDataSize</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>ControlPacketDataSizeReg</pValue>
+		</Integer>
+		<IntReg Name="ControlPacketDataSizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x400C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- StreamPacketDataSize -->
+		<Integer Name="StreamPacketDataSize" NameSpace="Standard">
+			<ToolTip>Bootstrap register StreamPacketDataSize.</ToolTip>
+			<Description>Bootstrap register StreamPacketDataSize.</Description>
+			<DisplayName>StreamPacketDataSize</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>StreamPacketDataSizeReg</pValue>
+		</Integer>
+		<IntReg Name="StreamPacketDataSizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4010</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- ConnectionConfig -->
+		<Enumeration Name="ConnectionConfig" NameSpace="Standard">
+			<ToolTip>Bootstrap register ConnectionConfig.</ToolTip>
+			<Description>Bootstrap register ConnectionConfig.</Description>
+			<DisplayName>ConnectionConfig</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="x1_CXP_1" NameSpace="Standard">
+				<DisplayName>1 Link 1.250 Gbps</DisplayName>
+				<Value>0x00010028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_2" NameSpace="Standard">
+				<DisplayName>1 Link 2.500 Gbps</DisplayName>
+				<Value>0x00010030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_3" NameSpace="Standard">
+				<DisplayName>1 Link 3.125 Gbps</DisplayName>
+				<Value>0x00010038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_5" NameSpace="Standard">
+				<DisplayName>1 Link 5.0 Gbps</DisplayName>
+				<Value>0x00010040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_6" NameSpace="Standard">
+				<DisplayName>1 Link 6.25 Gbps</DisplayName>
+				<Value>0x00010048</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_1" NameSpace="Standard">
+				<DisplayName>2 Link 1.250 Gbps</DisplayName>
+				<Value>0x00020028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_2" NameSpace="Standard">
+				<DisplayName>2 Link 2.500 Gbps</DisplayName>
+				<Value>0x00020030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_3" NameSpace="Standard">
+				<DisplayName>2 Link 3.125 Gbps</DisplayName>
+				<Value>0x00020038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_5" NameSpace="Standard">
+				<DisplayName>2 Link 5.0 Gbps</DisplayName>
+				<Value>0x00020040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_6" NameSpace="Standard">
+				<DisplayName>2 Link 6.25 Gbps</DisplayName>
+				<Value>0x00020048</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_1" NameSpace="Standard">
+				<DisplayName>4 Link 1.250 Gbps</DisplayName>
+				<Value>0x00040028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_2" NameSpace="Standard">
+				<DisplayName>4 Link 2.500 Gbps</DisplayName>
+				<Value>0x00040030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_3" NameSpace="Standard">
+				<DisplayName>4 Link 3.125 Gbps</DisplayName>
+				<Value>0x00040038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_5" NameSpace="Standard">
+				<DisplayName>4 Link 5.0 Gbps</DisplayName>
+				<Value>0x00040040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_6" NameSpace="Standard">
+				<DisplayName>4 Link 6.25 Gbps</DisplayName>
+				<Value>0x00040048</Value>
+			</EnumEntry>
+			<pValue>ConnectionConfigReg</pValue>
+		</Enumeration>
+		<IntReg Name="ConnectionConfigReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4014</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- ConnectionConfigDefault -->
+		<Enumeration Name="ConnectionConfigDefault" NameSpace="Standard">
+			<ToolTip>Bootstrap register ConnectionConfigDefault.</ToolTip>
+			<Description>Bootstrap register ConnectionConfigDefault.</Description>
+			<DisplayName>ConnectionConfigDefault</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="x1_CXP_1" NameSpace="Standard">
+				<DisplayName>1 Link 1.250 Gbps</DisplayName>
+				<Value>0x00010028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_2" NameSpace="Standard">
+				<DisplayName>1 Link 2.500 Gbps</DisplayName>
+				<Value>0x00010030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_3" NameSpace="Standard">
+				<DisplayName>1 Link 3.125 Gbps</DisplayName>
+				<Value>0x00010038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_5" NameSpace="Standard">
+				<DisplayName>1 Link 5.0 Gbps</DisplayName>
+				<Value>0x00010040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_6" NameSpace="Standard">
+				<DisplayName>1 Link 6.25 Gbps</DisplayName>
+				<Value>0x00010048</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_1" NameSpace="Standard">
+				<DisplayName>2 Link 1.250 Gbps</DisplayName>
+				<Value>0x00020028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_2" NameSpace="Standard">
+				<DisplayName>2 Link 2.500 Gbps</DisplayName>
+				<Value>0x00020030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_3" NameSpace="Standard">
+				<DisplayName>2 Link 3.125 Gbps</DisplayName>
+				<Value>0x00020038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_5" NameSpace="Standard">
+				<DisplayName>2 Link 5.0 Gbps</DisplayName>
+				<Value>0x00020040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_6" NameSpace="Standard">
+				<DisplayName>2 Link 6.25 Gbps</DisplayName>
+				<Value>0x00020048</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_1" NameSpace="Standard">
+				<DisplayName>4 Link 1.250 Gbps</DisplayName>
+				<Value>0x00040028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_2" NameSpace="Standard">
+				<DisplayName>4 Link 2.500 Gbps</DisplayName>
+				<Value>0x00040030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_3" NameSpace="Standard">
+				<DisplayName>4 Link 3.125 Gbps</DisplayName>
+				<Value>0x00040038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_5" NameSpace="Standard">
+				<DisplayName>4 Link 5.0 Gbps</DisplayName>
+				<Value>0x00040040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_6" NameSpace="Standard">
+				<DisplayName>4 Link 6.25 Gbps</DisplayName>
+				<Value>0x00040048</Value>
+			</EnumEntry>
+			<pValue>ConnectionConfigDefaultReg</pValue>
+		</Enumeration>
+		<IntReg Name="ConnectionConfigDefaultReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4018</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- TestMode -->
+		<Integer Name="TestMode" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestMode.</ToolTip>
+			<Description>Bootstrap register TestMode.</Description>
+			<DisplayName>TestMode</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestModeReg</pValue>
+		</Integer>
+		<IntReg Name="TestModeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x401C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- TestErrorCountSelector -->
+		<Integer Name="TestErrorCountSelector" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestErrorCountSelector.</ToolTip>
+			<Description>Bootstrap register TestErrorCountSelector.</Description>
+			<DisplayName>TestErrorCountSelector</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestErrorCountSelectorReg</pValue>
+			<pSelected>TestErrorCount</pSelected>
+		</Integer>
+		<IntReg Name="TestErrorCountSelectorReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4020</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- TestErrorCount -->
+		<Integer Name="TestErrorCount" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestErrorCount.</ToolTip>
+			<Description>Bootstrap register TestErrorCount.</Description>
+			<DisplayName>TestErrorCount</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestErrorCountReg</pValue>
+		</Integer>
+		<IntReg Name="TestErrorCountReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4024</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+
+		<!-- TestPacketCountTx -->
+		<Integer Name="TestPacketCountTx" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestPacketCountTx.</ToolTip>
+			<Description>Bootstrap register TestPacketCountTx.</Description>
+			<DisplayName>TestPacketCountTx</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestPacketCountTxReg</pValue>
+		</Integer>
+		<IntReg Name="TestPacketCountTxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4028</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+
+		<!-- TestPacketCountRx -->
+		<Integer Name="TestPacketCountRx" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestPacketCountRx.</ToolTip>
+			<Description>Bootstrap register TestPacketCountRx.</Description>
+			<DisplayName>TestPacketCountRx</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestPacketCountRxReg</pValue>
+		</Integer>
+		<IntReg Name="TestPacketCountRxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4030</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Image1StreamID -->
+		<Integer Name="Image1StreamID" NameSpace="Standard">
+			<ToolTip>Image1StreamID</ToolTip>
+			<Description>Image1StreamID.</Description>
+			<DisplayName>Image1StreamID</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>Image1StreamIDReg</pValue>
+		</Integer>
+		<IntReg Name="Image1StreamIDReg" NameSpace="Custom">
+			<Address>0x6030</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+	
+	</Group>
+		
+	<!-- Device -->
+	<Port Name="Device">
+		<ToolTip>Port giving access to the device.</ToolTip>
+		<Visibility>Invisible</Visibility>
+	</Port>
+</RegisterDescription>
+ 

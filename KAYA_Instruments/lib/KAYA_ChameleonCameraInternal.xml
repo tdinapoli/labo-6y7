@@ -1,0 +1,4879 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RegisterDescription 
+	ModelName="Chameleon_CoaXPress_Camera_Simulator"
+	VendorName="KAYA_Instruments_Ltd"
+	ToolTip="Chameleon_CoaXPress_Camera_Simulator"
+	StandardNameSpace="None"
+	SchemaMajorVersion="1" SchemaMinorVersion="1" SchemaSubMinorVersion="0"
+	MajorVersion="4" MinorVersion="0" SubMinorVersion="0"
+	ProductGuid="AAAAAAAA-BBBB-CCCC-DDDD-EEEEEEEEEEEE"
+	VersionGuid="11111111-2222-3333-4444-555555555555"
+	xmlns="http://www.genicam.org/GenApi/Version_1_1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.genicam.org/GenApi/Version_1_1
+	http://www.genicam.org/GenApi/GenApiSchema_Version_1_1.xsd">
+	
+	<StructReg Comment="HardwareBAR2_SystemCapabilitiesMirrorReg">
+		<Address>0x1FEFD850</Address>
+		<Length>8</Length>
+		<AccessMode>RO</AccessMode>
+		<pPort>Device</pPort>
+		<Cachable>NoCache</Cachable>
+		<Endianess>LittleEndian</Endianess>
+		<StructEntry Name="FW_System_Capable_AllBits">
+			<LSB>0</LSB>
+            <MSB>63</MSB>
+		</StructEntry>
+		<StructEntry Name="FW_System_Capable_DMA_Imp">
+			<Bit>0</Bit>
+		</StructEntry>
+		<StructEntry Name="FW_System_Capable_IO_Imp">
+			<Bit>1</Bit>
+		</StructEntry>
+		<StructEntry Name="FW_System_Capable_ImageProcessing_Imp">
+			<Bit>2</Bit>
+		</StructEntry>
+		<StructEntry Name="FW_System_Capable_VersionRegisters_Imp">
+			<Bit>9</Bit>
+		</StructEntry>
+	</StructReg>
+	
+	<StructReg Comment="IsImplementedAllBitsReg">
+		<Address>0x1FEFD7D0</Address>
+		<Length>4</Length>
+		<AccessMode>RO</AccessMode>
+		<pPort>Device</pPort>
+		<Cachable>NoCache</Cachable>
+		<Endianess>LittleEndian</Endianess>
+		<StructEntry Name="IsImplementedAllBits">
+			<LSB>0</LSB>
+            <MSB>31</MSB>
+		</StructEntry>
+		<StructEntry Name="CoaXPress_Revision_2_0_IsImplemented">
+			<Bit>0</Bit>
+		</StructEntry>
+		<StructEntry Name="NewSequencer_IsImplemented">
+			<Bit>1</Bit>
+		</StructEntry>
+		<StructEntry Name="TwelveG_IsImplemented">
+			<Bit>2</Bit>
+		</StructEntry>
+		<StructEntry Name="PoCXP_IsImplemented">
+			<Bit>3</Bit>
+		</StructEntry>
+		<StructEntry Name="SoftwareCommands_IsImplemented">
+			<Bit>4</Bit>
+		</StructEntry>
+	</StructReg>
+		
+	<IntSwissKnife Name="Not_FW_System_Capable_VersionRegisters_Imp">
+		<pVariable Name="VER_IMP">FW_System_Capable_VersionRegisters_Imp</pVariable>
+		<Formula>(VER_IMP = 1) ? 0 : 1</Formula>
+	</IntSwissKnife>
+	<Integer Name="CoaXPress_Revision_1_0_IsImplemented">
+	  <Value>1</Value>
+	</Integer>
+	<Integer Name="CoaXPress_Revision_1_1_IsImplemented">
+	  <Value>0</Value>
+	</Integer>
+	
+	<Integer Name="KAYADebugVisible">
+	  <ImposedAccessMode>RO</ImposedAccessMode>
+	  <Value>0</Value>
+	</Integer>
+	
+	<!--<Integer Name="CoaXPress_Revision_2_0_IsImplemented">
+		<Extension>
+			<KAYADebug>true</KAYADebug>
+		</Extension> 
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<Value>0</Value>
+	</Integer>-->
+	<IntSwissKnife Name="CoaXPress_Revision_2_0_NotImplemented">
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<pVariable Name="V">CoaXPress_Revision_2_0_IsImplemented</pVariable>
+		<Formula><![CDATA[ (0=V)?1:0 ]]></Formula>
+	</IntSwissKnife>
+	
+	<!--<Integer Name="CoaXPress_Revision_2_0_IsImplemented_GUI">
+	</Integer>-->
+	
+	<!--<Integer Name="NewSequencer_IsImplemented">
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<Value>0</Value>
+	</Integer>-->
+	<IntSwissKnife Name="NewSequencer_NotImplemented">
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<pVariable Name="V">NewSequencer_IsImplemented</pVariable>
+		<Formula><![CDATA[ (0=V)?1:0 ]]></Formula>
+	</IntSwissKnife>
+	
+	<!--<Integer Name="TwelveG_IsImplemented">
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<Value>0</Value>
+	</Integer>-->
+	<IntSwissKnife Name="TwelveG_NotImplemented">
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<pVariable Name="V">TwelveG_IsImplemented</pVariable>
+		<Formula><![CDATA[ (0=V)?1:0 ]]></Formula>
+	</IntSwissKnife>
+	
+	<!--<Integer Name="PoCXP_IsImplemented">
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<Value>0</Value>
+	</Integer>-->
+	<IntSwissKnife Name="PoCXP_NotImplemented">
+		<Visibility>Invisible</Visibility>
+		<ImposedAccessMode>RO</ImposedAccessMode>
+		<pVariable Name="V">PoCXP_IsImplemented</pVariable>
+		<Formula><![CDATA[ (0=V)?1:0 ]]></Formula>
+	</IntSwissKnife>
+	
+	<!-- Root categories -->
+	
+	<Group Comment="RootCategory">
+		<Category Name="Root" NameSpace="Standard">
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>DeviceControl</pFeature>
+			<pFeature>ImageFormatControl</pFeature>
+			<pFeature>AcquisitionControl</pFeature>
+			<pFeature>TransportLayerControl</pFeature>
+			<pFeature>SimulationControl</pFeature>
+			<pFeature>AnalogControl</pFeature>
+			<!-- <pFeature>TimerControl</pFeature> -->
+			<pFeature>DigitalIOControl</pFeature>
+			<pFeature>Support</pFeature>
+			<pFeature>CXP</pFeature>
+			<pFeature>HardwareInformation</pFeature>
+		</Category>
+	</Group>
+	
+	<!-- Sub categories -->
+
+	<Group Comment="SubCategories">
+		<!-- Device Control -->
+		<Category Name="DeviceControl" NameSpace="Standard">
+			<ToolTip>Category for Device information and control.</ToolTip>
+            <Description>Category for Device information and control.</Description>
+            <DisplayName>Device Control</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>DeviceVendorName</pFeature>
+			<pFeature>DeviceModelName</pFeature>
+			<pFeature>DeviceManufacturerInfo</pFeature>
+			<pFeature>DeviceVersion</pFeature>
+			<pFeature>DeviceID</pFeature>
+			<pFeature>DeviceReset</pFeature>
+			<pFeature>DeviceUserID</pFeature>
+			<pFeature>DeviceUserDataWrite</pFeature>
+		</Category>
+		
+		<!-- Image Format Control -->
+		<Category Name="ImageFormatControl" NameSpace="Standard">
+			<ToolTip>Category for Image Format Control features.</ToolTip>
+			<Description>Category for Image Format Control features.</Description>
+			<DisplayName>Image Format Control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>Width</pFeature>
+			<pFeature>Height</pFeature>
+			<pFeature>WidthMax</pFeature>
+			<pFeature>HeightMax</pFeature>
+			<pFeature>OffsetX</pFeature>
+			<pFeature>OffsetY</pFeature>
+			<pFeature>PixelFormat</pFeature>
+			<pFeature>ScanMode</pFeature>
+			<!-- 
+			Width   				0x1FEFDBD8 
+			Height					0x1FEFDBD4
+			WidthMax				0x1FEFDBD0
+			HeightMax				0x1FEFDBCC
+			OffsetX					0x1FEFDBC8
+			OffsetY					0x1FEFDBC4
+			PixelFormat				0x1FEFDBC0
+			-->
+		</Category>
+		
+		<!-- Acquisition Control -->
+		<Category Name="AcquisitionControl" NameSpace="Standard">
+			<ToolTip>Category for the acquisition and trigger control features.</ToolTip>
+            <Description>Category for the acquisition and trigger control features.</Description>
+            <DisplayName>Acquisition Control</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>AcquisitionMode</pFeature>
+			<pFeature>AcquisitionStart</pFeature>
+			<pFeature>AcquisitionStop</pFeature>
+			<pFeature>AcquisitionFrameCount</pFeature>
+			<pFeature>AcquisitionFrameRate</pFeature>
+			
+			<pFeature>VideoSourceType</pFeature>
+			<pFeature>VideoSourcePatternType</pFeature>
+			<pFeature>SourceFilePath</pFeature>
+			<pFeature>SourceFolderPath</pFeature>
+			<pFeature>VideoSourceFileType</pFeature>
+			<pFeature>VideoSourceFileCount</pFeature>
+			<pFeature>VideoSourcePatternValue1</pFeature>
+			<pFeature>VideoSourcePatternValue2</pFeature>
+			<pFeature>VideoSourcePatternValue3</pFeature>
+			<pFeature>VideoSourcePatternValue4</pFeature>
+			<!-- 
+			-->
+		</Category>
+		
+		<!-- Transport Layer Control -->
+		<Category Name="TransportLayerControl" NameSpace="Standard">
+			<ToolTip>Category that contains the transport layer control features.</ToolTip>
+			<Description>Category that contains the transport layer control features.</Description>
+			<DisplayName>Transport Layer Control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>PayloadSize</pFeature>
+			<pFeature>DeviceTapGeometry</pFeature>
+		</Category>
+		
+		<!-- Simulation Control -->
+		<Category Name="SimulationControl" NameSpace="Standard">
+			<ToolTip>Category for the simulation control features.</ToolTip>
+            <Description>Category for the simulation control features.</Description>
+            <DisplayName>Simulation Control</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>LinkDiscovery</pFeature>
+			<pFeature>BandwidthUtilization</pFeature>
+			<pFeature>InstantFPS</pFeature>
+			<pFeature>TriggerControl</pFeature>
+			<pFeature>FrameTimingControl</pFeature>
+			<!--InstantFPS 0x1FEFD80C -->
+		</Category>
+		
+		<Category Name="AnalogControl" NameSpace="Standard">
+			<ToolTip>Category that contains the Analog control features.</ToolTip>
+			<Description>Category that contains the Analog control features.</Description>
+			<DisplayName>Analog Control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pFeature>Vod</pFeature>
+			<pFeature>PreEmphasis</pFeature>
+			<!-- 
+			Vod   					0x1FEFDB98 
+			PreEmphasis				0x1FEFDB94
+			-->
+		</Category>
+		
+		<Category Name="DigitalIOControl" NameSpace="Standard">
+			<ToolTip>Digital I/O covers the features required to control the general Input and Output signals of the camera.</ToolTip>
+			<Description>Digital I/O covers the features required to control the general Input and Output signals of the camera.</Description>
+			<DisplayName>Digital I/O Control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<!-- <pFeature>IsChameleonSide</pFeature> -->
+			<pFeature>LineSelector</pFeature>
+			<pFeature>LineStatus</pFeature>
+			<pFeature>LineMode</pFeature>
+			<pFeature>LineInverter</pFeature>
+			<pFeature>LineFormat</pFeature>
+			<pFeature>LineSource</pFeature>
+		</Category>
+		
+		<Category Name="TriggerControl" NameSpace="Standard">
+			<ToolTip>The Trigger Control section describes all features related to image acquisition using trigger(s).</ToolTip>
+			<Description>The Trigger Control section describes all features related to image acquisition using trigger(s).</Description>
+			<DisplayName>Trigger Control</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pFeature>SimulationTriggerMode</pFeature>
+			<pFeature>SimulationTriggerActivation</pFeature>
+			<pFeature>SimulationTriggerSource</pFeature>
+			<pFeature>SimulationTriggerDelay</pFeature>
+			<pFeature>SimulationTriggerFilter</pFeature>
+			<pFeature>SimulationTriggerSoftware</pFeature>
+			<pFeature>SimulationTriggerEventMode</pFeature>
+		</Category>
+		
+		<Category Name="TimerControl" NameSpace="Standard">
+			<ToolTip>The Timer Control lists all features that relates to control and monitoring of Timers.</ToolTip>
+			<Description>The Timer Control lists all features that relates to control and monitoring of Timers.</Description>
+			<DisplayName>Timer Control</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pFeature>TimerSelector</pFeature>
+			<pFeature>TimerDelay</pFeature>
+			<pFeature>TimerDuration</pFeature>
+			<pFeature>TimerActivation</pFeature>
+			<pFeature>TimerOutputInverter</pFeature>
+			<pFeature>TimerTriggerSource</pFeature>
+			<pFeature>TimerTriggerSoftware</pFeature>
+			<pFeature>TimerReset</pFeature>
+			<pFeature>TimerEventMode</pFeature>
+		</Category>
+		
+		<!-- Support -->
+		<Category Name="Support" NameSpace="Standard">
+			<ToolTip>Category that contains the support features.</ToolTip>
+			<Description>Category that contains the support features.</Description>
+			<DisplayName>Support</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>Standard</pFeature>
+			<pFeature>Revision</pFeature>
+			<pFeature>XmlManifestSize</pFeature>
+			<pFeature>XmlManifestSelector</pFeature>
+			<pFeature>XmlVersion</pFeature>
+			<pFeature>XmlSchemaVersion</pFeature>
+			<pFeature>XmlUrlAddress</pFeature>
+			<pFeature>lidcPointer</pFeature>
+		</Category>
+		
+		<!-- CXP -->
+		<Category Name="CXP" NameSpace="Standard">
+			<ToolTip>Category that contains the CXP features.</ToolTip>
+			<Description>Category that contains the CXP features.</Description>
+			<DisplayName>CXP</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<!-- <pIsImplemented>CoaXPress_Revision_1_0_IsImplemented</pIsImplemented> -->
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>VersionsSupported</pFeature>
+			<pFeature>VersionUsed</pFeature>
+			<!-- <pFeature>VersionUsedSelector</pFeature> -->
+			<pFeature>LowSpeedTimeout</pFeature>
+			<pFeature>HeartbeatPeriod</pFeature>
+			
+			<pFeature>CoaXPress_Revision_2_0_IsImplemented</pFeature>
+			<pFeature>CoaXPress_Revision_2_0_NotImplemented</pFeature>
+			<pFeature>NewSequencer_IsImplemented</pFeature>
+			<pFeature>NewSequencer_NotImplemented</pFeature>
+			<pFeature>TwelveG_IsImplemented</pFeature>
+			<pFeature>TwelveG_NotImplemented</pFeature>
+			<pFeature>PoCXP_IsImplemented</pFeature>
+			<pFeature>PoCXP_NotImplemented</pFeature>
+			<pFeature>SoftwareCommands_IsImplemented</pFeature>
+			
+			
+			<pFeature>LinkReset</pFeature>
+			<pFeature>DeviceLinkID</pFeature>
+			<pFeature>MasterHostLinkID</pFeature>
+			<pFeature>ControlPacketDataSize</pFeature>
+			<pFeature>StreamPacketDataSize</pFeature>
+			<pFeature>LinkConfig</pFeature>
+			<pFeature>LinkConfigDefault</pFeature>
+			<pFeature>TestMode</pFeature>
+			<pFeature>TestErrorCountSelector</pFeature>
+			<pFeature>TestErrorCount</pFeature>
+			<pFeature>TestPacketCountTx</pFeature>
+			<pFeature>TestPacketCountRx</pFeature>
+			<pFeature>Image1StreamID</pFeature>
+			<pFeature>PoCXPFeatures</pFeature>
+		</Category>
+		<!-- PoCXP Features -->
+		<Category Name="PoCXPFeatures" NameSpace="Standard">
+			<ToolTip>.</ToolTip>
+            <Description>.</Description>
+            <DisplayName>PoCXP Features</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<!-- <pIsAvailable>PoCXP_IsImplemented</pIsAvailable> -->
+			<!-- <pFeature>Voltage</pFeature>
+			<pFeature>Current</pFeature> -->
+			<pFeature>AdcReadout0</pFeature>
+			<pFeature>AdcReadout1</pFeature>
+			<pFeature>AdcReadout2</pFeature>
+			<pFeature>AdcReadout3</pFeature>
+			<pFeature>PoCXP_All</pFeature>
+			<pFeature>PoCXP0</pFeature>
+			<pFeature>PoCXP1</pFeature>
+			<pFeature>PoCXP2</pFeature>
+			<pFeature>PoCXP3</pFeature>
+			<pFeature>PoCXP_Resistor0</pFeature>
+			<pFeature>PoCXP_Resistor1</pFeature>
+			<pFeature>PoCXP_Resistor2</pFeature>
+			<pFeature>PoCXP_Resistor3</pFeature>
+		</Category>
+		
+		<!-- Hardware Information -->
+		<Category Name="HardwareInformation" NameSpace="Standard">
+			<ToolTip>Category for device information.</ToolTip>
+            <Description>Category for device information.</Description>
+            <DisplayName>Hardware Information</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>FirmwareVersion</pFeature>
+			<pFeature>DeviceFirmwareVersion</pFeature>
+			<pFeature>SerialNumber</pFeature>
+			<pFeature>DeviceRevision</pFeature>
+      <!--pFeature>DeviceMemorySize</pFeature-->
+			<pFeature>MaxLinks</pFeature>
+			<pFeature>DevicePciGeneration</pFeature>
+			<pFeature>DevicePciLanes</pFeature>
+			<pFeature>DeviceTemperature</pFeature>
+			<!-- 
+			FirmwareVersion   			0x80004000 
+			SerialNumber				0x80004004
+			DeviceRevision				0x80004008
+			DeviceMemorySize			0x8000400C
+			MaxLinks   					0x80004010
+			DevicePciGeneration			0x80004014
+			DevicePciLanes				0x80004018
+			DeviceTemperature			0x8000401C
+			-->
+		</Category>
+		
+		<!-- FrameTimingControl  -->
+		<Category Name="FrameTimingControl" NameSpace="Standard">
+			<ToolTip>Frame Timing Control.</ToolTip>
+            <Description>Frame Timing Control.</Description>
+            <DisplayName>Frame Timing Control</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+			<pFeature>ActiveDuration</pFeature>
+			<pFeature>LineDuration</pFeature>
+			<pFeature>FrameDuration</pFeature>
+		</Category>
+	</Group>
+	
+	<!-- ******************************************************************* -->
+	<!-- Advanced Settings                                                   -->
+	<!-- ******************************************************************* -->	
+	<Group Comment="AdvancedSettings">
+		
+		<!-- LineDuration -->
+		<Float Name="LineDuration" NameSpace="Standard">
+			<ToolTip>Line Duration in microseconds(us) (max 8000000).</ToolTip>
+			<Description>Specifies the delay in microseconds(us) to apply between each line.</Description>
+			<DisplayName>Line Duration</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pLineDurationReg</pValue>
+			<Min>0</Min>
+			<Max>8000000</Max>
+		</Float>
+		<FloatReg Name="pLineDurationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD87C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>BigEndian</Endianess>
+   		</FloatReg>
+		
+		<!-- FrameDuration -->
+		<Float Name="FrameDuration" NameSpace="Standard">
+			<ToolTip>Frame Duration in microseconds(us) (max 8000000).</ToolTip>
+			<Description>Specifies the delay in microseconds(us) to apply between each frame.</Description>
+			<DisplayName>Frame Duration</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pFrameDurationReg</pValue>
+			<Min>0</Min>
+			<Max>8000000</Max>
+		</Float>
+		<FloatReg Name="pFrameDurationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD84C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>BigEndian</Endianess>
+   		</FloatReg>
+		
+		<!-- ActiveDuration -->
+		<Float Name="ActiveDuration" NameSpace="Standard">
+			<ToolTip>Active Duration in microseconds(us) (max 8000000).</ToolTip>
+			<Description>Specifies the delay in microseconds(us) to apply between each frame.</Description>
+			<DisplayName>Active Duration</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pActiveDurationReg</pValue>
+			<Min>0</Min>
+			<Max>8000000</Max><!-- 65536 / 250 -->
+		</Float>
+		<FloatReg Name="pActiveDurationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD848</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>BigEndian</Endianess>
+   		</FloatReg>
+	</Group>
+	
+	<!-- ******************************************************************* -->
+	<!-- AnalogControl                                                  		 -->
+	<!-- ******************************************************************* -->	
+	<Group Comment="AnalogControl">
+		<!-- Vod -->
+		<Enumeration Name="Vod" NameSpace="Standard">
+			<ToolTip>TX VOD settings.</ToolTip>
+			<Description>TX VOD settings.</Description>
+			<DisplayName>Vod</DisplayName>
+			<Visibility>Beginner</Visibility>		
+			<EnumEntry Name="VOD_180" NameSpace="Standard">
+				<DisplayName>180 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000009</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_200" NameSpace="Standard">
+				<DisplayName>200 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000A</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_220" NameSpace="Standard">
+				<DisplayName>220 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000B</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_240" NameSpace="Standard">
+				<DisplayName>240 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000C</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_260" NameSpace="Standard">
+				<DisplayName>260 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000D</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_280" NameSpace="Standard">
+				<DisplayName>280 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000E</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_300" NameSpace="Standard">
+				<DisplayName>300 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000F</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_320" NameSpace="Standard">
+				<DisplayName>320 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000010</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_340" NameSpace="Standard">
+				<DisplayName>340 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000011</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_360" NameSpace="Standard">
+				<DisplayName>360 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000012</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_380" NameSpace="Standard">
+				<DisplayName>380 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000013</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_400" NameSpace="Standard">
+				<DisplayName>400 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000014</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_420" NameSpace="Standard">
+				<DisplayName>420 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000015</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_440" NameSpace="Standard">
+				<DisplayName>440 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000016</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_460" NameSpace="Standard">
+				<DisplayName>460 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000017</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_480" NameSpace="Standard">
+				<DisplayName>480 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000018</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_500" NameSpace="Standard">
+				<DisplayName>500 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000019</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_520" NameSpace="Standard">
+				<DisplayName>520 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001A</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_540" NameSpace="Standard">
+				<DisplayName>540 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001B</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_560" NameSpace="Standard">
+				<DisplayName>560 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001C</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_580" NameSpace="Standard">
+				<DisplayName>580 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001D</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_600" NameSpace="Standard">
+				<DisplayName>600 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001E</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_620" NameSpace="Standard">
+				<DisplayName>620 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001F</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_640" NameSpace="Standard">
+				<DisplayName>640 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000020</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_660" NameSpace="Standard">
+				<DisplayName>660 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000021</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_680" NameSpace="Standard">
+				<DisplayName>680 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000022</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_700" NameSpace="Standard">
+				<DisplayName>700 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000023</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_720" NameSpace="Standard">
+				<DisplayName>720 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000024</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_740" NameSpace="Standard">
+				<DisplayName>740 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000025</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_760" NameSpace="Standard">
+				<DisplayName>760 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000026</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_780" NameSpace="Standard">
+				<DisplayName>780 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000027</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_800" NameSpace="Standard">
+				<DisplayName>800 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000028</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_820" NameSpace="Standard">
+				<DisplayName>820 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000029</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_840" NameSpace="Standard">
+				<DisplayName>840 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000002A</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_860" NameSpace="Standard">
+				<DisplayName>860 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000002B</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_880" NameSpace="Standard">
+				<DisplayName>880 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000002C</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_900" NameSpace="Standard">
+				<DisplayName>900 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000002D</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_920" NameSpace="Standard">
+				<DisplayName>920 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000002E</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_940" NameSpace="Standard">
+				<DisplayName>940 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000002F</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_960" NameSpace="Standard">
+				<DisplayName>960 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000030</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_980" NameSpace="Standard">
+				<DisplayName>980 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000031</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1000" NameSpace="Standard">
+				<DisplayName>1000 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000032</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1020" NameSpace="Standard">
+				<DisplayName>1020 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000033</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1040" NameSpace="Standard">
+				<DisplayName>1040 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000034</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1060" NameSpace="Standard">
+				<DisplayName>1060 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000035</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1080" NameSpace="Standard">
+				<DisplayName>1080 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000036</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1100" NameSpace="Standard">
+				<DisplayName>1100 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000037</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1120" NameSpace="Standard">
+				<DisplayName>1120 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000038</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1140" NameSpace="Standard">
+				<DisplayName>1140 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000039</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1160" NameSpace="Standard">
+				<DisplayName>1160 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000003A</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1180" NameSpace="Standard">
+				<DisplayName>1180 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000003B</Value>
+			</EnumEntry>
+			<EnumEntry Name="VOD_1200" NameSpace="Standard">
+				<DisplayName>1200 mV</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000003C</Value>
+			</EnumEntry>
+			
+			<pValue>VodReg</pValue>
+		</Enumeration>
+		<IntReg Name="VodReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB98</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- PreEmphasis -->
+		<Enumeration Name="PreEmphasis" NameSpace="Standard">
+			<ToolTip>Transmitter Pre-Emphasis Levels.</ToolTip>
+			<Description>Transmitter Pre-Emphasis Levels.</Description>
+			<DisplayName>Pre-Emphasis Levels</DisplayName>
+			<Visibility>Beginner</Visibility>		
+			<EnumEntry Name="PRE_EMPHASIS_0" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 0</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_1" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 1</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_2" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 2</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_3" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 3</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_4" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 4</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_5" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 5</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000005</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_6" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 6</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000006</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_7" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 7</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000007</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_8" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 8</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000008</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_9" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 9</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000009</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_10" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 10</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000A</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_11" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 11</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000B</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_12" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 12</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000C</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_13" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 13</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000D</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_14" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 14</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000E</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_15" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 15</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000000F</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_16" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 16</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000010</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_17" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 17</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000011</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_18" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 18</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000012</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_19" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 19</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000013</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_20" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 20</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000014</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_21" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 21</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000015</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_22" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 22</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000016</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_23" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 23</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000017</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_24" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 24</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000018</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_25" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 25</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00000019</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_26" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 26</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001A</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_27" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 27</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001B</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_28" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 28</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001C</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_29" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 29</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001D</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_30" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 30</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001E</Value>
+			</EnumEntry>
+			<EnumEntry Name="PRE_EMPHASIS_31" NameSpace="Standard">
+				<DisplayName>Pre emphasis setting 31</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x0000001F</Value>
+			</EnumEntry>
+			
+			<pValue>PreEmphasisReg</pValue>
+		</Enumeration>
+		<IntReg Name="PreEmphasisReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB94</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+      <Cachable>NoCache</Cachable>
+      <Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+	</Group>
+	
+	<!-- DeviceControl -->
+	
+	<Group Comment="DeviceControl">
+		<!-- Device Vendor Name -->
+		<StringReg Name="DeviceVendorName" NameSpace="Standard">
+			<ToolTip>Name of the manufacturer of the device.</ToolTip>
+            <Description>Name of the manufacturer of the device.</Description>
+            <DisplayName>Device Vendor Name</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2000</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>
+		
+		<!-- Device Model Name -->
+		<StringReg Name="DeviceModelName" NameSpace="Standard">
+			<ToolTip>This feature provides the model of the device.</ToolTip>
+            <Description>This feature provides the model of the device.</Description>
+            <DisplayName>Device Model Name</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2020</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>
+
+		<!-- Device Manufacturer Info -->
+		<StringReg Name="DeviceManufacturerInfo" NameSpace="Standard">
+			<ToolTip>This feature provides extended manufacturer information about the device.</ToolTip>
+            <Description>This feature provides extended manufacturer information about the device.</Description>
+            <DisplayName>Device Manufacturer Info</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2040</Address>
+            <Length>48</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>
+		
+		<!-- Device Version -->
+		<StringReg Name="DeviceVersion" NameSpace="Standard">
+			<ToolTip>This feature provides the version of the device.</ToolTip>
+            <Description>This feature provides the version of the device.</Description>
+            <DisplayName>Device Version</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2070</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+		</StringReg>		
+		
+		<!-- Device ID -->
+		<StringReg Name="DeviceID" NameSpace="Standard">
+            <ToolTip>This feature stores a camera identifier.</ToolTip>
+            <Description>This feature stores a camera identifier.</Description>
+            <DisplayName>Device ID</DisplayName>
+            <Visibility>Expert</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x20B0</Address>
+            <Length>16</Length>
+            <AccessMode>RO</AccessMode>
+            <pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+        </StringReg>
+
+		<!-- Device Reset -->
+		<Command Name="DeviceReset" NameSpace="Standard">
+            <ToolTip>Resets the device to its power up state.</ToolTip>
+            <Description>Resets the device to its power up state.</Description>
+            <DisplayName>Device Reset</DisplayName>
+            <Visibility>Guru</Visibility>
+            <ImposedAccessMode>WO</ImposedAccessMode>
+            <pValue>DeviceResetReg</pValue>
+            <CommandValue>1</CommandValue>
+        </Command>
+		<IntReg Name="DeviceResetReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4000</Address>
+			<Length>4</Length>
+			<AccessMode>WO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Device User ID -->
+		<StringReg Name="DeviceUserID" NameSpace="Standard">
+			<ToolTip>User-programmable device identifier.</ToolTip>
+			<Description>User-programmable device identifier.</Description>
+			<DisplayName>Device User ID</DisplayName>
+			<Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+            <Address>0x1FEFD7B0</Address>
+            <Length>16</Length>
+            <AccessMode>RW</AccessMode>
+            <pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+        </StringReg>
+
+		<!-- Device User Data Write command -->
+		<Command Name="DeviceUserDataWrite" NameSpace="Standard">
+			<ToolTip>Save user's data in hardware</ToolTip>
+			<Description>Save user's data in hardware</Description>
+			<DisplayName>Save user's data</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>WO</ImposedAccessMode>
+            <pValue>DeviceUserDataWriteReg</pValue>
+            <CommandValue>1</CommandValue>
+        </Command>
+		<IntReg Name="DeviceUserDataWriteReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD7AC</Address>
+			<Length>4</Length>
+			<AccessMode>WO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+
+	</Group>
+	
+	<!-- ******************************************************************* -->
+	<!-- SimulationControl                                                  -->
+	<!-- ******************************************************************* -->	
+	<Group Comment="SimulationControl">
+		
+		<!-- LinkDiscovery -->
+		<Enumeration Name="LinkDiscovery" NameSpace="Standard">
+			<ToolTip>Discovery speed settings.</ToolTip>
+			<Description>Discovery speed settings.</Description>
+			<DisplayName>Link Discovery</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="DISCOVERY_CXP_1" NameSpace="Standard">
+				<DisplayName>1.250 Gbps discovery speed</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00010028</Value>
+			</EnumEntry>
+			<EnumEntry Name="DISCOVERY_CXP_3" NameSpace="Standard">
+				<DisplayName>3.125 Gbps discovery speed</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0x00010038</Value>
+			</EnumEntry>
+			<pValue>LinkDiscoveryReg</pValue>
+		</Enumeration>
+		<IntReg Name="LinkDiscoveryReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB90</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- BandwidthUtilization -->
+		<Float Name="BandwidthUtilization" NameSpace="Standard">
+			<ToolTip>Utilization percentage of set bandwidth.</ToolTip>
+			<Description>Utilization percentage of set bandwidth.</Description>
+			<DisplayName>Bandwidth utilization percentage</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>BandwidthUtilizationReg</pValue>
+			<Min>0</Min>
+			<Max>100.0</Max>
+			<Representation>Linear</Representation>
+		</Float>
+		<FloatReg Name="BandwidthUtilizationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB84</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>BigEndian</Endianess>
+		</FloatReg>
+		
+		<!-- Trigger Mode -->
+		<Enumeration Name="SimulationTriggerMode" NameSpace="Standard">
+			<ToolTip>This feature controls the transmission trigger mode of the device.</ToolTip>
+			<Description>This feature controls the transmission trigger mode of the device.</Description>
+			<DisplayName>Trigger Mode</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="FreeRun" NameSpace="Standard">
+				<DisplayName>Free Running</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="Triggered" NameSpace="Standard">
+				<DisplayName>Triggered</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>SimulationTriggerModeReg</pValue>
+		</Enumeration>
+		<IntReg Name="SimulationTriggerModeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB8C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- SimulationTriggerActivation -->
+		<Enumeration Name="SimulationTriggerActivation" NameSpace="Standard">
+			<Extension>
+				<KAYA>
+				{
+					"Reflector": {"ClassName": "IOControllerReflector", "Address": "0x40"}
+				}
+				</KAYA>
+			</Extension> 
+			<ToolTip>Specifies the activation mode of the trigger.</ToolTip>
+			<Description>Specifies the activation mode of the trigger.</Description>
+			<DisplayName>Trigger Activation</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<EnumEntry Name="RisingEdge" NameSpace="Standard">
+				<DisplayName>Rising Edge</DisplayName>
+				<Visibility>Beginner</Visibility>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="FallingEdge" NameSpace="Standard">
+				<DisplayName>Falling Edge</DisplayName>
+				<Visibility>Beginner</Visibility>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="AnyEdge" NameSpace="Standard">
+				<DisplayName>Any Edge</DisplayName>
+				<Visibility>Beginner</Visibility>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="LevelHigh" NameSpace="Standard">
+				<DisplayName>Level High</DisplayName>
+				<Visibility>Beginner</Visibility>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="LevelLow" NameSpace="Standard">
+				<DisplayName>Level Low</DisplayName>
+				<Visibility>Beginner</Visibility>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			
+			<pValue>SimulationTriggerActivationReg</pValue>
+		</Enumeration>
+		<IntReg Name="SimulationTriggerActivationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD844</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- SimulationTriggerSource -->
+		<Enumeration Name="SimulationTriggerSource" NameSpace="Standard">
+			<ToolTip>Specifies the internal signal or physical input Line to use as the trigger source. The selected trigger must have its SimulationTriggerMode set to On.</ToolTip>
+			<Description>Specifies the internal signal or physical input Line to use as the trigger source. The selected trigger must have its SimulationTriggerMode set to On.</Description>
+			<DisplayName>Trigger Source</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<EnumEntry Name="KY_DISABLED" NameSpace="Standard">
+				<DisplayName>Disabled</DisplayName>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_OPTO_IN_0" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 0</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_1" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 1</DisplayName>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_2" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 2</DisplayName>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_3" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 3</DisplayName>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_4" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 4</DisplayName>
+				<Value>0x00000005</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_5" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 5</DisplayName>
+				<Value>0x00000006</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_6" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 6</DisplayName>
+				<Value>0x00000007</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_7" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 7</DisplayName>
+				<Value>0x00000008</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVDS_IN_0" NameSpace="Standard">
+				<DisplayName>LVDS Input 0</DisplayName>
+				<Value>0x00000009</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_1" NameSpace="Standard">
+				<DisplayName>LVDS Input 1</DisplayName>
+				<Value>0x0000000A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_2" NameSpace="Standard">
+				<DisplayName>LVDS Input 2</DisplayName>
+				<Value>0x0000000B</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_3" NameSpace="Standard">
+				<DisplayName>LVDS Input 3</DisplayName>
+				<Value>0x0000000C</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_TTL_0" NameSpace="Standard">
+				<DisplayName>TTL 0</DisplayName>
+				<Value>0x0000000D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_1" NameSpace="Standard">
+				<DisplayName>TTL 1</DisplayName>
+				<Value>0x0000000E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_2" NameSpace="Standard">
+				<DisplayName>TTL 2</DisplayName>
+				<Value>0x0000000F</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_3" NameSpace="Standard">
+				<DisplayName>TTL 3</DisplayName>
+				<Value>0x00000010</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_4" NameSpace="Standard">
+				<DisplayName>TTL 4</DisplayName>
+				<Value>0x00000011</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_5" NameSpace="Standard">
+				<DisplayName>TTL 5</DisplayName>
+				<Value>0x00000012</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_6" NameSpace="Standard">
+				<DisplayName>TTL 6</DisplayName>
+				<Value>0x00000013</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_7" NameSpace="Standard">
+				<DisplayName>TTL 7</DisplayName>
+				<Value>0x00000014</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVTTL_0" NameSpace="Standard">
+				<DisplayName>LVTTL 0</DisplayName>
+				<Value>0x00000015</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_1" NameSpace="Standard">
+				<DisplayName>LVTTL 1</DisplayName>
+				<Value>0x00000016</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_2" NameSpace="Standard">
+				<DisplayName>LVTTL 2</DisplayName>
+				<Value>0x00000017</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_3" NameSpace="Standard">
+				<DisplayName>LVTTL 3</DisplayName>
+				<Value>0x00000018</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_4" NameSpace="Standard">
+				<DisplayName>LVTTL 4</DisplayName>
+				<Value>0x00000019</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_5" NameSpace="Standard">
+				<DisplayName>LVTTL 5</DisplayName>
+				<Value>0x0000001A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_6" NameSpace="Standard">
+				<DisplayName>LVTTL 6</DisplayName>
+				<Value>0x0000001B</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_7" NameSpace="Standard">
+				<DisplayName>LVTTL 7</DisplayName>
+				<Value>0x0000001C</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_CAM_TRIG" NameSpace="Standard">
+				<DisplayName>Camera Trigger</DisplayName>
+				<Value>0x00000029</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_SOFTWARE" NameSpace="Standard">
+				<DisplayName>Software</DisplayName>
+				<Value>0x0000002B</Value>
+			</EnumEntry>
+
+			<EnumEntry Name="KY_ENCODER_0" NameSpace="Standard">
+				<DisplayName>Encoder 0</DisplayName>
+				<Value>0x0000002C</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_ENCODER_1" NameSpace="Standard">
+				<DisplayName>Encoder 1</DisplayName>
+				<Value>0x0000002D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_ENCODER_2" NameSpace="Standard">
+				<DisplayName>Encoder 2</DisplayName>
+				<Value>0x0000002E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_ENCODER_3" NameSpace="Standard">
+				<DisplayName>Encoder 3</DisplayName>
+				<Value>0x0000002F</Value>
+			</EnumEntry>
+
+			<EnumEntry Name="KY_TIMER_ACTIVE_0" NameSpace="Standard">
+				<DisplayName>Timer 0 Active</DisplayName>
+				<Value>0x00000030</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_1" NameSpace="Standard">
+				<DisplayName>Timer 1 Active</DisplayName>
+				<Value>0x00000031</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_2" NameSpace="Standard">
+				<DisplayName>Timer 2 Active</DisplayName>
+				<Value>0x00000032</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_3" NameSpace="Standard">
+				<DisplayName>Timer 3 Active</DisplayName>
+				<Value>0x00000033</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_4" NameSpace="Standard">
+				<DisplayName>Timer 4 Active</DisplayName>
+				<Value>0x00000034</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_5" NameSpace="Standard">
+				<DisplayName>Timer 5 Active</DisplayName>
+				<Value>0x00000035</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_6" NameSpace="Standard">
+				<DisplayName>Timer 6 Active</DisplayName>
+				<Value>0x00000036</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_7" NameSpace="Standard">
+				<DisplayName>Timer 7 Active</DisplayName>
+				<Value>0x00000037</Value>
+			</EnumEntry>
+			
+			<pValue>SimulationTriggerSourceReg</pValue>
+		</Enumeration>
+		<IntReg Name="SimulationTriggerSourceReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB88</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+		<!-- SimulationTriggerDelay -->
+		<Integer Name="SimulationTriggerDelay" NameSpace="Standard">
+			<ToolTip>Specifies the delay in microseconds(us) to apply after the trigger reception before activating it.</ToolTip>
+			<Description>Specifies the delay in microseconds(us) to apply after the trigger reception before activating it.</Description>
+			<DisplayName>Trigger Delay</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>SimulationTriggerDelayReg</pValue>
+		</Integer>
+		<IntReg Name="SimulationTriggerDelayReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD840</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- SimulationTriggerFilter -->
+		<Float Name="SimulationTriggerFilter" NameSpace="Standard">
+			<ToolTip>Filter for trigger, helps prevent signal de-bouncing. 8ns resolution, units in microseconds(us).</ToolTip>
+			<Description>Filter for trigger, helps prevent signal de-bouncing. 8ns resolution, units in microseconds(us).</Description>
+			<DisplayName>Trigger Filter</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pSimulationTriggerFilterReg</pValue>
+			<Min>0</Min>
+			<Max>34359738</Max>
+			<Unit>Us</Unit>
+			<Representation>Linear</Representation>
+		</Float>
+		<IntReg Name="SimulationTriggerFilterReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD83C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		<Converter Name="pSimulationTriggerFilterReg">
+			<FormulaTo> FROM * 125.0 </FormulaTo>
+			<FormulaFrom> TO / 125.0 </FormulaFrom>
+			<pValue>SimulationTriggerFilterReg</pValue>
+		</Converter>
+		
+		<!-- SimulationTriggerSoftware -->
+		<Command Name="SimulationTriggerSoftware" NameSpace="Standard">
+			<ToolTip>Generates an internal trigger. SimulationTriggerSource must be set to Software.</ToolTip>
+			<Description>Generates an internal trigger. SimulationTriggerSource must be set to Software.</Description>
+			<DisplayName>Trigger Software</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pValue>SimulationTriggerSoftwareReg</pValue>
+			<CommandValue>1</CommandValue>
+		</Command>
+		<IntReg Name="SimulationTriggerSoftwareReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD838</Address>
+			<Length>4</Length>
+			<AccessMode>WO</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- SimulationTriggerEventMode -->
+		<Enumeration Name="SimulationTriggerEventMode" NameSpace="Standard">
+			<ToolTip>Selects the trigger event generation mode.</ToolTip>
+			<Description>Selects the trigger event generation mode.</Description>
+			<DisplayName>Trigger Event Mode</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<EnumEntry Name="Disabled" NameSpace="Standard">
+			  <DisplayName>Disabled</DisplayName>
+			  <Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="RisingEdge" NameSpace="Standard">
+			  <DisplayName>Rising Edge</DisplayName>
+			  <Value>1</Value>
+			</EnumEntry>
+			<EnumEntry Name="FallingEdge" NameSpace="Standard">
+			  <DisplayName>Falling Edge</DisplayName>
+			  <Value>2</Value>
+			</EnumEntry>
+			<EnumEntry Name="AnyEdge" NameSpace="Standard">
+			  <DisplayName>Any Edge</DisplayName>
+			  <Value>3</Value>
+			</EnumEntry>
+			<pValue>SimulationTriggerEventModeReg</pValue>
+		</Enumeration>
+		<IntReg Name="SimulationTriggerEventModeReg">
+			<Address>0x1FEFD834</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+	</Group>
+	
+	<!-- ******************************************************************* -->
+	<!-- TimerControl                                                    	   -->
+	<!-- ******************************************************************* --> 
+	  
+	<Group Comment="TimerControl">
+	
+		<!-- TimerSelector -->
+		<Enumeration Name="TimerSelector" NameSpace="Standard">
+			<ToolTip>Selects which Timer to configure.</ToolTip>
+			<Description>Selects which Timer to configure.</Description>
+			<DisplayName>Timer Selector</DisplayName>
+			<Visibility>Expert</Visibility>
+			<EnumEntry Name="Timer0" NameSpace="Standard">
+				<DisplayName>Timer 0</DisplayName>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="Timer1" NameSpace="Standard">
+				<DisplayName>Timer 1</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="Timer2" NameSpace="Standard">
+				<DisplayName>Timer 2</DisplayName>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="Timer3" NameSpace="Standard">
+				<DisplayName>Timer 3</DisplayName>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="Timer4" NameSpace="Standard">
+				<DisplayName>Timer 4</DisplayName>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			<EnumEntry Name="Timer5" NameSpace="Standard">
+				<DisplayName>Timer 5</DisplayName>
+				<Value>0x00000005</Value>
+			</EnumEntry>
+			<EnumEntry Name="Timer6" NameSpace="Standard">
+				<DisplayName>Timer 6</DisplayName>
+				<Value>0x00000006</Value>
+			</EnumEntry>
+			<EnumEntry Name="Timer7" NameSpace="Standard">
+				<DisplayName>Timer 7</DisplayName>
+				<Value>0x00000007</Value>
+			</EnumEntry>
+			
+			<pValue>TimerSelectorValue</pValue>
+			<pSelected>TimerDelay</pSelected>
+			<pSelected>TimerDuration</pSelected>
+			<pSelected>TimerActivation</pSelected>
+			<pSelected>TimerOutputInverter</pSelected>
+			<pSelected>TimerTriggerSource</pSelected>
+			<pSelected>TimerTriggerSoftware</pSelected>
+			<pSelected>TimerReset</pSelected>
+			<pSelected>TimerEventMode</pSelected>
+		</Enumeration>
+		<IntReg Name="TimerSelectorValue">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD830</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+		<!-- TimerDelay -->
+		<Float Name="TimerDelay" NameSpace="Standard">
+			<ToolTip>Sets the duration in microseconds(us) of the delay to apply at the reception of a trigger before starting the Timer.</ToolTip>
+			<Description>Sets the duration in microseconds(us) of the delay to apply at the reception of a trigger before starting the Timer.</Description>
+			<DisplayName>Timer Delay</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pTimerDelayReg</pValue>
+			<Min>0</Min>
+			<Max>34359738</Max>
+			<Unit>Us</Unit>
+			<Representation>Linear</Representation>
+		</Float>
+		<IntReg Name="TimerDelayReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD82C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>TimerSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		<Converter Name="pTimerDelayReg">
+			<FormulaTo> FROM * 125.0 </FormulaTo>
+			<FormulaFrom> TO / 125.0 </FormulaFrom>
+			<pValue>TimerDelayReg</pValue>
+		</Converter>
+	  
+		<!-- TimerDuration -->
+		<Float Name="TimerDuration" NameSpace="Standard">
+			<ToolTip>Sets the duration in microseconds(us) of the Timer pulse.</ToolTip>
+			<Description>Sets the duration in microseconds(us) of the Timer pulse.</Description>
+			<DisplayName>Timer Duration</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pTimerDurationReg</pValue>
+			<Min>0</Min>
+			<Max>34359738</Max>
+			<Unit>Us</Unit>
+			<Representation>Linear</Representation>
+		</Float>
+		<IntReg Name="TimerDurationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD828</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>TimerSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		<Converter Name="pTimerDurationReg">
+			<FormulaTo> FROM * 125.0 </FormulaTo>
+			<FormulaFrom> TO / 125.0 </FormulaFrom>
+			<pValue>TimerDurationReg</pValue>
+		</Converter>
+		
+		<!-- TimerActivation -->
+		<Enumeration Name="TimerActivation" NameSpace="Standard">
+			<ToolTip>Selects the activation mode of the trigger to start the Counter.</ToolTip>
+			<Description>Selects the activation mode of the trigger to start the Counter.</Description>
+			<DisplayName>Timer Activation</DisplayName>
+			<Visibility>Expert</Visibility>
+			<EnumEntry Name="RisingEdge" NameSpace="Standard">
+				<DisplayName>Rising Edge</DisplayName>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="FallingEdge" NameSpace="Standard">
+				<DisplayName>Falling Edge</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="AnyEdge" NameSpace="Standard">
+				<DisplayName>Any Edge</DisplayName>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="LevelHigh" NameSpace="Standard">
+				<DisplayName>Level High</DisplayName>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="LevelLow" NameSpace="Standard">
+				<DisplayName>Level Low</DisplayName>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			
+			<pValue>TimerActivationReg</pValue>
+		</Enumeration>
+		<IntReg Name="TimerActivationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD824</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>TimerSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+		<!-- TimerOutputInverter -->
+		<Boolean Name="TimerOutputInverter" NameSpace="Standard">
+			<ToolTip>Controls the inversion of the timer output signal.</ToolTip>
+			<Description>Controls the inversion of the timer output signal.</Description>
+			<DisplayName>Timer Output Inverter</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TimerOutputInverterReg</pValue>
+		</Boolean>
+		<IntReg Name="TimerOutputInverterReg">
+			<Address>0x1FEFD820</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<pInvalidator>TimerSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+			<Representation>PureNumber</Representation>
+		</IntReg>
+
+		<!-- TimerTriggerSource -->
+		<Enumeration Name="TimerTriggerSource" NameSpace="Standard">
+			<ToolTip>Selects the source of the trigger to start the Timer.</ToolTip>
+			<Description>Selects the source of the trigger to start the Timer.</Description>
+			<DisplayName>Timer Trigger Source</DisplayName>
+			<Visibility>Expert</Visibility>
+			<EnumEntry Name="KY_DISABLED" NameSpace="Standard">
+				<DisplayName>Disabled</DisplayName>
+				<Visibility>Beginner</Visibility>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_OPTO_IN_0" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 0</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_1" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 1</DisplayName>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_2" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 2</DisplayName>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_3" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 3</DisplayName>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_4" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 4</DisplayName>
+				<Value>0x00000005</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_5" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 5</DisplayName>
+				<Value>0x00000006</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_6" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 6</DisplayName>
+				<Value>0x00000007</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_7" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 7</DisplayName>
+				<Value>0x00000008</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVDS_IN_0" NameSpace="Standard">
+				<DisplayName>LVDS Input 0</DisplayName>
+				<Value>0x00000009</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_1" NameSpace="Standard">
+				<DisplayName>LVDS Input 1</DisplayName>
+				<Value>0x0000000A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_2" NameSpace="Standard">
+				<DisplayName>LVDS Input 2</DisplayName>
+				<Value>0x0000000B</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_3" NameSpace="Standard">
+				<DisplayName>LVDS Input 3</DisplayName>
+				<Value>0x0000000C</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_TTL_0" NameSpace="Standard">
+				<DisplayName>TTL 0</DisplayName>
+				<Value>0x0000000D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_1" NameSpace="Standard">
+				<DisplayName>TTL 1</DisplayName>
+				<Value>0x0000000E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_2" NameSpace="Standard">
+				<DisplayName>TTL 2</DisplayName>
+				<Value>0x0000000F</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_3" NameSpace="Standard">
+				<DisplayName>TTL 3</DisplayName>
+				<Value>0x00000010</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_4" NameSpace="Standard">
+				<DisplayName>TTL 4</DisplayName>
+				<Value>0x00000011</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_5" NameSpace="Standard">
+				<DisplayName>TTL 5</DisplayName>
+				<Value>0x00000012</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_6" NameSpace="Standard">
+				<DisplayName>TTL 6</DisplayName>
+				<Value>0x00000013</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_7" NameSpace="Standard">
+				<DisplayName>TTL 7</DisplayName>
+				<Value>0x00000014</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVTTL_0" NameSpace="Standard">
+				<DisplayName>LVTTL 0</DisplayName>
+				<Value>0x00000015</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_1" NameSpace="Standard">
+				<DisplayName>LVTTL 1</DisplayName>
+				<Value>0x00000016</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_2" NameSpace="Standard">
+				<DisplayName>LVTTL 2</DisplayName>
+				<Value>0x00000017</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_3" NameSpace="Standard">
+				<DisplayName>LVTTL 3</DisplayName>
+				<Value>0x00000018</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_4" NameSpace="Standard">
+				<DisplayName>LVTTL 4</DisplayName>
+				<Value>0x00000019</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_5" NameSpace="Standard">
+				<DisplayName>LVTTL 5</DisplayName>
+				<Value>0x0000001A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_6" NameSpace="Standard">
+				<DisplayName>LVTTL 6</DisplayName>
+				<Value>0x0000001B</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_7" NameSpace="Standard">
+				<DisplayName>LVTTL 7</DisplayName>
+				<Value>0x0000001C</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_CONTINUOUS" NameSpace="Standard">
+				<DisplayName>Continuous</DisplayName>
+				<Value>0x0000002A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_SOFTWARE" NameSpace="Standard">
+				<DisplayName>Software</DisplayName>
+				<Value>0x0000002B</Value>
+			</EnumEntry>
+
+			<EnumEntry Name="KY_ENCODER_0" NameSpace="Standard">
+				<DisplayName>Encoder 0</DisplayName>
+				<Value>0x0000002C</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_ENCODER_1" NameSpace="Standard">
+				<DisplayName>Encoder 1</DisplayName>
+				<Value>0x0000002D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_ENCODER_2" NameSpace="Standard">
+				<DisplayName>Encoder 2</DisplayName>
+				<Value>0x0000002E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_ENCODER_3" NameSpace="Standard">
+				<DisplayName>Encoder 3</DisplayName>
+				<Value>0x0000002F</Value>
+			</EnumEntry>
+
+			<EnumEntry Name="KY_TIMER_ACTIVE_0" NameSpace="Standard">
+				<DisplayName>Timer 0 Active</DisplayName>
+				<Value>0x00000030</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_1" NameSpace="Standard">
+				<DisplayName>Timer 1 Active</DisplayName>
+				<Value>0x00000031</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_2" NameSpace="Standard">
+				<DisplayName>Timer 2 Active</DisplayName>
+				<Value>0x00000032</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_3" NameSpace="Standard">
+				<DisplayName>Timer 3 Active</DisplayName>
+				<Value>0x00000033</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_4" NameSpace="Standard">
+				<DisplayName>Timer 4 Active</DisplayName>
+				<Value>0x00000034</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_5" NameSpace="Standard">
+				<DisplayName>Timer 5 Active</DisplayName>
+				<Value>0x00000035</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_6" NameSpace="Standard">
+				<DisplayName>Timer 6 Active</DisplayName>
+				<Value>0x00000036</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_7" NameSpace="Standard">
+				<DisplayName>Timer 7 Active</DisplayName>
+				<Value>0x00000037</Value>
+			</EnumEntry>
+			
+			<pValue>TimerTriggerSourceReg</pValue>
+		</Enumeration>
+		<IntReg Name="TimerTriggerSourceReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD81C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>TimerSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+		<!-- TimerTriggerSoftware -->
+		<Command Name="TimerTriggerSoftware" NameSpace="Standard">
+			<ToolTip>Generates an internal trigger . TimerTriggerSource must be set to Software.</ToolTip>
+			<Description>Generates an internal trigger. TimerTriggerSource must be set to Software.</Description>
+			<DisplayName>Timer Trigger Software</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pValue>TimerTriggerSoftwareReg</pValue>
+			<CommandValue>1</CommandValue>
+		</Command>
+		<IntReg Name="TimerTriggerSoftwareReg">
+			<ToolTip>Issue the Trigger Software command to Timer.</ToolTip>
+			<Address>0x1FEFD818</Address>
+			<Length>4</Length>
+			<AccessMode>WO</AccessMode>
+			<pPort>Device</pPort>
+			<pInvalidator>TimerSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+		<!-- TimerReset -->
+		<Command Name="TimerReset" NameSpace="Standard">
+			<ToolTip>Does a software reset of the selected timer and starts it. The timer starts immediately after the reset unless a timer trigger is active.</ToolTip>
+			<Description>Does a software reset of the selected timer and starts it. The timer starts immediately after the reset unless a timer trigger is active.</Description>
+			<DisplayName>Timer Reset</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pValue>TimerResetReg</pValue>
+			<CommandValue>1</CommandValue>
+		</Command>
+		<IntReg Name="TimerResetReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD814</Address>
+			<Length>4</Length>
+			<AccessMode>WO</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+		<!-- TimerEventMode -->
+		<Enumeration Name="TimerEventMode" NameSpace="Standard">
+			<ToolTip>Selects the activation mode of the trigger to start the Counter.</ToolTip>
+			<Description>Selects the activation mode of the trigger to start the Counter.</Description>
+			<DisplayName>Timer Event Mode</DisplayName>
+			<Visibility>Expert</Visibility>
+			<EnumEntry Name="Disabled" NameSpace="Standard">
+				<DisplayName>Disabled</DisplayName>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="RisingEdge" NameSpace="Standard">
+				<DisplayName>Rising Edge</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="FallingEdge" NameSpace="Standard">
+				<DisplayName>Falling Edge</DisplayName>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="AnyEdge" NameSpace="Standard">
+				<DisplayName>Any Edge</DisplayName>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			
+			<pValue>TimerEventModeReg</pValue>
+		</Enumeration>
+		<IntReg Name="TimerEventModeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD810</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>TimerSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+	</Group><!-- TimerControl -->
+	  
+	
+	<!-- ******************************************************************* -->
+	<!-- DigitalIOControl                                                  		 -->
+	<!-- ******************************************************************* -->	
+	<Group Comment="DigitalIOControl">
+		<Integer Name="IsChameleonSide">
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<Value>0</Value>
+		</Integer>
+		
+		<!-- LineSelector -->
+		<Enumeration Name="LineSelector" NameSpace="Standard">
+			<ToolTip>Selects the physical pin of the external camera connectors.</ToolTip>
+			<Description>Selects the physical pin of the external camera connectors.</Description>
+			<DisplayName>Line Selector</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>IsChameleonSide</pIsImplemented>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="KY_OPTO_IN_0" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 0</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN0_ImpReg</pIsImplemented> -->
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_1" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 1</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN1_ImpReg</pIsImplemented> -->
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_2" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 2</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN2_ImpReg</pIsImplemented> -->
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_3" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 3</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN3_ImpReg</pIsImplemented> -->
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_4" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 4</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN4_ImpReg</pIsImplemented> -->
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_5" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 5</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN5_ImpReg</pIsImplemented> -->
+				<Value>0x00000005</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_6" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 6</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN6_ImpReg</pIsImplemented> -->
+				<Value>0x00000006</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_7" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 7</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOIN7_ImpReg</pIsImplemented> -->
+				<Value>0x00000007</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVDS_IN_0" NameSpace="Standard">
+				<DisplayName>LVDS Input 0</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVDSIN0_ImpReg</pIsImplemented> -->
+				<Value>0x00000008</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_1" NameSpace="Standard">
+				<DisplayName>LVDS Input 1</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVDSIN1_ImpReg</pIsImplemented> -->
+				<Value>0x00000009</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_2" NameSpace="Standard">
+				<DisplayName>LVDS Input 2</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVDSIN2_ImpReg</pIsImplemented> -->
+				<Value>0x0000000A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_3" NameSpace="Standard">
+				<DisplayName>LVDS Input 3</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVDSIN3_ImpReg</pIsImplemented> -->
+				<Value>0x0000000B</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_TTL_0" NameSpace="Standard">
+				<DisplayName>TTL 0</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL0_ImpReg</pIsImplemented> -->
+				<Value>0x0000000C</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_1" NameSpace="Standard">
+				<DisplayName>TTL 1</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL1_ImpReg</pIsImplemented> -->
+				<Value>0x0000000D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_2" NameSpace="Standard">
+				<DisplayName>TTL 2</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL2_ImpReg</pIsImplemented> -->
+				<Value>0x0000000E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_3" NameSpace="Standard">
+				<DisplayName>TTL 3</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL3_ImpReg</pIsImplemented> -->
+				<Value>0x0000000F</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_4" NameSpace="Standard">
+				<DisplayName>TTL 4</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL4_ImpReg</pIsImplemented> -->
+				<Value>0x00000010</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_5" NameSpace="Standard">
+				<DisplayName>TTL 5</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL5_ImpReg</pIsImplemented> -->
+				<Value>0x00000011</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_6" NameSpace="Standard">
+				<DisplayName>TTL 6</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL6_ImpReg</pIsImplemented> -->
+				<Value>0x00000012</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_7" NameSpace="Standard">
+				<DisplayName>TTL 7</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYTTL7_ImpReg</pIsImplemented> -->
+				<Value>0x00000013</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVTTL_0" NameSpace="Standard">
+				<DisplayName>LVTTL 0</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL0_ImpReg</pIsImplemented> -->
+				<Value>0x00000014</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_1" NameSpace="Standard">
+				<DisplayName>LVTTL 1</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL1_ImpReg</pIsImplemented> -->
+				<Value>0x00000015</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_2" NameSpace="Standard">
+				<DisplayName>LVTTL 2</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL2_ImpReg</pIsImplemented> -->
+				<Value>0x00000016</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_3" NameSpace="Standard">
+				<DisplayName>LVTTL 3</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL3_ImpReg</pIsImplemented> -->
+				<Value>0x00000017</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_4" NameSpace="Standard">
+				<DisplayName>LVTTL 4</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL4_ImpReg</pIsImplemented> -->
+				<Value>0x00000018</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_5" NameSpace="Standard">
+				<DisplayName>LVTTL 5</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL5_ImpReg</pIsImplemented> -->
+				<Value>0x00000019</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_6" NameSpace="Standard">
+				<DisplayName>LVTTL 6</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL6_ImpReg</pIsImplemented> -->
+				<Value>0x0000001A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_7" NameSpace="Standard">
+				<DisplayName>LVTTL 7</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVTTL7_ImpReg</pIsImplemented> -->
+				<Value>0x0000001B</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_OPTO_OUT_0" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 0</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT0_ImpReg</pIsImplemented> -->
+				<Value>0x0000001C</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_OUT_1" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 1</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT1_ImpReg</pIsImplemented> -->
+				<Value>0x0000001D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_OUT_2" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 2</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT2_ImpReg</pIsImplemented> -->
+				<Value>0x0000001E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_OUT_3" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 3</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT3_ImpReg</pIsImplemented> -->
+				<Value>0x0000001F</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_OUT_4" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 4</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT4_ImpReg</pIsImplemented> -->
+				<Value>0x00000020</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_OUT_5" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 5</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT5_ImpReg</pIsImplemented> -->
+				<Value>0x00000021</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_OUT_6" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 6</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT6_ImpReg</pIsImplemented> -->
+				<Value>0x00000022</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_OUT_7" NameSpace="Standard">
+				<DisplayName>OptoCoupled Output 7</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYOPTOOUT7_ImpReg</pIsImplemented> -->
+				<Value>0x00000023</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVDS_OUT_0" NameSpace="Standard">
+				<DisplayName>LVDS Output 0</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVDSOUT0_ImpReg</pIsImplemented> -->
+				<Value>0x00000024</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_OUT_1" NameSpace="Standard">
+				<DisplayName>LVDS Output 1</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVDSOUT1_ImpReg</pIsImplemented> -->
+				<Value>0x00000025</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_OUT_2" NameSpace="Standard">
+				<DisplayName>LVDS Output 2</DisplayName>
+				<!-- <pIsImplemented>LineSelector_KYLVDSOUT2_ImpReg</pIsImplemented> -->
+				<Value>0x00000026</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_OUT_3" NameSpace="Standard">
+				<DisplayName>LVDS Output 3</DisplayName>
+				<!-- pIsImplemented>LineSelector_KYLVDSOUT3_ImpReg</pIsImplemented> -->
+				<Value>0x00000027</Value>
+			</EnumEntry>
+
+			
+			<pValue>LineSelectorValue</pValue>
+			<pSelected>LineStatus</pSelected>
+			<pSelected>LineMode</pSelected>
+			<pSelected>LineInverter</pSelected>
+			<pSelected>LineSource</pSelected>
+			<pSelected>LineFormat</pSelected>
+		</Enumeration>
+		<IntReg Name="LineSelectorValue">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB80</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<!-- <Cachable>WriteThrough</Cachable> -->
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+			<!-- <Value>0xFFFFFFFFFFFF</Value> -->
+		<!-- <StructReg Comment="LineSelectorListReg">
+			<pAddress>pLineSelectorListAddr</pAddress>
+			<Length>8</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>LittleEndian</Endianess>
+			<StructEntry Name="LineSelector_ImpReg_AllBits">
+				<LSB>0</LSB>
+				<MSB>63</MSB>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN0_ImpReg">
+				<Bit>0</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN1_ImpReg">
+				<Bit>1</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN2_ImpReg">
+				<Bit>2</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN3_ImpReg">
+				<Bit>3</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN4_ImpReg">
+				<Bit>4</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN5_ImpReg">
+				<Bit>5</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN6_ImpReg">
+				<Bit>6</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOIN7_ImpReg">
+				<Bit>7</Bit>
+			</StructEntry>
+			
+			<StructEntry Name="LineSelector_KYLVDSIN0_ImpReg">
+				<Bit>8</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVDSIN1_ImpReg">
+				<Bit>9</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVDSIN2_ImpReg">
+				<Bit>10</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVDSIN3_ImpReg">
+				<Bit>11</Bit>
+			</StructEntry>
+			
+			<StructEntry Name="LineSelector_KYTTL0_ImpReg">
+				<Bit>12</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYTTL1_ImpReg">
+				<Bit>13</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYTTL2_ImpReg">
+				<Bit>14</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYTTL3_ImpReg">
+				<Bit>15</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYTTL4_ImpReg">
+				<Bit>16</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYTTL5_ImpReg">
+				<Bit>17</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYTTL6_ImpReg">
+				<Bit>18</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYTTL7_ImpReg">
+				<Bit>19</Bit>
+			</StructEntry>
+			
+			<StructEntry Name="LineSelector_KYLVTTL0_ImpReg">
+				<Bit>20</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVTTL1_ImpReg">
+				<Bit>21</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVTTL2_ImpReg">
+				<Bit>22</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVTTL3_ImpReg">
+				<Bit>23</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVTTL4_ImpReg">
+				<Bit>24</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVTTL5_ImpReg">
+				<Bit>25</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVTTL6_ImpReg">
+				<Bit>26</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVTTL7_ImpReg">
+				<Bit>27</Bit>
+			</StructEntry>
+			
+			<StructEntry Name="LineSelector_KYOPTOOUT0_ImpReg">
+				<Bit>28</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOOUT1_ImpReg">
+				<Bit>29</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOOUT2_ImpReg">
+				<Bit>30</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOOUT3_ImpReg">
+				<Bit>31</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOOUT4_ImpReg">
+				<Bit>32</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOOUT5_ImpReg">
+				<Bit>33</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOOUT6_ImpReg">
+				<Bit>34</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYOPTOOUT7_ImpReg">
+				<Bit>35</Bit>
+			</StructEntry>
+			
+			<StructEntry Name="LineSelector_KYLVDSOUT0_ImpReg">
+				<Bit>36</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVDSOUT1_ImpReg">
+				<Bit>37</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVDSOUT2_ImpReg">
+				<Bit>38</Bit>
+			</StructEntry>
+			<StructEntry Name="LineSelector_KYLVDSOUT3_ImpReg">
+				<Bit>39</Bit>
+			</StructEntry>
+		</StructReg> -->
+		<!-- <IntSwissKnife Name="pLineSelectorListAddr">
+			<pVariable Name="BASE_IO_CONTROL">DigitalIOControlBase</pVariable>
+			<Formula>BASE_IO_CONTROL + 0x00000028</Formula>
+		</IntSwissKnife> -->
+		
+		<!-- LineStatus -->
+		<Boolean Name="LineStatus" NameSpace="Standard">
+			<ToolTip>Returns the current status of the selected input or output Line.</ToolTip>
+			<Description>Returns the current status of the selected input or output Line.</Description>
+			<DisplayName>Line Status</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pIsImplemented>IsChameleonSide</pIsImplemented>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>LineStatusReg</pValue>
+		</Boolean>
+		<IntReg Name="LineStatusReg">
+			<!-- <pAddress>pLineStatusAddress</pAddress> -->
+			<Address>0x1FEFD88C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<pInvalidator>LineModeReg</pInvalidator>
+			<pInvalidator>LineInverterReg</pInvalidator>
+			<pInvalidator>LineSourceReg</pInvalidator>
+			<pInvalidator>SimulationTriggerSourceReg</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+			<Representation>PureNumber</Representation>
+		</IntReg>
+		<!-- <IntSwissKnife Name="pLineStatusAddress">
+			<pVariable Name="SINKADDR">LineSelectorValue</pVariable>
+			<Formula>(SINKADDR &lt; 32) ? 0x1FEFD88C : 0x1FEFD890 </Formula><!- - 0x8000300C : 0x80003010 - ->
+		</IntSwissKnife> -->
+		
+	
+		<!-- LineMode -->
+		<Integer Name="LineMode_EndAddress"><Value>0</Value></Integer>
+		<Enumeration Name="LineMode" NameSpace="Standard">
+			<ToolTip>Controls if the physical Line is used to Input or Output a signal.</ToolTip>
+			<Description>Controls if the physical Line is used to Input or Output a signal.</Description>
+			<DisplayName>Line Mode</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pIsImplemented>IsChameleonSide</pIsImplemented>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="Input" NameSpace="Standard">
+			  <DisplayName>Input</DisplayName>
+			  <Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="Output" NameSpace="Standard">
+			  <DisplayName>Output</DisplayName>
+			  <Value>1</Value>
+			</EnumEntry>
+			<pValue>LineModeReg</pValue>
+		</Enumeration>
+		<IntReg Name="LineModeReg">
+			<Address>0x1FEFD880</Address>
+			<!-- 
+			<IntSwissKnife Name="pSegmentsPerBufferAddr">
+				<pVariable Name="END_ADDRESS">LineMode_EndAddress</pVariable>
+				<pVariable Name="SELECTOR_VALUE">LineSelectorValue</pVariable>
+				<Formula>END_ADDRESS - (SELECTOR_VALUE + 1)*4</Formula>
+			</IntSwissKnife>
+			-->
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>LineSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- LineInverter -->
+		<Boolean Name="LineInverter" NameSpace="Standard">
+			<ToolTip>Controls the inversion of the signal of the selected input or output Line.</ToolTip>
+			<Description>Controls the inversion of the signal of the selected input or output Line.</Description>
+			<DisplayName>Line Inverter</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pIsImplemented>IsChameleonSide</pIsImplemented>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>LineInverterReg</pValue>
+		</Boolean>
+		<IntReg Name="LineInverterReg">
+			<!-- <pAddress>pLineInverterAddress</pAddress> -->
+			<Address>0x1FEFD884</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<pInvalidator>LineSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+			<Representation>PureNumber</Representation>
+		</IntReg>	
+		<!-- <IntSwissKnife Name="pLineInverterAddress">
+			<pVariable Name="SINKADDR">LineSelectorValue</pVariable>
+			<Formula>(SINKADDR &lt; 32) ? 0x1FEFD884 : 0x1FEFD888(now lineformat) </Formula><!- - 0x80003004 : 0x80003008 - ->
+		</IntSwissKnife> -->
+
+		<!-- LineFormat -->
+		<Enumeration Name="LineFormat" NameSpace="Standard">
+			<ToolTip>Controls the current electrical format of the selected physical input or output Line.</ToolTip>
+			<Description>Controls the current electrical format of the selected physical input or output Line.</Description>
+			<DisplayName>Line Format</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pIsImplemented>IsChameleonSide</pIsImplemented>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<EnumEntry Name="NoConnect" NameSpace="Standard">
+				<DisplayName>No Connect</DisplayName>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="TriState" NameSpace="Standard">
+				<DisplayName>TriState</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="TTL" NameSpace="Standard">
+				<DisplayName>TTL</DisplayName>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="LVDS" NameSpace="Standard">
+				<DisplayName>LVDS</DisplayName>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="RS422" NameSpace="Standard">
+				<DisplayName>RS422</DisplayName>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			<EnumEntry Name="OptoCoupled" NameSpace="Standard">
+				<DisplayName>OptoCoupled</DisplayName>
+				<Value>0x00000005</Value>
+			</EnumEntry>
+			<EnumEntry Name="LVTTL" NameSpace="Standard">
+				<DisplayName>LVTTL</DisplayName>
+				<Value>0x00000006</Value>
+			</EnumEntry>
+			<EnumEntry Name="NonAvailable" NameSpace="Standard">
+				<DisplayName>Non Available</DisplayName>
+				<Value>0x00000007</Value>
+			</EnumEntry>
+			
+			<pValue>LineFormatReg</pValue>
+		</Enumeration>
+		<IntReg Name="LineFormatReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD888</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>LineSelectorValue</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- LineSource -->
+		<Enumeration Name="LineSource" NameSpace="Standard">
+			<ToolTip>Selects which internal acquisition or I/O source signal to output on the selected Line.</ToolTip>
+			<Description>Selects which internal acquisition or I/O source signal to output on the selected Line.</Description>
+			<DisplayName>Line Source</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pIsImplemented>IsChameleonSide</pIsImplemented>
+			
+			<EnumEntry Name="KY_DISABLED" NameSpace="Standard">
+				<DisplayName>Disabled</DisplayName>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_0" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 0</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_1" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 1</DisplayName>
+				<Value>0x00000002</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_2" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 2</DisplayName>
+				<Value>0x00000003</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_3" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 3</DisplayName>
+				<Value>0x00000004</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_4" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 4</DisplayName>
+				<Value>0x00000005</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_5" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 5</DisplayName>
+				<Value>0x00000006</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_6" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 6</DisplayName>
+				<Value>0x00000007</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_OPTO_IN_7" NameSpace="Standard">
+				<DisplayName>OptoCoupled Input 7</DisplayName>
+				<Value>0x00000008</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVDS_IN_0" NameSpace="Standard">
+				<DisplayName>LVDS Input 0</DisplayName>
+				<Value>0x00000009</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_1" NameSpace="Standard">
+				<DisplayName>LVDS Input 1</DisplayName>
+				<Value>0x0000000A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_2" NameSpace="Standard">
+				<DisplayName>LVDS Input 2</DisplayName>
+				<Value>0x0000000B</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVDS_IN_3" NameSpace="Standard">
+				<DisplayName>LVDS Input 3</DisplayName>
+				<Value>0x0000000C</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_TTL_0" NameSpace="Standard">
+				<DisplayName>TTL 0</DisplayName>
+				<Value>0x0000000D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_1" NameSpace="Standard">
+				<DisplayName>TTL 1</DisplayName>
+				<Value>0x0000000E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_2" NameSpace="Standard">
+				<DisplayName>TTL 2</DisplayName>
+				<Value>0x0000000F</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_3" NameSpace="Standard">
+				<DisplayName>TTL 3</DisplayName>
+				<Value>0x00000010</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_4" NameSpace="Standard">
+				<DisplayName>TTL 4</DisplayName>
+				<Value>0x00000011</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_5" NameSpace="Standard">
+				<DisplayName>TTL 5</DisplayName>
+				<Value>0x00000012</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_6" NameSpace="Standard">
+				<DisplayName>TTL 6</DisplayName>
+				<Value>0x00000013</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TTL_7" NameSpace="Standard">
+				<DisplayName>TTL 7</DisplayName>
+				<Value>0x00000014</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_LVTTL_0" NameSpace="Standard">
+				<DisplayName>LVTTL 0</DisplayName>
+				<Value>0x00000015</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_1" NameSpace="Standard">
+				<DisplayName>LVTTL 1</DisplayName>
+				<Value>0x00000016</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_2" NameSpace="Standard">
+				<DisplayName>LVTTL 2</DisplayName>
+				<Value>0x00000017</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_3" NameSpace="Standard">
+				<DisplayName>LVTTL 3</DisplayName>
+				<Value>0x00000018</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_4" NameSpace="Standard">
+				<DisplayName>LVTTL 4</DisplayName>
+				<Value>0x00000019</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_5" NameSpace="Standard">
+				<DisplayName>LVTTL 5</DisplayName>
+				<Value>0x0000001A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_6" NameSpace="Standard">
+				<DisplayName>LVTTL 6</DisplayName>
+				<Value>0x0000001B</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_LVTTL_7" NameSpace="Standard">
+				<DisplayName>LVTTL 7</DisplayName>
+				<Value>0x0000001C</Value>
+			</EnumEntry>
+
+			<EnumEntry Name="KY_TIMER_ACTIVE_0" NameSpace="Standard">
+				<DisplayName>Timer 0 Active</DisplayName>
+				<Value>0x00000030</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_1" NameSpace="Standard">
+				<DisplayName>Timer 1 Active</DisplayName>
+				<Value>0x00000031</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_2" NameSpace="Standard">
+				<DisplayName>Timer 2 Active</DisplayName>
+				<Value>0x00000032</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_3" NameSpace="Standard">
+				<DisplayName>Timer 3 Active</DisplayName>
+				<Value>0x00000033</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_4" NameSpace="Standard">
+				<DisplayName>Timer 4 Active</DisplayName>
+				<Value>0x00000034</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_5" NameSpace="Standard">
+				<DisplayName>Timer 5 Active</DisplayName>
+				<Value>0x00000035</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_6" NameSpace="Standard">
+				<DisplayName>Timer 6 Active</DisplayName>
+				<Value>0x00000036</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_TIMER_ACTIVE_7" NameSpace="Standard">
+				<DisplayName>Timer 7 Active</DisplayName>
+				<Value>0x00000037</Value>
+			</EnumEntry>
+			
+			<EnumEntry Name="KY_USER_OUT_0" NameSpace="Standard">
+				<DisplayName>User Output 0</DisplayName>
+				<Value>0x00000038</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_USER_OUT_1" NameSpace="Standard">
+				<DisplayName>User Output 1</DisplayName>
+				<Value>0x00000039</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_USER_OUT_2" NameSpace="Standard">
+				<DisplayName>User Output 2</DisplayName>
+				<Value>0x0000003A</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_USER_OUT_3" NameSpace="Standard">
+				<DisplayName>User Output 3</DisplayName>
+				<Value>0x0000003B</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_USER_OUT_4" NameSpace="Standard">
+				<DisplayName>User Output 4</DisplayName>
+				<Value>0x0000003C</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_USER_OUT_5" NameSpace="Standard">
+				<DisplayName>User Output 5</DisplayName>
+				<Value>0x0000003D</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_USER_OUT_6" NameSpace="Standard">
+				<DisplayName>User Output 6</DisplayName>
+				<Value>0x0000003E</Value>
+			</EnumEntry>
+			<EnumEntry Name="KY_USER_OUT_7" NameSpace="Standard">
+				<DisplayName>User Output 7</DisplayName>
+				<Value>0x0000003F</Value>
+			</EnumEntry>
+			
+			<pValue>LineSourceReg</pValue>
+		</Enumeration>
+		<IntReg Name="LineSourceReg">
+			<Visibility>Invisible</Visibility>
+			<pAddress>pLineSourceAddress</pAddress>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<pInvalidator>SimulationTriggerSourceReg</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="pLineSourceAddress">
+			<pVariable Name="SINKADDR">LineSelectorValue</pVariable>
+			<!-- <Formula>0x1FEFD980 + 4*SINKADDR</Formula> --><!-- 0x80003100 + 4*SINKADDR -->
+			<Formula>0x1FEFD980</Formula><!-- 0x80003100 + 4*SINKADDR -->
+		</IntSwissKnife>
+	</Group>
+	
+	
+	<Integer Name="DigitalIOControlBase">
+		<Value>0xA0000000</Value>
+	</Integer>
+	<!-- ImageFormatControl -->
+	
+	<Group Comment="ImageFormatControl">
+		
+		<!-- Width -->
+		<Integer Name="Width" NameSpace="Standard">
+			<ToolTip>This feature represents the actual image width expelled by the camera (in pixels).</ToolTip>
+			<Description>This feature represents the actual image width expelled by the camera (in pixels).</Description>
+			<DisplayName>Width</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>WidthReg</pValue>
+			<Min>16</Min>
+			<pInc>pWidthInc</pInc>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="WidthReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBD8</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="pWidthInc">
+			<pVariable Name="PIX_FORMAT">PixelFormat</pVariable>
+			<Formula>((PIX_FORMAT &amp; 0xF) = 1) ? 2 : 1</Formula>
+		</IntSwissKnife>
+		
+		<!-- Heigth -->
+		<Integer Name="Height" NameSpace="Standard">
+			<ToolTip>This feature represents the actual image height expelled by the camera (in pixels).</ToolTip>
+			<Description>This feature represents the actual image height expelled by the camera (in pixels).</Description>
+			<DisplayName>Height</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>HeightReg</pValue>
+			<Min>1</Min>
+			<Inc>1</Inc>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="HeightReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBD4</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Width Max -->
+		<Integer Name="WidthMax" NameSpace="Standard">
+			<ToolTip>Maximum width (in pixels) of the image.</ToolTip>
+			<Description>Maximum width (in pixels) of the image. The dimension is calculated after horizontal binning, decimation or any other function changing the horizontal dimension of the image.</Description>
+			<DisplayName>Width Max</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>WidthMaxReg</pValue>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="WidthMaxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBD0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		
+		<!-- Heigth Max -->
+		<Integer Name="HeightMax" NameSpace="Standard">
+			<ToolTip>Maximum height (in pixels) of the image.</ToolTip>
+			<Description>Maximum height (in pixels) of the image. This dimension is calculated after vertical binning, decimation or any other function changing the vertical dimension of the image.</Description>
+			<DisplayName>Height Max</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>HeightMaxReg</pValue>
+			<Representation>Linear</Representation>
+		</Integer>
+		<IntReg Name="HeightMaxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBCC</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- OffsetX -->
+		<Integer Name="OffsetX" NameSpace="Standard">
+            <ToolTip>Horizontal offset from the origin to the area of interest (in pixels).</ToolTip>
+            <Description>Horizontal offset from the origin to the area of interest (in pixels).</Description>
+            <DisplayName>Offset X</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+            <pValue>OffsetXReg</pValue>
+			<Min>0</Min>
+			<pMax>OffsetXMax</pMax>
+        </Integer>
+		<IntReg Name="OffsetXReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBC8</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="OffsetXMax" NameSpace="Standard">
+		    <Visibility>Invisible</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <pVariable Name="IMAGE_WIDTH_MAX">WidthMax</pVariable>
+			<pVariable Name="IMAGE_WIDTH">Width</pVariable>
+			<Formula>IMAGE_WIDTH_MAX-IMAGE_WIDTH</Formula>
+		</IntSwissKnife>
+		
+		<!-- OffsetY -->
+		<Integer Name="OffsetY" NameSpace="Standard">
+            <ToolTip>Vertical offset from the origin to the area of interest (in pixels).</ToolTip>
+            <Description>Vertical offset from the origin to the area of interest (in pixels).</Description>
+            <DisplayName>Offset Y</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+            <pValue>OffsetYReg</pValue>
+			<Min>0</Min>
+			<pMax>OffsetYMax</pMax>
+        </Integer>
+		<IntReg Name="OffsetYReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBC4</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<IntSwissKnife Name="OffsetYMax" NameSpace="Standard">
+		    <Visibility>Invisible</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <pVariable Name="IMAGE_HEIGHT_MAX">HeightMax</pVariable>
+			<pVariable Name="IMAGE_HEIGHT">Height</pVariable>
+			<Formula>IMAGE_HEIGHT_MAX-IMAGE_HEIGHT</Formula>
+		</IntSwissKnife>
+						
+		<!-- Pixel Format -->
+		<Enumeration Name="PixelFormat" NameSpace="Standard">
+			<ToolTip>This feature indicates the format of the pixel to use during the acquisition.</ToolTip>
+			<Description>This feature indicates the format of the pixel to use during the acquisition.</Description>
+			<DisplayName>Pixel Format</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="Mono8" NameSpace="Standard">
+				<DisplayName>Mono 8</DisplayName>
+				<Value>0x00000101</Value>
+			</EnumEntry>
+			<EnumEntry Name="Mono10" NameSpace="Standard">
+				<DisplayName>Mono 10</DisplayName>
+				<Value>0x00000102</Value>
+			</EnumEntry>
+			<EnumEntry Name="Mono12" NameSpace="Standard">
+				<DisplayName>Mono 12</DisplayName>
+				<Value>0x00000103</Value>
+			</EnumEntry>
+			<EnumEntry Name="Mono14" NameSpace="Standard">
+				<DisplayName>Mono 14</DisplayName>
+				<Value>0x00000104</Value>
+			</EnumEntry>			
+			<EnumEntry Name="Mono16" NameSpace="Standard">
+				<DisplayName>Mono 16</DisplayName>
+				<Value>0x00000105</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR8" NameSpace="Standard">
+				<DisplayName>BayerGR 8</DisplayName>
+				<Value>0x00000311</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR10" NameSpace="Standard">
+				<DisplayName>BayerGR 10</DisplayName>
+				<Value>0x00000312</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR12" NameSpace="Standard">
+				<DisplayName>BayerGR 12</DisplayName>
+				<Value>0x00000313</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR14" NameSpace="Standard">
+				<DisplayName>BayerGR 14</DisplayName>
+				<Value>0x00000314</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGR16" NameSpace="Standard">
+				<DisplayName>BayerGR 16</DisplayName>
+				<Value>0x00000315</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG8" NameSpace="Standard">
+				<DisplayName>BayerRG 8</DisplayName>
+				<Value>0x00000321</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG10" NameSpace="Standard">
+				<DisplayName>BayerRG 10</DisplayName>
+				<Value>0x00000322</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG12" NameSpace="Standard">
+				<DisplayName>BayerRG 12</DisplayName>
+				<Value>0x00000323</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG14" NameSpace="Standard">
+				<DisplayName>BayerRG 14</DisplayName>
+				<Value>0x00000324</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerRG16" NameSpace="Standard">
+				<DisplayName>BayerRG 16</DisplayName>
+				<Value>0x00000325</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB8" NameSpace="Standard">
+				<DisplayName>BayerGB 8</DisplayName>
+				<Value>0x00000331</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB10" NameSpace="Standard">
+				<DisplayName>BayerGB 10</DisplayName>
+				<Value>0x00000332</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB12" NameSpace="Standard">
+				<DisplayName>BayerGB 12</DisplayName>
+				<Value>0x00000333</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB14" NameSpace="Standard">
+				<DisplayName>BayerGB 14</DisplayName>
+				<Value>0x00000334</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerGB16" NameSpace="Standard">
+				<DisplayName>BayerGB 16</DisplayName>
+				<Value>0x00000335</Value>
+			</EnumEntry>			
+			<EnumEntry Name="BayerBG8" NameSpace="Standard">
+				<DisplayName>BayerBG 8</DisplayName>
+				<Value>0x00000341</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG10" NameSpace="Standard">
+				<DisplayName>BayerBG 10</DisplayName>
+				<Value>0x00000342</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG12" NameSpace="Standard">
+				<DisplayName>BayerBG 12</DisplayName>
+				<Value>0x00000343</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG14" NameSpace="Standard">
+				<DisplayName>BayerBG14</DisplayName>
+				<Value>0x00000344</Value>
+			</EnumEntry>
+			<EnumEntry Name="BayerBG16" NameSpace="Standard">
+				<DisplayName>BayerBG 16</DisplayName>
+				<Value>0x00000345</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB8" NameSpace="Standard">
+				<DisplayName>RGB 8</DisplayName>
+				<Value>0x00000401</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB10" NameSpace="Standard">
+				<DisplayName>RGB 10</DisplayName>
+				<Value>0x00000402</Value>
+			</EnumEntry>
+			<EnumEntry Name="RGB12" NameSpace="Standard">
+				<DisplayName>RGB 12</DisplayName>
+				<Value>0x00000403</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB14" NameSpace="Standard">
+				<DisplayName>RGB 14</DisplayName>
+				<Value>0x00000404</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGB16" NameSpace="Standard">
+				<DisplayName>RGB 16</DisplayName>
+				<Value>0x00000405</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA8" NameSpace="Standard">
+				<DisplayName>RGBA 8</DisplayName>
+				<Value>0x00000501</Value>
+			</EnumEntry>
+			<EnumEntry Name="RGBA10" NameSpace="Standard">
+				<DisplayName>RGBA 10</DisplayName>
+				<Value>0x00000502</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA12" NameSpace="Standard">
+				<DisplayName>RGBA 12</DisplayName>
+				<Value>0x00000503</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA14" NameSpace="Standard">
+				<DisplayName>RGBA 14</DisplayName>
+				<Value>0x00000504</Value>
+			</EnumEntry>			
+			<EnumEntry Name="RGBA16" NameSpace="Standard">
+				<DisplayName>RGBA 16</DisplayName>
+				<Value>0x00000505</Value>
+			</EnumEntry>
+			<EnumEntry Name="YUV422_8" NameSpace="Standard">
+				<DisplayName>YUV422_8</DisplayName>
+				<Value>0x00000621</Value>
+			</EnumEntry>
+			<EnumEntry Name="YUV422_16" NameSpace="Standard">
+				<DisplayName>YUV422_16</DisplayName>
+				<Value>0x00000625</Value>
+			</EnumEntry>
+			<EnumEntry Name="YCBCR709_422_8" NameSpace="Standard">
+				<DisplayName>YCBCR709_422_8</DisplayName>
+				<Value>0x00000821</Value>
+			</EnumEntry>
+			<EnumEntry Name="YCBCR709_422_16" NameSpace="Standard">
+				<DisplayName>YCBCR709_422_16</DisplayName>
+				<Value>0x00000825</Value>
+			</EnumEntry>
+			<pValue>PixelFormatReg</pValue>
+		</Enumeration>
+		
+		<IntReg Name="PixelFormatReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBC0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+
+						
+		<!-- ScanMode -->
+		<Enumeration Name="ScanMode" NameSpace="Standard">
+			<ToolTip>Indicates whether generated picture is progressive or interlaced.</ToolTip>
+			<Description>Indicates whether generated picture is progressive or interlaced.</Description>
+			<DisplayName>Scan Mode</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="Progressive" NameSpace="Standard">
+				<DisplayName>Progressive</DisplayName>
+				<Value>0x00000000</Value>
+			</EnumEntry>
+			<EnumEntry Name="Interlaced" NameSpace="Standard">
+				<DisplayName>Interlaced</DisplayName>
+				<Value>0x00000001</Value>
+			</EnumEntry>
+			<pValue>ScanModeReg</pValue>
+		</Enumeration>
+		
+		<IntReg Name="ScanModeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBBC</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+
+	</Group>
+	
+	<!-- AcquisitionControl  -->
+
+	<Group Comment="AcquisitionControl">
+		<!-- Acquisition Mode -->
+		<Enumeration Name="AcquisitionMode" NameSpace="Standard">
+			<ToolTip>This feature controls the acquisition mode of the device.</ToolTip>
+			<Description>This feature controls the acquisition mode of the device.</Description>
+			<DisplayName>Acquisition Mode</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="Continuous" NameSpace="Standard">
+				<DisplayName>Continuous</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="SingleFrame" NameSpace="Standard">
+				<DisplayName>Single Frame</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<EnumEntry Name="MultiFrame" NameSpace="Standard">
+				<DisplayName>Multi Frame</DisplayName>
+				<Value>2</Value>
+			</EnumEntry>
+			<pValue>AcquisitionModeReg</pValue>
+		</Enumeration>
+		<IntReg Name="AcquisitionModeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBB8</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Acquisition Start -->
+		<Command Name="AcquisitionStart" NameSpace="Standard">
+			<ToolTip>This feature starts the Acquisition of the device.</ToolTip>
+			<Description>This feature starts the Acquisition of the device.</Description>
+			<DisplayName>Acquisition Start</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>AcquisitionStartReg</pValue>
+			<CommandValue>1</CommandValue>
+		</Command>
+		<IntReg Name="AcquisitionStartReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBB4</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Acquisition Stop -->
+		<Command Name="AcquisitionStop" NameSpace="Standard">
+			<ToolTip>This feature stops the Acquisition of the device at the end of the current Frame.</ToolTip>
+			<Description>This feature stops the Acquisition of the device at the end of the current Frame.</Description>
+			<DisplayName>Acquisition Stop</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>AcquisitionStopReg</pValue>
+			<CommandValue>0</CommandValue>
+		</Command>
+		<IntReg Name="AcquisitionStopReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBB0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	
+		<!-- AcquisitionFrameCount -->
+		<Integer Name="AcquisitionFrameCount" NameSpace="Standard">
+			<ToolTip>Number of frames to be sent in MultiFrame AcquisitionMode.</ToolTip>
+            <Description>Number of frames to be sent in MultiFrame AcquisitionMode.</Description>
+			<DisplayName>Acquisition Frame Count</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>AcquisitionFrameCountReg</pValue>
+			<Min>1</Min>
+		</Integer>
+		<IntReg Name="AcquisitionFrameCountReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBAC</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Acquisition Frame Rate -->
+		<Float Name="AcquisitionFrameRate" NameSpace="Standard">
+            <ToolTip>KAYA Frame rate in Hz.</ToolTip>
+            <Description>KAYA Frame rate in Hz.</Description>
+            <DisplayName>Acquisition Frame Rate</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+            <pValue>pFrameRateReg</pValue>
+			<Unit>Hz</Unit>
+			<Representation>Linear</Representation>
+        </Float>
+		<FloatReg Name="pFrameRateReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBA8</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>BigEndian</Endianess>
+   		 </FloatReg>
+		
+		<!-- InstantFPS -->
+		<Float Name="InstantFPS" NameSpace="Standard">
+            <ToolTip>Instantly calculated frame rate in Hz.</ToolTip>
+            <Description>Instant frame rate in Hz.</Description>
+            <DisplayName>InstantFPS</DisplayName>
+            <!-- <Visibility>Guru</Visibility> --> <!-- Make it visible only for debugging purposes -->
+			<Visibility>Invisible</Visibility>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <pValue>pInstantFPSReg</pValue>
+			<Unit>Hz</Unit>
+			<Representation>Linear</Representation>
+        </Float>
+		<FloatReg Name="pInstantFPSReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD80C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>LittleEndian</Endianess>
+   		 </FloatReg>
+		
+		<!-- Acquisition Line Rate -->
+		<Float Name="AcquisitionLineRate" NameSpace="Standard">
+            <ToolTip>KAYA Line rate in Hz.</ToolTip>
+            <Description>KAYA Line rate in Hz.</Description>
+            <DisplayName>Acquisition Line Rate</DisplayName>
+            <Visibility>Beginner</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+            <pValue>pLineRateReg</pValue>
+			<Unit>Hz</Unit>
+			<Representation>Linear</Representation>
+        </Float>
+		<FloatReg Name="pLineRateReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBA4</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>BigEndian</Endianess>
+   		</FloatReg>
+		
+		<!-- Video source file path -->
+		<StringReg Name="SourceFilePath">
+			<Description>Path to a file if single file is selected as video source.</Description>
+			<DisplayName>Image source file</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Address>0x1FEFEC00</Address>
+			<Length>4096</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+		</StringReg>
+		
+		<!-- Video source folder path -->
+		<StringReg Name="SourceFolderPath">
+			<Description>Path of a folder if folder with multiple files is selected as video source.</Description>
+			<DisplayName>Images source folder</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<Address>0x1FEFDC00</Address>
+			<Length>4096</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+		</StringReg>
+		
+		<!-- Video source type -->
+		<Enumeration Name="VideoSourceType" NameSpace="Standard">
+			<ToolTip>Type of video source for stream generation.</ToolTip>
+			<Description>Type of video source for stream generation.</Description>
+			<DisplayName>Video source type</DisplayName>
+			<Visibility>Beginner</Visibility>		
+			<EnumEntry Name="Pattern" NameSpace="Standard">
+				<DisplayName>Pattern</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="File" NameSpace="Standard">
+				<DisplayName>File</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>1</Value>
+			</EnumEntry>
+			<EnumEntry Name="Folder" NameSpace="Standard">
+				<DisplayName>Folder</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>2</Value>
+			</EnumEntry>
+			<pValue>VideoSourceTypeReg</pValue>
+		</Enumeration>
+		<IntReg Name="VideoSourceTypeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBFC</Address>
+			<Length>1</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- Video source file type -->
+		<Enumeration Name="VideoSourceFileType" NameSpace="Standard">
+			<ToolTip>Type of video source file in case source is folder.</ToolTip>
+			<Description>Type of video source file in case source is folder.</Description>
+			<DisplayName>Source file type</DisplayName>
+			<Visibility>Beginner</Visibility>		
+			<EnumEntry Name="Raw" NameSpace="Standard">
+				<DisplayName>RAW</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="Bmp" NameSpace="Standard">
+				<DisplayName>BMP</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>1</Value>
+			</EnumEntry>
+			<EnumEntry Name="Tif" NameSpace="Standard">
+				<DisplayName>TIF</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>2</Value>
+			</EnumEntry>
+			<EnumEntry Name="Png" NameSpace="Standard">
+				<DisplayName>PNG</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>3</Value>
+			</EnumEntry>
+			<pValue>VideoSourceFileTypeReg</pValue>
+		</Enumeration>
+		<IntReg Name="VideoSourceFileTypeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBF4</Address>
+			<Length>1</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		
+		<!-- Video source pattern type -->
+		<Enumeration Name="VideoSourcePatternType" NameSpace="Standard">
+			<ToolTip>Type of pattern in case pattern source is selected.</ToolTip>
+			<Description>Type of pattern in case pattern source is selected.</Description>
+			<DisplayName>Pattern type</DisplayName>
+			<Visibility>Beginner</Visibility>		
+			<EnumEntry Name="XRAMP" NameSpace="Standard">
+				<DisplayName>Horizontal ramp</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="XRAMP_COLOR" NameSpace="Standard">
+				<DisplayName>Horizontal ramp (color)</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>1</Value>
+			</EnumEntry>
+			<EnumEntry Name="YRAMP" NameSpace="Standard">
+				<DisplayName>Vertical ramp</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>2</Value>
+			</EnumEntry>
+			<EnumEntry Name="YRAMP_COLOR" NameSpace="Standard">
+				<DisplayName>Vertical ramp (color)</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>3</Value>
+			</EnumEntry>
+			<EnumEntry Name="XYRAMP" NameSpace="Standard">
+				<DisplayName>Diagonal ramp</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>4</Value>
+			</EnumEntry>
+			<EnumEntry Name="XYRAMP_COLOR" NameSpace="Standard">
+				<DisplayName>Diagonal ramp (color)</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>5</Value>
+			</EnumEntry>
+			<EnumEntry Name="FIXED" NameSpace="Standard">
+				<DisplayName>Fixed</DisplayName>
+				<Visibility>Invisible</Visibility>
+				<Value>6</Value>
+			</EnumEntry>
+			<pValue>VideoSourcePatternTypeReg</pValue>
+		</Enumeration>
+		<IntReg Name="VideoSourcePatternTypeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBF8</Address>
+			<Length>1</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- VideoSourceFileCount -->
+		<Integer Name="VideoSourceFileCount" NameSpace="Standard">
+			<ToolTip>Number of files to read in case source is folder.</ToolTip>
+			<Description>Number of files to read in case source is folder.</Description>
+			<DisplayName>Source files count</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>VideoSourceFileCountReg</pValue>
+		</Integer>
+		<IntReg Name="VideoSourceFileCountReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBF0</Address>
+			<Length>2</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<Integer Name="VideoSourcePatternValue1" NameSpace="Standard">
+			<ToolTip>Fixed pattern value 1.</ToolTip>
+			<Description>Fixed pattern value 1.</Description>
+			<DisplayName>Fixed pattern value 1</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>VideoSourcePatternValue1Reg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="VideoSourcePatternValue1Reg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBEC</Address>
+			<Length>2</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<Integer Name="VideoSourcePatternValue2" NameSpace="Standard">
+			<ToolTip>Fixed pattern value 2.</ToolTip>
+			<Description>Fixed pattern value 2.</Description>
+			<DisplayName>Fixed pattern value 2</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>VideoSourcePatternValue2Reg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="VideoSourcePatternValue2Reg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBE8</Address>
+			<Length>2</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<Integer Name="VideoSourcePatternValue3" NameSpace="Standard">
+			<ToolTip>Fixed pattern value 3.</ToolTip>
+			<Description>Fixed pattern value 3.</Description>
+			<DisplayName>Fixed pattern value 3</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>VideoSourcePatternValue3Reg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="VideoSourcePatternValue3Reg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBE4</Address>
+			<Length>2</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<Integer Name="VideoSourcePatternValue4" NameSpace="Standard">
+			<ToolTip>Fixed pattern value 4.</ToolTip>
+			<Description>Fixed pattern value 4.</Description>
+			<DisplayName>Fixed pattern value 4</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>VideoSourcePatternValue4Reg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="VideoSourcePatternValue4Reg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBE0</Address>
+			<Length>2</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+	</Group>
+	
+	<!-- TransportLayerControl -->
+
+	<Group Comment="TransportLayerControl">
+		<!-- Payload Size -->
+		<Integer Name="PayloadSize" NameSpace="Standard">
+			<ToolTip>Provides the number of bytes transferred for each image or chunk on the stream channel.</ToolTip>
+            <Description>Provides the number of bytes transferred for each image or chunk on the stream channel. This includes any end-of-line, end-of-frame statistics or other stamp data. This is the total size of data payload for a data block.</Description>
+            <DisplayName>Payload Size</DisplayName>
+            <Visibility>Expert</Visibility>
+            <ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>PayloadSizeReg</pValue>
+		</Integer>
+		<IntReg Name="PayloadSizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDBA0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- DeviceTapGeometry -->
+		<Enumeration Name="DeviceTapGeometry" NameSpace="Standard">
+			<ToolTip>This device tap geometry feature describes the geometrical properties characterizing the taps of a camera as presented at the output of the device.</ToolTip>
+			<Description>This device tap geometry feature describes the geometrical properties characterizing the taps of a camera as presented at the output of the device.</Description>
+			<DisplayName>Device tap geometry</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<EnumEntry Name="Geometry_1X_1Y" NameSpace="Standard">
+				<DisplayName>1X-1Y</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<pValue>DeviceTapGeometryReg</pValue>
+		</Enumeration>
+		<IntReg Name="DeviceTapGeometryReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFDB9C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	</Group>
+	
+	<!-- Support	-->
+	
+	<Group Comment="Support">
+		<!-- Standard -->
+		<Integer Name="Standard" NameSpace="Standard">
+			<ToolTip>Bootstrap register Standard.</ToolTip>
+			<Description>Bootstrap register Standard.</Description>
+			<DisplayName>Standard</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>StandardReg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="StandardReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0000</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Revision -->
+		<Integer Name="Revision" NameSpace="Standard">
+			<ToolTip>Bootstrap register Revision.</ToolTip>
+			<Description>Bootstrap register Revision.</Description>
+			<DisplayName>Revision</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>RevisionReg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="RevisionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0004</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- VersionsSupported -->
+		<Integer Name="VersionsSupported" NameSpace="Standard">
+			<ToolTip>Bitmask containing all supported version(s) of the CoaXPress specification.</ToolTip>
+			<Description>Bootstrap register. The bitmask indicates all version(s) of the CoaXPress specification supported by the Device.</Description>
+			<DisplayName>CXP Versions Supported</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<!-- <pIsImplemented>CoaXPress_Revision_2_0_IsImplemented</pIsImplemented> -->  <!-- when CXP 2.0 is not implemented this parameter is not suppossed even appear, but we want to see it for debugging purposes, so we make it "RO" -->
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>VersionsSupportedReg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="VersionsSupportedReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4044</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- VersionUsed -->
+		<!-- Note about <pIsLocked>CoaXPress_Revision_2_0_NotImplemented</pIsLocked>: if CXP 2.0 is not implemented, this parameter is not suppossed even appear, 
+             but we want to see it for debugging purposes, so we make it "locked" -->
+        
+        <!-- Option 1: "VersionUsed" as integer with "VersionUsedSelector" as enum alias: (don't forget to open "VersionUsedSelector" feature in the Category Name="CXP" -->
+        <!--
+		<Enumeration Name="VersionUsedSelector" NameSpace="Standard">
+			<ToolTip>Version of the CoaXPress specification currently used.</ToolTip>
+			<Description>Currently selected version of the CoaXPress specification used to communicate between the Device and Host.</Description>
+			<DisplayName>CXP Version Used selector</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsLocked>CoaXPress_Revision_2_0_NotImplemented</pIsLocked>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+            <pCastAlias>VersionUsed</pCastAlias>
+			<EnumEntry Name="CXP 1.0" NameSpace="Standard">
+			  <DisplayName>CXP 1.0</DisplayName>
+			  <Value>0x00010000</Value>
+			</EnumEntry>
+			<EnumEntry Name="CXP 1.1" NameSpace="Standard">
+			  <DisplayName>CXP 1.1</DisplayName>
+			  <Value>0x00010001</Value>
+			</EnumEntry>
+			<EnumEntry Name="CXP 2.0" NameSpace="Standard">
+			  <DisplayName>CXP 2.0</DisplayName>
+			  <Value>0x00020000</Value>
+			</EnumEntry>
+			<pValue>VersionUsedReg</pValue>
+		</Enumeration>
+		<Integer Name="VersionUsed" NameSpace="Standard">
+			<ToolTip>Version of the CoaXPress specification currently used.</ToolTip>
+			<Description>Currently selected version of the CoaXPress specification used to communicate between the Device and Host.</Description>
+			<DisplayName>CXP Version Used</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsLocked>CoaXPress_Revision_2_0_NotImplemented</pIsLocked>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>VersionUsedReg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+        -->
+        
+        <!-- Option 2: Single "VersionUsed" as enum: -->
+        <!--
+        -->
+		<Enumeration Name="VersionUsed" NameSpace="Standard">
+			<ToolTip>Version of the CoaXPress specification currently used.</ToolTip>
+			<Description>Currently selected version of the CoaXPress specification used to communicate between the Device and Host.</Description>
+			<DisplayName>CXP Version Used</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsLocked>CoaXPress_Revision_2_0_NotImplemented</pIsLocked> 
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="CXP 1.0" NameSpace="Standard">
+			  <DisplayName>CXP 1.0</DisplayName>
+			  <Value>0x00010000</Value>
+			</EnumEntry>
+			<EnumEntry Name="CXP 1.1" NameSpace="Standard">
+			  <DisplayName>CXP 1.1</DisplayName>
+			  <Value>0x00010001</Value>
+			</EnumEntry>
+			<EnumEntry Name="CXP 2.0" NameSpace="Standard">
+			  <DisplayName>CXP 2.0</DisplayName>
+              <pIsAvailable>CoaXPress_Revision_2_0_IsImplemented</pIsAvailable>
+			  <Value>0x00020000</Value>
+			</EnumEntry>
+			<pValue>VersionUsedReg</pValue>
+		</Enumeration>
+        
+        
+		<IntReg Name="VersionUsedReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4048</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- LowSpeedTimeout -->
+		<Float Name="LowSpeedTimeout" NameSpace="Standard">
+			<ToolTip>Low Speed timeout. 8ns resolution, units in microseconds(us).</ToolTip>
+			<Description>Low Speed timeout. 8ns resolution, units in microseconds(us). Default value is 800ms</Description>
+			<DisplayName>Low Speed timeout</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pIsImplemented>CoaXPress_Revision_2_0_IsImplemented</pIsImplemented>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pLowSpeedTimeoutReg</pValue>
+			<Min>0</Min>
+			<Max>34359738</Max>
+			<Unit>Us</Unit>
+			<Representation>Linear</Representation>
+		</Float>
+		<IntReg Name="LowSpeedTimeoutReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD7F0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		<Converter Name="pLowSpeedTimeoutReg">
+			<FormulaTo> FROM * 125.0 </FormulaTo>
+			<FormulaFrom> TO / 125.0 </FormulaFrom>
+			<pValue>LowSpeedTimeoutReg</pValue>
+		</Converter>
+		<!-- <FormulaFrom> describes how to make the float from the int -->
+		<!-- <FormulaTo> describes how to make the int from the float -->
+		
+		<!-- HeartbeatPeriod -->
+		<Float Name="HeartbeatPeriod" NameSpace="Standard">
+			<ToolTip>Heartbeat period. 8ns resolution, units in microseconds(us).</ToolTip>
+			<Description>Heartbeat period. 8ns resolution, units in microseconds(us). Default value is 10ms</Description>
+			<DisplayName>Heartbeat period</DisplayName>
+			<Visibility>Expert</Visibility>
+			<pIsImplemented>CoaXPress_Revision_2_0_IsImplemented</pIsImplemented>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>pHeartbeatPeriodReg</pValue>
+			<Min>0</Min>
+			<Max>34359738</Max>
+			<Unit>Us</Unit>
+			<Representation>Linear</Representation>
+		</Float>
+		<IntReg Name="HeartbeatPeriodReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD7EC</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		<Converter Name="pHeartbeatPeriodReg">
+			<FormulaTo> FROM * 125.0 </FormulaTo>
+			<FormulaFrom> TO / 125.0 </FormulaFrom>
+			<pValue>HeartbeatPeriodReg</pValue>
+		</Converter>
+		
+		<!-- XmlManifestSize -->
+		<Integer Name="XmlManifestSize" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlManifestSize.</ToolTip>
+			<Description>Bootstrap register XmlManifestSize.</Description>
+			<DisplayName>XmlManifestSize</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlManifestSizeReg</pValue>
+		</Integer>
+		<IntReg Name="XmlManifestSizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0008</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlManifestSelector -->
+		<Integer Name="XmlManifestSelector" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlManifestSelector.</ToolTip>
+			<Description>Bootstrap register XmlManifestSelector.</Description>
+			<DisplayName>XmlManifestSelector</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>XmlManifestSelectorReg</pValue>
+		</Integer>
+		<IntReg Name="XmlManifestSelectorReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x000C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlVersion -->
+		<Integer Name="XmlVersion" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlVersion.</ToolTip>
+			<Description>Bootstrap register XmlVersion.</Description>
+			<DisplayName>XmlVersion</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlVersionReg</pValue>
+		</Integer>
+		<IntReg Name="XmlVersionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0010</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlSchemaVersion -->
+		<Integer Name="XmlSchemaVersion" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlSchemaVersion.</ToolTip>
+			<Description>Bootstrap register XmlSchemaVersion.</Description>
+			<DisplayName>XmlSchemaVersion</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlSchemaVersionReg</pValue>
+		</Integer>
+		<IntReg Name="XmlSchemaVersionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0014</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- XmlUrlAddress -->
+		<Integer Name="XmlUrlAddress" NameSpace="Standard">
+			<ToolTip>Bootstrap register XmlUrlAddress.</ToolTip>
+			<Description>Bootstrap register XmlUrlAddress.</Description>
+			<DisplayName>XmlUrlAddress</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>XmlUrlAddressReg</pValue>
+		</Integer>
+		<IntReg Name="XmlUrlAddressReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x0018</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- lidcPointer -->
+		<Integer Name="lidcPointer" NameSpace="Standard">
+			<ToolTip>Bootstrap register lidcPointer.</ToolTip>
+			<Description>Bootstrap register lidcPointer.</Description>
+			<DisplayName>lidcPointer</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>lidcPointerReg</pValue>
+		</Integer>
+		<IntReg Name="lidcPointerReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x001C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	</Group>
+	
+	<!-- CXP -->
+	<Group Comment="CXP">
+		<!-- LinkReset -->
+		<Integer Name="LinkReset" NameSpace="Standard">
+			<ToolTip>Bootstrap register LinkReset.</ToolTip>
+			<Description>Bootstrap register LinkReset.</Description>
+			<DisplayName>LinkReset</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>LinkResetReg</pValue>
+		</Integer>
+		<IntReg Name="LinkResetReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4000</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- DeviceLinkID -->
+		<Integer Name="DeviceLinkID" NameSpace="Standard">
+			<ToolTip>Bootstrap register DeviceLinkID.</ToolTip>
+			<Description>Bootstrap register DeviceLinkID.</Description>
+			<DisplayName>DeviceLinkID</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>DeviceLinkIDReg</pValue>
+		</Integer>
+		<IntReg Name="DeviceLinkIDReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4004</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- MasterHostLinkID -->
+		<Integer Name="MasterHostLinkID" NameSpace="Standard">
+			<ToolTip>Bootstrap register MasterHostLinkID.</ToolTip>
+			<Description>Bootstrap register MasterHostLinkID.</Description>
+			<DisplayName>MasterHostLinkID</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>MasterHostLinkIDReg</pValue>
+		</Integer>
+		<IntReg Name="MasterHostLinkIDReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4008</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- ControlPacketDataSize -->
+		<Integer Name="ControlPacketDataSize" NameSpace="Standard">
+			<ToolTip>Bootstrap register ControlPacketDataSize.</ToolTip>
+			<Description>Bootstrap register ControlPacketDataSize.</Description>
+			<DisplayName>ControlPacketDataSize</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>ControlPacketDataSizeReg</pValue>
+		</Integer>
+		<IntReg Name="ControlPacketDataSizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x400C</Address>
+			<Length>4</Length>
+			<AccessMode>RO</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- StreamPacketDataSize -->
+		<Integer Name="StreamPacketDataSize" NameSpace="Standard">
+			<ToolTip>Bootstrap register StreamPacketDataSize.</ToolTip>
+			<Description>Bootstrap register StreamPacketDataSize.</Description>
+			<DisplayName>StreamPacketDataSize</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>StreamPacketDataSizeReg</pValue>
+		</Integer>
+		<IntReg Name="StreamPacketDataSizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4010</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- LinkConfig -->
+		<Enumeration Name="LinkConfig" NameSpace="Standard">
+			<ToolTip>Bootstrap register LinkConfig.</ToolTip>
+			<Description>Bootstrap register LinkConfig.</Description>
+			<DisplayName>LinkConfig</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<!-- see "typedef enum _cxp_link_speed" and "int64_t connectionConfig" in ConfigInitialParams() -->
+			<EnumEntry Name="x1_CXP_1" NameSpace="Standard">
+				<DisplayName>1 Link 1.250 Gbps</DisplayName>
+				<Value>0x00010028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_2" NameSpace="Standard">
+				<DisplayName>1 Link 2.500 Gbps</DisplayName>
+				<Value>0x00010030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_3" NameSpace="Standard">
+				<DisplayName>1 Link 3.125 Gbps</DisplayName>
+				<Value>0x00010038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_5" NameSpace="Standard">
+				<DisplayName>1 Link 5.0 Gbps</DisplayName>
+				<Value>0x00010040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_6" NameSpace="Standard">
+				<DisplayName>1 Link 6.25 Gbps</DisplayName>
+				<Value>0x00010048</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_10" NameSpace="Standard">
+				<DisplayName>1 Link 10 Gbps</DisplayName>
+			    <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+				<Value>0x00010050</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_12" NameSpace="Standard">
+				<DisplayName>1 Link 12 Gbps</DisplayName>
+			    <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+				<Value>0x00010058</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_1" NameSpace="Standard">
+				<DisplayName>2 Link 1.250 Gbps</DisplayName>
+				<Value>0x00020028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_2" NameSpace="Standard">
+				<DisplayName>2 Link 2.500 Gbps</DisplayName>
+				<Value>0x00020030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_3" NameSpace="Standard">
+				<DisplayName>2 Link 3.125 Gbps</DisplayName>
+				<Value>0x00020038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_5" NameSpace="Standard">
+				<DisplayName>2 Link 5.0 Gbps</DisplayName>
+				<Value>0x00020040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_6" NameSpace="Standard">
+				<DisplayName>2 Link 6.25 Gbps</DisplayName>
+				<Value>0x00020048</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_10" NameSpace="Standard">
+				<DisplayName>2 Link 10 Gbps</DisplayName>
+			    <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+				<Value>0x00020050</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_12" NameSpace="Standard">
+				<DisplayName>2 Link 12 Gbps</DisplayName>
+			    <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+				<Value>0x00020058</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_1" NameSpace="Standard">
+				<DisplayName>4 Link 1.250 Gbps</DisplayName>
+				<Value>0x00040028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_2" NameSpace="Standard">
+				<DisplayName>4 Link 2.500 Gbps</DisplayName>
+				<Value>0x00040030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_3" NameSpace="Standard">
+				<DisplayName>4 Link 3.125 Gbps</DisplayName>
+				<Value>0x00040038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_5" NameSpace="Standard">
+				<DisplayName>4 Link 5.0 Gbps</DisplayName>
+				<Value>0x00040040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_6" NameSpace="Standard">
+				<DisplayName>4 Link 6.25 Gbps</DisplayName>
+				<Value>0x00040048</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_10" NameSpace="Standard">
+				<DisplayName>4 Link 10 Gbps</DisplayName>
+			    <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+				<Value>0x00040050</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_12" NameSpace="Standard">
+				<DisplayName>4 Link 12 Gbps</DisplayName>
+			    <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+				<Value>0x00040058</Value>
+			</EnumEntry>
+			<pValue>LinkConfigReg</pValue>
+		</Enumeration>
+		<IntReg Name="LinkConfigReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4014</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- LinkConfigDefault -->
+		<Enumeration Name="LinkConfigDefault" NameSpace="Standard">
+			<ToolTip>Bootstrap register LinkConfigDefault.</ToolTip>
+			<Description>Bootstrap register LinkConfigDefault.</Description>
+			<DisplayName>LinkConfigDefault</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<EnumEntry Name="x1_CXP_1" NameSpace="Standard">
+				<DisplayName>1 Link 1.250 Gbps</DisplayName>
+				<Value>0x00010028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_2" NameSpace="Standard">
+				<DisplayName>1 Link 2.500 Gbps</DisplayName>
+				<Value>0x00010030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_3" NameSpace="Standard">
+				<DisplayName>1 Link 3.125 Gbps</DisplayName>
+				<Value>0x00010038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_5" NameSpace="Standard">
+				<DisplayName>1 Link 5.0 Gbps</DisplayName>
+				<Value>0x00010040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x1_CXP_6" NameSpace="Standard">
+				<DisplayName>1 Link 6.25 Gbps</DisplayName>
+				<Value>0x00010048</Value>
+			</EnumEntry>
+      <EnumEntry Name="x1_CXP_10" NameSpace="Standard">
+        <DisplayName>1 Link 10 Gbps</DisplayName>
+        <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+        <Value>0x00010050</Value>
+      </EnumEntry>
+      <EnumEntry Name="x1_CXP_12" NameSpace="Standard">
+        <DisplayName>1 Link 12 Gbps</DisplayName>
+        <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+        <Value>0x00010058</Value>
+      </EnumEntry>
+      <EnumEntry Name="x2_CXP_1" NameSpace="Standard">
+				<DisplayName>2 Link 1.250 Gbps</DisplayName>
+				<Value>0x00020028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_2" NameSpace="Standard">
+				<DisplayName>2 Link 2.500 Gbps</DisplayName>
+				<Value>0x00020030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_3" NameSpace="Standard">
+				<DisplayName>2 Link 3.125 Gbps</DisplayName>
+				<Value>0x00020038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_5" NameSpace="Standard">
+				<DisplayName>2 Link 5.0 Gbps</DisplayName>
+				<Value>0x00020040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x2_CXP_6" NameSpace="Standard">
+				<DisplayName>2 Link 6.25 Gbps</DisplayName>
+				<Value>0x00020048</Value>
+			</EnumEntry>
+      <EnumEntry Name="x2_CXP_10" NameSpace="Standard">
+        <DisplayName>2 Link 10 Gbps</DisplayName>
+        <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+        <Value>0x00020050</Value>
+      </EnumEntry>
+      <EnumEntry Name="x2_CXP_12" NameSpace="Standard">
+        <DisplayName>2 Link 12 Gbps</DisplayName>
+        <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+        <Value>0x00020058</Value>
+      </EnumEntry>
+      <EnumEntry Name="x4_CXP_1" NameSpace="Standard">
+				<DisplayName>4 Link 1.250 Gbps</DisplayName>
+				<Value>0x00040028</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_2" NameSpace="Standard">
+				<DisplayName>4 Link 2.500 Gbps</DisplayName>
+				<Value>0x00040030</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_3" NameSpace="Standard">
+				<DisplayName>4 Link 3.125 Gbps</DisplayName>
+				<Value>0x00040038</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_5" NameSpace="Standard">
+				<DisplayName>4 Link 5.0 Gbps</DisplayName>
+				<Value>0x00040040</Value>
+			</EnumEntry>
+			<EnumEntry Name="x4_CXP_6" NameSpace="Standard">
+				<DisplayName>4 Link 6.25 Gbps</DisplayName>
+				<Value>0x00040048</Value>
+			</EnumEntry>
+      <EnumEntry Name="x4_CXP_10" NameSpace="Standard">
+        <DisplayName>4 Link 10 Gbps</DisplayName>
+        <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+        <Value>0x00040050</Value>
+      </EnumEntry>
+      <EnumEntry Name="x4_CXP_12" NameSpace="Standard">
+        <DisplayName>4 Link 12 Gbps</DisplayName>
+        <pIsImplemented>TwelveG_IsImplemented</pIsImplemented>
+        <Value>0x00040058</Value>
+      </EnumEntry>
+      <pValue>LinkConfigDefaultReg</pValue>
+		</Enumeration>
+		<IntReg Name="LinkConfigDefaultReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4018</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- TestMode -->
+		<Integer Name="TestMode" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestMode.</ToolTip>
+			<Description>Bootstrap register TestMode.</Description>
+			<DisplayName>TestMode</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestModeReg</pValue>
+		</Integer>
+		<IntReg Name="TestModeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x401C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- TestErrorCountSelector -->
+		<Integer Name="TestErrorCountSelector" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestErrorCountSelector.</ToolTip>
+			<Description>Bootstrap register TestErrorCountSelector.</Description>
+			<DisplayName>TestErrorCountSelector</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestErrorCountSelectorReg</pValue>
+			<pSelected>TestErrorCount</pSelected>
+			<pSelected>TestPacketCountTx</pSelected>
+			<pSelected>TestPacketCountRx</pSelected>
+		</Integer>
+		<IntReg Name="TestErrorCountSelectorReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4020</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- TestErrorCount -->
+		<Integer Name="TestErrorCount" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestErrorCount.</ToolTip>
+			<Description>Bootstrap register TestErrorCount.</Description>
+			<DisplayName>TestErrorCount</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestErrorCountReg</pValue>
+		</Integer>
+		<IntReg Name="TestErrorCountReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4024</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- TestPacketCountTx -->
+		<Integer Name="TestPacketCountTx" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestPacketCountTx.</ToolTip>
+			<Description>Bootstrap register TestPacketCountTx.</Description>
+			<DisplayName>TestPacketCountTx</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestPacketCountTxReg</pValue>
+		</Integer>
+		<IntReg Name="TestPacketCountTxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4028</Address>
+			<Length>8</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+
+		<!-- TestPacketCountRx -->
+		<Integer Name="TestPacketCountRx" NameSpace="Standard">
+			<ToolTip>Bootstrap register TestPacketCountRx.</ToolTip>
+			<Description>Bootstrap register TestPacketCountRx.</Description>
+			<DisplayName>TestPacketCountRx</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RW</ImposedAccessMode>
+			<pValue>TestPacketCountRxReg</pValue>
+		</Integer>
+		<IntReg Name="TestPacketCountRxReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x4030</Address>
+			<Length>8</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Image1StreamID -->
+		<Integer Name="Image1StreamID" NameSpace="Standard">
+			<ToolTip>Image1StreamID</ToolTip>
+			<Description>Image1StreamID.</Description>
+			<DisplayName>Image1StreamID</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>Image1StreamIDReg</pValue>
+		</Integer>
+        <IntReg Name="Image1StreamIDReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD7F4</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- Voltage -->
+		<Integer Name="Voltage" NameSpace="Standard">
+			<ToolTip>Voltage</ToolTip>
+			<Description>Voltage.</Description>
+			<DisplayName>Voltage</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>VoltageReg</pValue>
+		</Integer>
+        <IntReg Name="VoltageReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD7E8</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+		
+		<!-- Current -->
+		<!--  -->
+		<Integer Name="Current" NameSpace="Standard">
+			<ToolTip>Current</ToolTip>
+			<Description>Current.</Description>
+			<DisplayName>Current</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>CurrentReg</pValue>
+		</Integer>
+        <IntReg Name="CurrentReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD7E4</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+	
+		<String Name="AdcReadout0" NameSpace="Standard">
+			<ToolTip>.</ToolTip>
+			<Description>.</Description>
+			<DisplayName>AdcReadout0</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<Value></Value>
+		</String>
+		<String Name="AdcReadout1" NameSpace="Standard">
+			<ToolTip>.</ToolTip>
+			<Description>.</Description>
+			<DisplayName>AdcReadout1</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<Value></Value>
+		</String>
+		<String Name="AdcReadout2" NameSpace="Standard">
+			<ToolTip>.</ToolTip>
+			<Description>.</Description>
+			<DisplayName>AdcReadout2</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<Value></Value>
+		</String>
+		<String Name="AdcReadout3" NameSpace="Standard">
+			<ToolTip>.</ToolTip>
+			<Description>.</Description>
+			<DisplayName>AdcReadout3</DisplayName>
+			<Visibility>Expert</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<Value></Value>
+		</String>
+			
+		<!-- PoCXP_All -->
+		<Integer Name="PoCXP_All" NameSpace="Standard">
+			<ToolTip>PoCXP_All</ToolTip>
+			<Description>PoCXP_All.</Description>
+			<DisplayName>PoCXP All</DisplayName>
+		    <Visibility>Invisible</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>PoCXP_AllReg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+        <IntReg Name="PoCXP_AllReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<pInvalidator>PoCXP0</pInvalidator>
+			<pInvalidator>PoCXP1</pInvalidator>
+			<pInvalidator>PoCXP2</pInvalidator>
+			<pInvalidator>PoCXP3</pInvalidator>
+			<pInvalidator>PoCXP_Resistor0</pInvalidator>
+			<pInvalidator>PoCXP_Resistor1</pInvalidator>
+			<pInvalidator>PoCXP_Resistor2</pInvalidator>
+			<pInvalidator>PoCXP_Resistor3</pInvalidator>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</IntReg>
+
+		<Enumeration Name="PoCXP0" NameSpace="Standard">
+			<ToolTip>Device PoCXP channel 0 control.</ToolTip>
+			<Description>Device PoCXP channel 0 control.</Description>
+			<DisplayName>PoCXP 0 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXPOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXPOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP0Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP0Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable><!-- NoCache -->
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>0</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+
+		<Enumeration Name="PoCXP1" NameSpace="Standard">
+			<ToolTip>Device PoCXP channel 1 control.</ToolTip>
+			<Description>Device PoCXP channel 1 control.</Description>
+			<DisplayName>PoCXP 1 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXPOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXPOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP1Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP1Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>1</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+
+		<Enumeration Name="PoCXP2" NameSpace="Standard">
+			<ToolTip>Device PoCXP channel 2 control.</ToolTip>
+			<Description>Device PoCXP channel 2 control.</Description>
+			<DisplayName>PoCXP 2 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXPOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXPOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP2Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP2Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>2</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+
+		<Enumeration Name="PoCXP3" NameSpace="Standard">
+			<ToolTip>Device PoCXP channel 3 control.</ToolTip>
+			<Description>Device PoCXP channel 3 control.</Description>
+			<DisplayName>PoCXP 3 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXPOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXPOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP3Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP3Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>3</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+
+		<Enumeration Name="PoCXP_Resistor0" NameSpace="Standard">
+			<ToolTip>Device PoCXP Resistor channel 0 control.</ToolTip>
+			<Description>Device PoCXP Resistor channel 0 control.</Description>
+			<DisplayName>PoCXP Resistor 0 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXP_ResistorOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXP_ResistorOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP_Resistor0Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP_Resistor0Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>WriteThrough</Cachable><!-- NoCache -->
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>16</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+
+		<Enumeration Name="PoCXP_Resistor1" NameSpace="Standard">
+			<ToolTip>Device PoCXP Resistor channel 1 control.</ToolTip>
+			<Description>Device PoCXP Resistor channel 1 control.</Description>
+			<DisplayName>PoCXP Resistor 1 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXP_ResistorOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXP_ResistorOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP_Resistor1Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP_Resistor1Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>17</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+
+		<Enumeration Name="PoCXP_Resistor2" NameSpace="Standard">
+			<ToolTip>Device PoCXP Resistor channel 2 control.</ToolTip>
+			<Description>Device PoCXP Resistor channel 2 control.</Description>
+			<DisplayName>PoCXP Resistor 2 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXP_ResistorOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXP_ResistorOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP_Resistor2Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP_Resistor2Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>18</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+
+		<Enumeration Name="PoCXP_Resistor3" NameSpace="Standard">
+			<ToolTip>Device PoCXP Resistor channel 3 control.</ToolTip>
+			<Description>Device PoCXP Resistor channel 3 control.</Description>
+			<DisplayName>PoCXP Resistor 3 control</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>PoCXP_IsImplemented</pIsImplemented>
+			<!-- <pIsLocked>PoCXPManualLocked</pIsLocked> -->
+			<EnumEntry Name="PoCXP_ResistorOff" NameSpace="Standard">
+				<DisplayName>Off</DisplayName>
+				<Value>0</Value>
+			</EnumEntry>
+			<EnumEntry Name="PoCXP_ResistorOn" NameSpace="Standard">
+				<DisplayName>On</DisplayName>
+				<Value>1</Value>
+			</EnumEntry>
+			<pValue>PoCXP_Resistor3Reg</pValue>
+		</Enumeration>
+		<MaskedIntReg Name="PoCXP_Resistor3Reg">
+			<Address>0x1FEFD7E0</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<!-- <pInvalidator>PolledParametersInvalidator</pInvalidator> -->
+			<Bit>19</Bit>
+			<Sign>Unsigned</Sign>
+			<Endianess>LittleEndian</Endianess>
+		</MaskedIntReg>
+	
+	<!-- ******************************************************************* -->
+	<!-- HardwareInformation                                                 -->
+	<!-- ******************************************************************* -->	
+	<Group Comment="HardwareInformation">
+		<!-- FirmwareVersion -->
+		<Float Name="FirmwareVersion" NameSpace="Standard">
+			<ToolTip>Firmware version of the device.</ToolTip>
+			<Description>Firmware version  of the device.</Description>
+			<DisplayName>Firmware version</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<pIsImplemented>Not_FW_System_Capable_VersionRegisters_Imp</pIsImplemented>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>FirmwareVersionReg</pValue>
+			<Representation>Linear</Representation>
+			<DisplayPrecision>3</DisplayPrecision>
+		</Float>
+		<FloatReg Name="FirmwareVersionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD878</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Endianess>BigEndian</Endianess>
+		</FloatReg>
+		
+		<!-- Device Firmware Version -->
+		<StringReg Name="DeviceFirmwareVersion" NameSpace="Standard">
+            <ToolTip>Version of the firmware in the device.</ToolTip>
+            <Description>Version of the firmware in the device.</Description>
+            <DisplayName>Device Firmware Version</DisplayName>
+            <Visibility>Beginner</Visibility>
+			<pIsImplemented>FW_System_Capable_VersionRegisters_Imp</pIsImplemented>
+            <ImposedAccessMode>RO</ImposedAccessMode>
+            <Address>0x2090</Address>
+            <Length>32</Length>
+            <AccessMode>RO</AccessMode>
+            <pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+        </StringReg>
+		
+		<!-- SerialNumber -->
+		<Integer Name="SerialNumber" NameSpace="Standard">
+			<ToolTip>Serial Number of the device.</ToolTip>
+			<Description>Serial Number of the device.</Description>
+			<DisplayName>Serial Number</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>SerialNumberReg</pValue>
+		</Integer>
+		<IntReg Name="SerialNumberReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD874</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<!-- DeviceRevision -->
+		<Integer Name="DeviceRevision" NameSpace="Standard">
+			<ToolTip>Revision of the device.</ToolTip>
+			<Description>Revision of the device.</Description>
+			<DisplayName>Device Revision</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>DeviceRevisionReg</pValue>
+		</Integer>
+		<IntReg Name="DeviceRevisionReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD870</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<!-- DeviceMemorySize -->
+		<!--Integer Name="DeviceMemorySize" NameSpace="Standard">
+			<ToolTip>Device memory size in bytes.</ToolTip>
+			<Description>Device memory size in bytes.</Description>
+			<DisplayName>Device Memory Size</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>DeviceMemorySizeReg</pValue>
+			<Representation>HexNumber</Representation>
+		</Integer>
+		<IntReg Name="DeviceMemorySizeReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD86C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg -->
+		<!-- MaxLinks -->
+		<Integer Name="MaxLinks" NameSpace="Standard">
+			<ToolTip>Maximum available links on the device.</ToolTip>
+			<Description>Maximum available links on the device.</Description>
+			<DisplayName>Maximum available links</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>MaxLinksReg</pValue>
+		</Integer>
+		<IntReg Name="MaxLinksReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD868</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		<!-- DevicePciGeneration -->
+		<Integer Name="DevicePciGeneration" NameSpace="Standard">
+			<ToolTip>PCIe generation configuration.</ToolTip>
+			<Description>PCIe generation configuration.</Description>
+			<DisplayName>PCIe generation</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>DevicePciGenerationReg</pValue>
+		</Integer>
+		<IntReg Name="DevicePciGenerationReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD864</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- DevicePciLanes -->
+		<Integer Name="DevicePciLanes" NameSpace="Standard">
+			<ToolTip>Maximum available lanes on the device PCIe slot.</ToolTip>
+			<Description>Maximum available lanes on the device PCIe slot.</Description>
+			<DisplayName>PCIe lanes</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>DevicePciLanesReg</pValue>
+		</Integer>
+		<IntReg Name="DevicePciLanesReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD860</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+		
+		<!-- DeviceTemperature -->
+		<Integer Name="DeviceTemperature" NameSpace="Standard">
+			<ToolTip>Device core temperature in Celsius.</ToolTip>
+			<Description>Device core temperature in Celsius.</Description>
+			<DisplayName>Core Temperature</DisplayName>
+			<Visibility>Beginner</Visibility>
+			<ImposedAccessMode>RO</ImposedAccessMode>
+			<pValue>DeviceTemperatureReg</pValue>
+		</Integer>
+		<IntReg Name="DeviceTemperatureReg">
+			<Visibility>Invisible</Visibility>
+			<Address>0x1FEFD85C</Address>
+			<Length>4</Length>
+			<AccessMode>RW</AccessMode>
+			<pPort>Device</pPort>
+			<Cachable>NoCache</Cachable>
+			<Sign>Unsigned</Sign>
+			<Endianess>BigEndian</Endianess>
+		</IntReg>
+	</Group>
+		
+	
+	</Group>
+		
+	<!-- Device -->
+	<Port Name="Device">
+		<ToolTip>Port giving access to the device.</ToolTip>
+		<Visibility>Invisible</Visibility>
+	</Port>
+</RegisterDescription>

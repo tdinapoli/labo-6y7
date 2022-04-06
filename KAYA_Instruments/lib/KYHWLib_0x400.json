@@ -1,0 +1,117 @@
+{
+    "File version": 60002,
+    
+    // Predator II
+    "Device":
+    {
+        "X": 1 // Just first dummy entry - no meaning
+        ,"system_capabilities" : "0x200"
+        ,"pocxp_i2c_monitor_min_rev" : 0
+        
+        ,"on_board_memory" : 512 // 512 MB
+        // ,"sodimm_check_address" : "0x7100" // no physical SODIMM slot
+        ,"sodimm_required" : false
+        
+        ,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+        ,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+        ,"generation" : 2
+
+        
+        // Tracking avalon fifo (aka Butterfly) access (when "end" is not specified it is assumed same as "start")
+        //,"bar_memory_filtered": [
+        //     {"bar": 2, "start": "0x0000A800", "comment": "0x02 - Reset meta data FIFO interrupt, 0x01 - Enable, 0x00 - Disable metadata interrupt 3"}
+        //    
+        //    ,{"bar": 2, "start": "0x0000A050", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //    ,{"bar": 2, "start": "0x0000A0D0", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //    ,{"bar": 2, "start": "0x0000A150", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //    ,{"bar": 2, "start": "0x0000A1D0", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //    ,{"bar": 2, "start": "0x0000A250", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //    ,{"bar": 2, "start": "0x0000A2D0", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //    ,{"bar": 2, "start": "0x0000A350", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //    ,{"bar": 2, "start": "0x0000A3D0", "comment": "0xFF - Reset events, 0x00 - Disable Avalon MM RX FIFO" } 
+        //
+        //    ,{"bar": 2, "start": "0x0000A054", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //    ,{"bar": 2, "start": "0x0000A0D4", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //    ,{"bar": 2, "start": "0x0000A154", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //    ,{"bar": 2, "start": "0x0000A1D4", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //    ,{"bar": 2, "start": "0x0000A254", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //    ,{"bar": 2, "start": "0x0000A2D4", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //    ,{"bar": 2, "start": "0x0000A354", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //    ,{"bar": 2, "start": "0x0000A3D4", "comment": "0x04 - Enable, 0x00 - Disable Avalon MM RX FIFO Interrupt Mask" } 
+        //
+        //    ,{"bar": 2, "start": "0x00000040", "comment": "0x00 - Reset global interrupt status" } 
+        //    ,{"bar": 2, "start": "0x00000050", "comment": "0xFF - Enable, 0x00 - Disable global mask" } 
+        //]
+
+        
+        ,"io_features_value" : "0x28001144"  // [3..0] Encoders - 4, [7..4] Timers - 4, [11..8] Stream Triggers - 1, 
+                                             // [15..12] Camera Triggers - 1, [31..24] LineIO - 40 (Default: 0x28004444)
+        
+        ,"InitialParameterValues": {
+            "DevicePciGenerationMin": 2
+            ,"DevicePciLanesMin": 4
+        }
+    }
+    
+    ,"Interrupts": [
+        {
+            "aux_base": "0x01C0"
+            ,"interrupt": 11
+        }
+    ]
+ 	
+	,"CommandInterrupts": [
+        {
+			// Interrupt controller part:
+			"interrupt_base": "0xA800"
+			,"csr_bar": 2
+            ,"interrupt": 3
+			// Command controller part:
+			,"command_base": "0xA000"
+        
+            ,"min_fw_version" : "5.1.1"
+        }
+	]
+	
+   ,"SpeedConfig":
+    {
+        "SpeedConfigController": [
+            {
+                "type": "MacomHighSpeed"    // "None"/"MacomHighSpeed"/"MacomLowSpeed"/"MacomHighLowSpeed"/"FPGATransceiverPhyII"
+                ,"csr_base": "0x5800"
+                ,"csr_bar": 2
+                ,"csr_speed": 10
+            }
+        ]
+        
+        ,"SpeedConfigChannels": [
+            { "controller_index":0 ,"channel_select_id": 0}
+        ]
+    }
+    
+    ,"TemperatureController":
+    {
+        "csr_base": "0x5008"
+        ,"csr_bar": 2
+        ,"formula_type": 2 // 1 - Calculation formula for Device type I, 2 - Calculation formula for Device type II
+    }
+    
+    ,"DmaChannels": [
+        {
+            /* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+            "ChannelDirection": 1
+            ,"csr_base": "0x8000"
+            ,"interrupt": 1
+            ,"dmaChannelIndex": 0
+            //,"isVirtual": true
+        }
+    ]
+    
+    ,"PoCXP_Monitoring":
+    {
+        "Channels" : [
+            {"slave": "0x90", "volt" : "0x8C", "curr" : "0xCC"}
+        ],
+        "I2CController": {"base": "0x200000", "clock_source_speed":125000000, "freq":80000, "TIPSleepTime" : 125}
+    }
+}

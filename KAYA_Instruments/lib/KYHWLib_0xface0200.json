@@ -1,0 +1,89 @@
+{
+    "File version": 60002,
+	
+	"Device":
+	{
+	    "X": 1 // Just first dummy entry - no meaning
+        
+        ,"on_board_memory" : 512 // 512 MB
+		// ,"sodimm_check_address" : "0x7100" // no physical SODIMM slot
+		,"sodimm_required" : false
+
+		,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+		,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+		,"InitialParameterValues": {
+			"DevicePciGenerationMin": 2
+			,"DevicePciLanesMin": 4
+		}
+	},
+	"DmaChannels": [
+		{
+			/* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+			/* DMA host to device (simulator) interrupts: 0, 4, 6, 8*/
+			/* DMA device to host (frame grabber) interrupts: 1, 5, 7, 9, 12, 13, 14, 15*/
+			"ChannelDirection": 1
+			,"csr_base": "0x8000"
+			,"interrupt": 1
+			,"dmaChannelIndex": 0
+			,"isVirtual": true
+			,"deviceModelName": "External Camera 0"
+			,"deviceVendorName": "KAYA Software Team"
+			,"xmlFileName": "CoaXPress_Camera_Manifest_Example.xml" 
+            ,"DeviceUserID": "Demo camera I" // if not present than "deviceModelName" will be used as camera identifier, which can lead to more than one camera with same name
+			,"InitialParameterValues": [
+				{"Width": 1920},
+				{"Height": 720},
+				{"AcquisitionFrameRate": 60.0},
+				
+                //{"PixelFormat": 257} // 0x101 corresponds to VIDEO_PIXELIF {DATA_WIDTH_8BIT, DATA_SUBTYPE_NONE, DATA_TYPE_MONO}
+				// GenICam values of "FixelFormat" are not the same as their VIDEO_PIXELIF values, so for now we opt to:
+                {"PixelFormat": "Mono8"}
+			]
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8100"
+			,"interrupt": 5
+			,"dmaChannelIndex": 1
+			,"isVirtual": true
+			,"deviceModelName": "External Camera 1"
+			,"deviceVendorName": "KAYA Software Team"
+			,"xmlFileName": "CoaXPress_Camera_Manifest_Example.xml" 
+            ,"DeviceUserID": "Demo camera II" // if not present than "deviceModelName" will be used as camera identifier, which can lead to more than one camera with same name
+			,"InitialParameterValues": [
+				{"Width": 640},
+				{"Height": 480},
+				{"AcquisitionFrameRate": 100.0},
+                {"PixelFormat": 
+                        //"0x0721" // "YCBCR422_8"
+                        "Mono8"
+                }
+			]
+		}
+		/*
+		,
+		{
+			"ChannelDirection": 0
+			,"csr_base": "0x8200"
+			,"interrupt": 7
+			,"dmaChannelIndex": 2
+			,"isVirtual": true
+			,"deviceModelName": "External Camera 2"
+			,"deviceVendorName": "KAYA Software Team"
+			,"xmlFileName": "Generic_Virtual_Camera.xml" 
+		}
+		,
+		{
+			"ChannelDirection": 0
+			,"csr_base": "0x8300"
+			,"interrupt": 9
+			,"dmaChannelIndex": 3
+			,"isVirtual": true
+			,"deviceModelName": "External Camera 3"
+			,"deviceVendorName": "KAYA Software Team"
+			,"xmlFileName": "Generic_Virtual_Camera.xml" 
+		}
+		*/
+	]
+}

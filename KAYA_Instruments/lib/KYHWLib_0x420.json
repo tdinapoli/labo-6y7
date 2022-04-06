@@ -1,0 +1,163 @@
+{
+    "File version": 60002,
+	
+	// Komodo Fiber CXP II
+    "Device":
+	{
+	    "X": 1 // Just first dummy entry - no meaning
+		,"system_capabilities" : "0x200"
+		
+		,"on_board_memory" : 0 // 0 MB
+		,"sodimm_check_address" : "0x7000"
+		,"sodimm_required" : true
+		
+		,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+		,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+		,"generation" : 2
+		
+		,"io_features_value" : "0x28008844"  // [3..0] Encoders - 4, [7..4] Timers - 4, [11..8] Stream Triggers - 8, 
+		                                     // [15..12] Camera Triggers - 8, [31..24] LineIO - 40 (Default: 0x28004444)
+											 
+    //,"bar_memory_filtered": [
+		//	{"bar": 2, "start": "0x58", "end": "0x5B" }
+		//]
+		,"InitialParameterValues": {
+			"DevicePciGenerationMin": 3
+			,"DevicePciLanesMin": 8
+		}
+	},
+	"Interrupts": [
+		{
+			"aux_base": "0x01C0"
+			,"interrupt": 11
+		}
+	],
+	"TemperatureController":
+	{
+		"csr_base": "0x5008"
+		,"csr_bar": 2
+		,"formula_type": 2 // 1 - Calculation formula for Device type I, 2 - Calculation formula for Device type II
+	},
+	"DmaChannels": [
+		{
+			/* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+			"ChannelDirection": 1
+			,"csr_base": "0x8000"
+			,"interrupt": 1
+			,"dmaChannelIndex": 0
+			//,"isVirtual": true
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8100"
+			,"interrupt": 5
+			,"dmaChannelIndex": 1
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8200"
+			,"interrupt": 7
+			,"dmaChannelIndex": 2
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8300"
+			,"interrupt": 9
+			,"dmaChannelIndex": 3
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8400"
+			,"interrupt": 12
+			,"dmaChannelIndex": 4
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8500"
+			,"interrupt": 13
+			,"dmaChannelIndex": 5
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8600"
+			,"interrupt": 14
+			,"dmaChannelIndex": 6
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8700"
+			,"interrupt": 15
+			,"dmaChannelIndex": 7
+		}
+	],
+	"Sequences": [
+		{
+			"Trigger" : {"parameter" : "I2CReInit"}
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "KernelTraceCountersSet"}
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "BarWatchAdd" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "BarWatchRemove" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "InterruptReadTimeout" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "DeviceStreamControlReset" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"parameter" : ""}
+			]
+		}
+    ]
+	
+	,"DDR_Monitoring":
+	{
+	    "I2CController": {"base": "0x100000", "clock_source_speed":125000000, "freq":100000, "TIPSleepTime" : 125}
+		,"slave": "0xA0"
+		,"regs_range": {"start": "0x80 ", "end": "0x91"}
+	}
+	
+}

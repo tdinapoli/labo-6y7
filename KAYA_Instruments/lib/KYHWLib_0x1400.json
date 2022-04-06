@@ -1,0 +1,75 @@
+{
+    "File version": 60002,
+    
+    // Predator II
+    "Device":
+    {
+        "X": 1 // Just first dummy entry - no meaning
+        ,"system_capabilities" : "0x200"
+        ,"pocxp_i2c_monitor_min_rev" : 0
+        
+        ,"on_board_memory" : 512 // 512 MB
+        // ,"sodimm_check_address" : "0x7100" // no physical SODIMM slot
+        ,"sodimm_required" : false
+        
+        ,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+        ,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+        ,"generation" : 2
+        
+        ,"io_features_value" : "0x28001144"  // [3..0] Encoders - 4, [7..4] Timers - 4, [11..8] Stream Triggers - 1, 
+                                             // [15..12] Camera Triggers - 1, [31..24] LineIO - 40 (Default: 0x28004444)
+        
+        ,"InitialParameterValues": {
+            "DevicePciGenerationMin": 2
+            ,"DevicePciLanesMin": 4
+        }
+    }
+    
+    ,"Interrupts": [
+        {
+            "aux_base": "0x01C0"
+            ,"interrupt": 11
+        }
+    ]
+    ,"SpeedConfig":
+    {
+        "SpeedConfigController": [
+            {
+                "type": "MacomHighSpeed"    // "None"/"MacomHighSpeed"/"MacomLowSpeed"/"MacomHighLowSpeed"/"FPGATransceiverPhyII"
+                ,"csr_base": "0x5800"
+                ,"csr_bar": 2
+                ,"csr_speed": 10
+            }
+        ]
+        
+        ,"SpeedConfigChannels": [
+            { "controller_index":0 ,"channel_select_id": 0}
+        ]
+    }
+    
+    ,"TemperatureController":
+    {
+        "csr_base": "0x5008"
+        ,"csr_bar": 2
+        ,"formula_type": 2 // 1 - Calculation formula for Device type I, 2 - Calculation formula for Device type II
+    }
+    
+    ,"DmaChannels": [
+        {
+            /* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+            "ChannelDirection": 1
+            ,"csr_base": "0x8000"
+            ,"interrupt": 1
+            ,"dmaChannelIndex": 0
+            //,"isVirtual": true
+        }
+    ]
+    
+    ,"PoCXP_Monitoring":
+    {
+        "Channels" : [
+            {"slave": "0x90", "volt" : "0x8C", "curr" : "0xCC"}
+        ],
+        "I2CController": {"base": "0x200000", "clock_source_speed":125000000, "freq":80000, "TIPSleepTime" : 125}
+    }
+}

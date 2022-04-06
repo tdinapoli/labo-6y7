@@ -1,0 +1,141 @@
+{
+    "File version": 60002,
+	
+	// Komodo CXP 4R4T
+    "Device":
+	{
+	    "X": 1 // Just first dummy entry - no meaning
+		,"pocxp_i2c_monitor_min_rev" : 3
+		
+		,"system_capabilities" : "0x200"
+		
+		,"on_board_memory" : 1024 // 1024 MB
+		,"sodimm_check_address" : "0x7100"
+		,"sodimm_required" : false
+		
+		,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+		,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+		
+		//,"bar_memory_filtered": [
+		//	{"bar": 2, "start": "0x58", "end": "0x5B" }
+		//]
+		
+		,"io_features_value" : "0x28004444"  // [3..0] Encoders - 4, [7..4] Timers - 4, [11..8] Stream Triggers - 4, 
+		                                     // [15..12] Camera Triggers - 4, [31..24] LineIO - 40 (Default: 0x28004444)
+											 
+		,"InitialParameterValues": {
+			"DevicePciGenerationMin": 3
+			,"DevicePciLanesMin": 8
+		}
+	},
+	"Interrupts": [
+		{
+			"aux_base": "0x01C0"
+			,"interrupt": 11
+		}
+	],
+	"HostIPController":
+	{
+		"supported_speeds": [
+		     "0x28" // LINK_SPEED_CXP1   1.25  Gbps
+		    ,"0x30" // LINK_SPEED_CXP2   2.5   Gbps
+		    ,"0x38" // LINK_SPEED_CXP3   3.125 Gbps
+		    ,"0x40" // LINK_SPEED_CXP5   5     Gbps
+		    ,"0x48" // LINK_SPEED_CXP6   6.25  Gbps
+		    //,"0x50" // LINK_SPEED_CXP10  10    Gbps
+		    //,"0x58" // LINK_SPEED_CXP12  12.5  Gbps
+		]
+	},
+	"DmaChannels": [
+		{
+			/* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+			"ChannelDirection": 1
+			,"csr_base": "0x8000"
+			,"interrupt": 1
+			,"dmaChannelIndex": 0
+			//,"isVirtual": true
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8100"
+			,"interrupt": 5
+			,"dmaChannelIndex": 1
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8200"
+			,"interrupt": 7
+			,"dmaChannelIndex": 2
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8300"
+			,"interrupt": 9
+			,"dmaChannelIndex": 3
+		}
+	]
+	,"PoCXP_Monitoring":
+	{
+		"Channels" : [
+			 {"slave": "0x90", "volt" : "0xBC", "curr" : "0xFC"}
+			,{"slave": "0x90", "volt" : "0xAC", "curr" : "0xEC"}
+			,{"slave": "0x90", "volt" : "0x9C", "curr" : "0xDC"}
+			,{"slave": "0x90", "volt" : "0x8C", "curr" : "0xCC"}
+			,{"slave": "0x92", "volt" : "0x8C", "curr" : "0xCC"}
+			,{"slave": "0x92", "volt" : "0x9C", "curr" : "0xDC"}
+			,{"slave": "0x92", "volt" : "0xAC", "curr" : "0xEC"}
+			,{"slave": "0x92", "volt" : "0xBC", "curr" : "0xFC"}
+		],
+	    "I2CController": {"base": "0x200000", "clock_source_speed":125000000, "freq":80000, "TIPSleepTime" : 125}
+	}
+	,"Sequences": [
+		{
+			"Trigger" : {"parameter" : "I2CReInit"}
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "KernelTraceCountersSet"}
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "BarWatchAdd" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "BarWatchRemove" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+		,
+		{
+			"Trigger" : {"parameter" : "InterruptReadTimeout" }
+			// perform the following sequence
+			,
+			"Sequence" : [
+					{"KYHW_Call" : ""}
+			]
+		}
+    ],
+  "Schema version": 1
+}

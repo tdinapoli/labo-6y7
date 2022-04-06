@@ -1,0 +1,158 @@
+{
+    "File version": 60002,
+    
+    // Komodo Fiber
+    "Device":
+    {
+        "X": 1 // Just first dummy entry - no meaning
+        ,"system_capabilities" : "0x200"
+        
+        ,"min_fw_version" : "4.16"
+        
+        ,"on_board_memory" : 1024 // 1024 MB
+        ,"sodimm_check_address" : "0x7100"
+        ,"sodimm_required" : false
+        
+        
+        ,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+        ,"protocol" : "CLHS" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+        
+        ,"io_features_value" : "0x28008884"  // [3..0] Encoders - 4, [7..4] Timers - 8, [11..8] Stream Triggers - 8, 
+                                             // [15..12] Camera Triggers - 8, [31..24] LineIO - 40 (Default: 0x28004444)
+        
+        ,"InitialParameterValues": {
+            "DevicePciGenerationMin": 3
+            ,"DevicePciLanesMin": 8
+        }
+        
+        //,"bar_memory_filtered": [
+        //    {"bar": 2, "start": "0x58", "end": "0x5B" }
+        //]
+        // Add to registry:
+        // "KYHW.FilteredRange.warns" (default 1)
+        // "KYHW.FilteredRange.write_warns" (default 1)
+        // "KYHW.FilteredRange.read_warns" (default 1)
+        /////////////////////////////////////////////////////////
+        // ,"bar_memory_filtered": [
+        //    //0x0000_0000 - 0x0000_01ff    
+        //    {"bar": 0, "start": "0x200", "end": "0xfffff" },
+        //    //0x0010_0000 - 0x0010_001f
+        //    {"bar": 0, "start": "0x100020", "end": "0x2fffff" },                
+        //    //0x0030_0000 - 0x0030_001f
+        //    {"bar": 0, "start": "0x300020", "end": "0x300fff" },                    
+        //    //0x0030_1000 - 0x0030_10ff    
+        //    {"bar": 0, "start": "0x301100", "end": "0x301fff" },            
+        //    //0x0030_2000 - 0x0030_201f    
+        //    {"bar": 0, "start": "0x302020", "end": "0x3fffff" },            
+        //    //0x0040_0000 - 0x0040_ffff
+        //    {"bar": 0, "start": "0x410000", "end": "0x4fffff" },                    
+        //    //0x0050_0000 - 0x0050_00ff    
+        //    //0x0050_0100 - 0x0050_01ff                
+        //    //0x0050_0200 - 0x0050_02ff                
+        //    //0x0050_0300 - 0x0050_03ff                
+        //    {"bar": 0, "start": "0x500400", "end": "0xffffffff" },
+        //    
+        //    //0x0000_0000 - 0x0000_3fff        
+        //    {"bar": 2, "start": "0x4000", "end": "0x4fff" },                
+        //    //0x0000_5000 - 0x0000_53ff            
+        //    //0x0000_6000 - 0x0000_67ff            
+        //    //0x0000_7000 - 0x0000_707f            
+        //    //0x0000_7100 - 0x0000_717f            
+        //    //0x0000_8000 - 0x0000_87ff            
+        //    {"bar": 2, "start": "0x8800", "end": "0xffffffff" }    
+        // ]
+    },
+    "Interrupts": [
+        {
+            "aux_base": "0x01C0"
+            ,"interrupt": 11
+        }
+        ,
+        {
+            "aux_base": "0x402000"
+            ,"interrupt": 3
+        }
+    ],
+    "FanController": // Valid only if bit 21 of system capabilities is set (SYSTEM_CAPABLE_FAN_CONTROLLER)
+    {
+        "bar": 0 
+        ,"base_address": "0x6000" 
+        ,"capabilities_address": "0x0"
+        //-----------------------------
+        ,"formula_type": 1 // 1 - Calculation formula for Device type I, 2 - Calculation formula for Device type II
+    },
+    "PulseMessage":
+    {
+        "csr_base": "0x401000"
+        ,"csr_bar": 0
+    },
+    "DmaChannels": [
+        {
+            /* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+            "ChannelDirection": 1
+            ,"csr_base": "0x8000"
+            ,"interrupt": 1
+            ,"dmaChannelIndex": 0
+            //,"isVirtual": true
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8100"
+            ,"interrupt": 5
+            ,"dmaChannelIndex": 1
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8200"
+            ,"interrupt": 7
+            ,"dmaChannelIndex": 2
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8300"
+            ,"interrupt": 9
+            ,"dmaChannelIndex": 3
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8400"
+            ,"interrupt": 12
+            ,"dmaChannelIndex": 4
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8500"
+            ,"interrupt": 13
+            ,"dmaChannelIndex": 5
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8600"
+            ,"interrupt": 14
+            ,"dmaChannelIndex": 6
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8700"
+            ,"interrupt": 15
+            ,"dmaChannelIndex": 7
+        }
+    ],
+    "Sequences": [
+        {
+            "Trigger" : {"parameter" : "DeviceStreamControlReset" }
+            // perform the following sequence
+            ,
+            "Sequence" : [
+                    {"parameter" : ""}
+            ]
+        }
+    ]
+}

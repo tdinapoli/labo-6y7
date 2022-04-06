@@ -1,0 +1,51 @@
+{
+    "File version": 60002,
+	
+	// ??????
+    "Device":
+	{
+	    "X": 1 // Just first dummy entry - no meaning
+		,"system_capabilities" : "0x200"
+		
+		,"on_board_memory" : 1024 // 1024 MB
+		,"sodimm_check_address" : "0x7100"
+		,"sodimm_required" : false
+		
+		,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+		,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+		
+		//,"bar_memory_filtered": [
+		//	{"bar": 2, "start": "0x58", "end": "0x5B" }
+		//]
+		,"InitialParameterValues": {
+			"DevicePciGenerationMin": 3
+			,"DevicePciLanesMin": 8
+		}
+	},
+	"DmaChannels": [
+		{
+			/* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+			"ChannelDirection": 1
+			,"csr_base": "0x8000"
+			,"interrupt": 1
+			,"dmaChannelIndex": 0
+		}
+		,
+		{
+			"ChannelDirection": 1
+			,"csr_base": "0x8100"
+			,"interrupt": 5
+			,"dmaChannelIndex": 1
+			,"isVirtual": true
+		}
+		,
+		{
+			"ChannelDirection": 0
+			,"csr_base": "0x4000"
+			,"interrupt": 0
+			,"dmaChannelIndex": 2
+			,"isVirtual": true
+		}
+	],
+  "Schema version": 1
+}

@@ -1,0 +1,72 @@
+{
+    "File version": 60002,
+	
+	// Chameleon Simulator
+    "Device":
+	{
+	    "X": 1 // Just first dummy entry - no meaning
+		//,"pocxp_i2c_monitor_min_rev" : 100
+		
+		,"on_board_memory" : 512 // 512 MB
+		// ,"sodimm_check_address" : "0x7100" // no physical SODIMM slot
+		,"sodimm_required" : false
+		
+		,"classification" : "Slave" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+		,"protocol" : "CoaXPress" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+		
+		,"bar_memory_filtered": [
+			 {"bar": -1} // Just first dummy entry
+			 
+		//	,{"bar": 0, "start": "0x104044", "end": "0x104047", "faked_content" : "0x00000001" } // emulating "VersionsSupportedReg" (BigEndian), static int64_t BOOTSTRAP_REGS_ADDR_Chameleon = 0x100000;
+		//	,{"bar": 0, "start": "0x104048", "end": "0x10404B", "faked_content" : "0x00000000" } // emulating "VersionsUsedReg" (BigEndian), static int64_t BOOTSTRAP_REGS_ADDR_Chameleon = 0x100000;
+		//	
+		//	,{"bar": 0, "start": "0x180014", "end": "0x180017", "faked_content" : "0x1F000000" } // emulating SIMULATOR_CSR_ADDR(0x180000) (LittleEndian) + CSR_CAPABILITIES_ADDRESS(0x14), static int64_t BOOTSTRAP_REGS_ADDR_Chameleon = 0x100000;
+		//	//,{"bar": 0, "start": "0x180014", "end": "0x180017", "faked_content" : "0x01000000" }
+		//	
+		//	
+		//	,{"bar": 0, "start": "0x18001C", "end": "0x18001F", "faked_content" : "0x00000000" } // emulating SIMULATOR_CSR_ADDR(0x180000) + Low Speed timeout (0x1C), static int64_t BOOTSTRAP_REGS_ADDR_Chameleon = 0x100000;
+		//	,{"bar": 0, "start": "0x180020", "end": "0x180023", "faked_content" : "0x00000000" } // emulating SIMULATOR_CSR_ADDR(0x180000) + Heartbeat period (0x20), static int64_t BOOTSTRAP_REGS_ADDR_Chameleon = 0x100000;
+		//	
+		//	,{"bar": 0, "start": "0x180024", "end": "0x180027", "faked_content" : "0x00000000" } // emulating SIMULATOR_CSR_ADDR(0x180000) + PoCXP (0x24), static int64_t BOOTSTRAP_REGS_ADDR_Chameleon = 0x100000;
+		]
+		
+		,"InitialParameterValues": {
+			"DevicePciGenerationMin": 2
+			,"DevicePciLanesMin": 4
+		}
+		
+		,"dma_capabilities_bar": 2
+		,"dma_capabilities_base": "0x4018"
+		
+		,"imgproc_capabilities_bar": 0
+		,"imgproc_capabilities_base": "0x500070"
+		
+		,"io_capabilities_bar": 0
+		,"io_capabilities_base": "0x38"
+	}
+	
+	,"Interrupts": [
+		{
+			"aux_base": "0x01C0"
+			,"interrupt": 11
+		}
+        ,
+        {
+            "aux_base": "0x800000"
+            ,"interrupt": 3
+        }
+	]
+	
+	,"DmaChannels": [
+		{
+			"ChannelDirection": 0
+			,"csr_base": "0x4000"
+			,"interrupt": 0
+		}
+	]
+	
+	//,"PoCXP_Monitoring":
+	//{
+	//     "I2CController": {"base": "0x200000", "clock_source_speed":125000000, "freq":80000, "TIPSleepTime" : 125}
+	//}
+}

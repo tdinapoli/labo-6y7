@@ -1,0 +1,166 @@
+{
+    "File version": 60002,
+    
+    // Komodo Fiber Gige
+    "Device":
+    {
+        "X": 1 // Just first dummy entry - no meaning
+        ,"system_capabilities" : "0x200"
+        
+        ,"on_board_memory" : 1024 // 1024 MB
+        ,"sodimm_check_address" : "0x7100"
+        ,"sodimm_required" : false
+        
+        ,"classification" : "Host" // Main device classification "Host"(FrameGrabber)/"Slave"(Chameleon)/"FNC"/"Custom"
+        ,"protocol" : "GigE" // "CoaXPress"/"CLHS"/"GigE"/"Mixed"
+        
+        ,"io_features_value" : "0x28008884"  // [3..0] Encoders - 4, [7..4] Timers - 8, [11..8] Stream Triggers - 8, 
+                                             // [15..12] Camera Triggers - 8, [31..24] LineIO - 40 (Default: 0x28004444)
+                                             
+        ,"bar_memory_filtered": [ 
+            {"bar": -1 } // Just first record to simplify further records manipulation, skipped by parser
+            // internal.KYFGLib._conf.KYHWLib.FilteredRange.warns defines initial number of warnings
+            
+            // Entire range
+            //,{"bar": 0, "start": "0x0", "end": "0x7FFFFFFFFFFFFFFF" } //9,223,372,036,854,775,807
+            //,{"bar": 2, "start": "0x0", "end": "0x7FFFFFFFFFFFFFFF" } //9223372036854775807
+            
+            /* Valid  Gige ranges
+            ,{"bar": 2, "start": "0x00000000", "end": "0x00003FFF" }
+            ,{"bar": 2, "start": "0x00005000", "end": "0x000053FF" }
+            ,{"bar": 2, "start": "0x00006000", "end": "0x000067FF" }
+            ,{"bar": 2, "start": "0x00007000", "end": "0x0000707F" }
+            ,{"bar": 2, "start": "0x00007100", "end": "0x0000717F" }
+            ,{"bar": 2, "start": "0x00008000", "end": "0x000087FF" }
+            
+            
+            ,{"bar": 0, "start": "0x00000000", "end": "0x000001ff" }                                                         
+            ,{"bar": 0, "start": "0x00100000", "end": "0x0010001f" }                                                        
+            ,{"bar": 0, "start": "0x00300000", "end": "0x0030001f" }                                                        
+            ,{"bar": 0, "start": "0x00301000", "end": "0x003010ff" }                                                         
+            ,{"bar": 0, "start": "0x00302000", "end": "0x0030201f" }                                                        
+            ,{"bar": 0, "start": "0x00400000", "end": "0x004003ff" }                                                         
+            ,{"bar": 0, "start": "0x00500000", "end": "0x005000ff" }                                                         
+            ,{"bar": 0, "start": "0x00500100", "end": "0x005001ff" }                                                         
+            ,{"bar": 0, "start": "0x00500200", "end": "0x005002ff" }                                                         
+            ,{"bar": 0, "start": "0x00500300", "end": "0x005003ff" }                                                         
+            ,{"bar": 0, "start": "0x00800000", "end": "0x00ffffff" }
+            */            
+            
+            // Inverted Valid Gige ranges:
+            //,{"bar": 2, "start": "0x00004000", "end": "0x00004FFF"    }
+            //,{"bar": 2, "start": "0x00005400", "end": "0x00005FFF"    }
+            //,{"bar": 2, "start": "0x00006800", "end": "0x00006FFF"    }
+            //,{"bar": 2, "start": "0x00007080", "end": "0x000070FF"    }
+            //,{"bar": 2, "start": "0x00007180", "end": "0x00007FFF"    }
+            //,{"bar": 2, "start": "0x00008800", "end": "0x7FFFFFFFFFFFFFFF"  }
+            //
+            //,{"bar": 0, "start": "0x00000200", "end": "0x000FFFFF"    }                                                         
+            //,{"bar": 0, "start": "0x00100020", "end": "0x002FFFFF"    }                                                        
+            //,{"bar": 0, "start": "0x00300020", "end": "0x00300FFF"    }                                                        
+            //,{"bar": 0, "start": "0x00301100", "end": "0x00301FFF"    }                                                         
+            //,{"bar": 0, "start": "0x00302020", "end": "0x003FFFFF"    }                                                        
+            //,{"bar": 0, "start": "0x00400400", "end": "0x004FFFFF"    }                                                         
+            //,{"bar": 0, "start": "0x00500100", "end": "0x005000FF"    }                                                         
+            //,{"bar": 0, "start": "0x00500200", "end": "0x005001FF"    }                                                         
+            //,{"bar": 0, "start": "0x00500300", "end": "0x005002FF"    }                                                         
+            //,{"bar": 0, "start": "0x00500400", "end": "0x007FFFFF"    }                                                         
+            //,{"bar": 0, "start": "0x01000000", "end": "0x7FFFFFFFFFFFFFFF" }
+
+        ]
+        
+        ,"InitialParameterValues": {
+            "DevicePciGenerationMin": 3
+            ,"DevicePciLanesMin": 8
+        }
+    },
+    "Interrupts": [
+        {
+            "aux_base": "0x01C0"
+            ,"interrupt": 11
+        }
+        ,
+        {
+            "aux_base": "0x800000"
+            ,"interrupt": 3
+        }
+    ],
+    "FanController": // Valid only if bit 21 of system capabilities is set (SYSTEM_CAPABLE_FAN_CONTROLLER)
+    {
+        "bar": 0 
+        ,"base_address": "0x6000" 
+        ,"capabilities_address": "0x0"
+        //-----------------------------
+        ,"formula_type": 1 // 1 - Calculation formula for Device type I, 2 - Calculation formula for Device type II
+    },
+    "DmaChannels": [
+        {
+            /* enum class Direction{UNDEFINED = -1, HOST2DEVICE = 0, DEVICE2HOST = 1}; */
+            "ChannelDirection": 1
+            ,"csr_base": "0x8000"
+            ,"interrupt": 1
+            ,"dmaChannelIndex": 0
+            //,"isVirtual": true
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8100"
+            ,"interrupt": 5
+            ,"dmaChannelIndex": 1
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8200"
+            ,"interrupt": 7
+            ,"dmaChannelIndex": 2
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8300"
+            ,"interrupt": 9
+            ,"dmaChannelIndex": 3
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8400"
+            ,"interrupt": 12
+            ,"dmaChannelIndex": 4
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8500"
+            ,"interrupt": 13
+            ,"dmaChannelIndex": 5
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8600"
+            ,"interrupt": 14
+            ,"dmaChannelIndex": 6
+        }
+        ,
+        {
+            "ChannelDirection": 1
+            ,"csr_base": "0x8700"
+            ,"interrupt": 15
+            ,"dmaChannelIndex": 7
+        }
+    ],
+    "Sequences": [
+        {
+            "Trigger" : {"parameter" : "DeviceStreamControlReset" }
+            // perform the following sequence
+            ,
+            "Sequence" : [
+                    {"parameter" : ""}
+            ]
+        }
+    ],
+  "Schema version": 1
+}

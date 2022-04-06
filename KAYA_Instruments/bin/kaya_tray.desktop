@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=KAYA Instruments tray notifications
+GenericName=KAYA Instruments tray notifications
+Exec=/opt/KAYA_Instruments/bin/VisionPoint.sh -d
+Terminal=false
+Icon=/usr/share/icons/gnome/48x48/apps/VisionPoint_logo-48px.png
+Categories=Utility
+Type=Application
+StartupNotify=false
+X-GNOME-Autostart-enabled=true
