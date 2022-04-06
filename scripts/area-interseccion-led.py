@@ -61,10 +61,10 @@ led1 = (1,1)
 led2 = (1,2)
 lmbd = 652e-9
 #dos = [0.05, 0.1, 0.15, 0.2, 0.25]
-dos = [0.15]
+dos = [0.1]
 dx = 0.006
 dy = 0.006
-NA = 0.25
+NA = 0.1
 
 
 for do in dos:
@@ -81,7 +81,7 @@ for do in dos:
                 area, dist,k1,k2 = calcularArea(led1, led2, lmbd, do, dx, dy, NA)
                 k2x, k2y, k2z = k2
                 #circle = plt.Circle((k2[0], k2[1]),radio, fill = False, linewidth = 0.2)
-                circle = plt.Circle((k2x, k2y),radio, alpha  = 0.01, linewidth = 0.2)
+                circle = plt.Circle((k2x, k2y),radio, alpha  = 0.1, linewidth = 0.2)
                 #ax.plot(k2x, k2y, '.k')
                 kxs.append(k2x)
                 kys.append(k2y)
@@ -101,7 +101,6 @@ y = np.linspace(-1e6, 1e6, 100)
 cuantos_hay = np.zeros(shape=(len(x), len(y)))
 
 for i in range(len(x)):
-    break
     for j in range(len(y)):
         punto_mesh = np.array([x[i], y[j]])
         n_overlap = 0
