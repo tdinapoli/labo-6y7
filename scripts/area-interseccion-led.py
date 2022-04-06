@@ -14,6 +14,7 @@ def areaCirculo(R, d):
 
 def calcularArea(led1, led2, lmbd, do, dx, dy, NA):
     """Calcula el area de intersección del circulo en el espacio de Fourier generado al prender dos LEDs.
+
     :led1: Tupla (i, j) que determina el led de la grilla, se asume que (0,0) está en el eje óptico
     :led2: led2
     :lmbd: long de onda
@@ -35,7 +36,7 @@ def calcularArea(led1, led2, lmbd, do, dx, dy, NA):
     tita1 = np.arctan(dij1/do)
     kx1 = modK * np.sin(tita1) * np.cos(phi1)
     ky1 = modK * np.sin(tita1) * np.sin(phi1)
-    kz1 = modK * np.cos(np.arctan2(dij1, do))
+    kz1 = modK * np.cos(np.arctan(dij1/do))
     k1 = np.array([kx1, ky1, kz1])
 
     phi2 = np.arctan2(y2, x2)
@@ -43,10 +44,10 @@ def calcularArea(led1, led2, lmbd, do, dx, dy, NA):
     tita2 = np.arctan(dij2/do)
     kx2 = modK * np.sin(tita2) * np.cos(phi2)
     ky2 = modK * np.sin(tita2) * np.sin(phi2)
-    kz2 = modK * np.cos(np.arctan2(dij2, do))
+    kz2 = modK * np.cos(np.arctan(dij2/do))
     k2 = np.array([kx2, ky2, kz2])
 
-    k_radio = modK*np.arcsin(NA)
+    k_radio = NA * modK/2
 
     dist_entre_circulos = np.linalg.norm(k2 - k1)
 
@@ -59,7 +60,8 @@ def calcularArea(led1, led2, lmbd, do, dx, dy, NA):
 led1 = (1,1)
 led2 = (1,2)
 lmbd = 652e-9
-dos = [0.05, 0.1, 0.15, 0.2, 0.25]
+#dos = [0.05, 0.1, 0.15, 0.2, 0.25]
+dos = [0.15]
 dx = 0.006
 dy = 0.006
 NA = 0.25
@@ -69,10 +71,11 @@ for do in dos:
     fig, ax = plt.subplots()
     kxs = []
     kys = []
+    ks = []
+    radio = NA/(lmbd*2)
     for i in range(-15, 16):
         for j in range(-15,16):
             if j != 100:
-                radio = np.arcsin(NA)/lmbd
                 led1 = (1,1)
                 led2 = (i,j)
                 area, dist,k1,k2 = calcularArea(led1, led2, lmbd, do, dx, dy, NA)
@@ -82,13 +85,41 @@ for do in dos:
                 #ax.plot(k2x, k2y, '.k')
                 kxs.append(k2x)
                 kys.append(k2y)
+                ks.append(np.array([k2x, k2y]))
 
                 ax.set_aspect(1)
                 ax.add_artist(circle)
-                #print(k2, k1)
     ax.scatter(kxs, kys, s=0.1, color="black")
     plt.xlim([-1.25e6, 1.25e6])
     plt.ylim([-1.25e6, 1.25e6])
     plt.title(str(do))
     plt.show()
+
+ks = np.array(ks)
+x = np.linspace(-1e6, 1e6, 100)
+y = np.linspace(-1e6, 1e6, 100)
+cuantos_hay = np.zeros(shape=(len(x), len(y)))
+
+for i in range(len(x)):
+    break
+    for j in range(len(y)):
+        punto_mesh = np.array([x[i], y[j]])
+        n_overlap = 0
+        for k in ks:
+            dist = np.linalg.norm(punto_mesh - k)
+            #print(punto_mesh, k, dist, dist < radio)
+            if dist < radio:
+                n_overlap += 1
+        cuantos_hay[i, j] = n_overlap
+        
+
+print(radio)
+print(cuantos_hay)
+plt.imshow(cuantos_hay)
+plt.colorbar()
+plt.show()
+
+
+
+
 
