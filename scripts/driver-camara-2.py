@@ -8,6 +8,18 @@ import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 from typing import Tuple, Optional
 
+class Camera(ABC):
+    @abstractmethod
+    def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
+        pass
+
+    @abstractmethod
+    def set_gain_exposure(self, gain: int, exposure: int):
+        pass
+
+    @abstractmethod
+    def get_frame(self) -> np.ndarray:
+        pass
 
 class ImperexCamera(Camera):
     def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
@@ -20,6 +32,7 @@ class ImperexCamera(Camera):
         (status, dev_info) = ky.KY_DeviceInfo(grabberIndex)
         self.camHandleArray = [[0]]
         self.handle = [0]
+        self.buffHandle = ky.STREAM_HANDLE()
 
     ##########Conexión al grabber###############################################
 
@@ -49,18 +62,6 @@ def connectToGrabber(grabberIndex):
     connected = connected_fghandle.get()
     handle[grabberIndex] = connected
 
-class Camera(ABC):
-    @abstractmethod
-    def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
-        pass
-
-    @abstractmethod
-    def set_gain_exposure(self, gain: int, exposure: int):
-        pass
-
-    @abstractmethod
-    def get_frame(self) -> np.ndarray:
-        pass
 
 camara = Camera()
 imperx = ImperexCamera(camara)
