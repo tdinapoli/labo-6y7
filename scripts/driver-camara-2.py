@@ -23,38 +23,19 @@ class Camera(ABC):
 
 class ImperexCamera(Camera):
     def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
-        self.grabberIndex = 0
-        self.streamInfoStruct = StreamInfoStruct()
-        initParams = ky.KYFGLib_InitParameters()
-        ky.KYFGLib_InitParameters(initParams)
+        self.initParams = ky.KYFGLib_InitParameters()
+        ky.KYFGLib_Initialize(initParams)
 
-        (KYFG_Scan_status, fgAmount) = ky.KY_DeviceScan()
-        (status, dev_info) = ky.KY_DeviceInfo(grabberIndex)
-        self.camHandleArray = [[0]]
-        self.handle = [0]
-        self.buffHandle = ky.STREAM_HANDLE()
+        self.grabberIndex = 0 #número del grabber de la lista de grabbers
 
-    ##########Conexión al grabber###############################################
+        fgAmount, dev_info = _connectToGrabber(grabberIndex)
 
-        connection = -1
-        try:
-            connection = connectToGrabber(grabberIndex)
-        except ky.KYException as err:
-            print('error')
+    def _connectToGrabber(grabberIndex):
+        _, fgAmount = ky.KY_DeviceScan()
+        _, dev_info = ky.KY_DeviceInfo(grabberIndex)
+        return fgAmount, dev_info
+        
 
-        if (connection == 0):
-            (KYDeviceEventCallBackRegister_status,) = KYDeviceEventCallBackRegister(handle[grabberIndex], Device_event_callback_func, self.handle[self.grabberIndex])
-
-    #########Conectamos la camara########################## 
-
-        (CameraScan_status, camHandleArray[grabberIndex]) = ky.KYFG_UpdateCameraList(handle[grabberIndex])
-        cams_num = len(camHandleArray[grabberIndex])
-        if (cams_num < 1):
-            print("no se encontraron camaras")
-        (KYFG_CameraOpen2_status,) = ky.KYFG_CameraOpen2(camHandleArray[grabberIndex][0], None)
-        if (KYFG_CameraOpen2_status == ky.FGSTATUS_OK):
-            print("camara conectada correctamente")
-        pass
 
 def connectToGrabber(grabberIndex):
     global handle
