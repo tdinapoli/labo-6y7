@@ -2,7 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 a = np.loadtxt("prueba.csv")
-print(a.shape)
+print(a)
 
-plt.imshow(a)
-plt.show()
+for val in np.unique(a):
+    print(val)
+
+
+#plt.imshow(a)
+#plt.show()
