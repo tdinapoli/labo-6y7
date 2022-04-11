@@ -1,9 +1,9 @@
 import KYFGLib as ky
 from time import sleep
+from time import time
 import ctypes as c
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 
@@ -34,6 +34,7 @@ def startCamera(grabberIndex, cameraIndex, n_frames):
     return 0
 
 def Stream_callback_func(buffHandle, userContext): 
+    print("buffhandle", buffHandle)
     if (buffHandle == 0 ):
         Stream_callback_func.copyingDataFlag = 0
         return
@@ -58,19 +59,18 @@ def Stream_callback_func(buffHandle, userContext):
     
     streamInfo.callbackCount = streamInfo.callbackCount + 1
 
-    # BUSCAMOS EL ARCHIVO DE MEMORIA CON NUMPY Y LO TRANSFORMAMOPS A UN ARRAY
-    INTP = c.POINTER(c.c_int)
-    num = c.c_int(pInfoBase)
-    addr = c.addressof(num)
-    ptr = c.cast(addr, INTP)
-    print("addr", addr)
-    print("ptr", ptr)
-    data = np.ctypeslib.as_array(ptr, shape=(640,480))
-    np.savetxt("prueba.csv", data)
-    print(data)
-    print(data.shape)
 
-    
+    #SEGUNDO INTENTO DE BUSCAR EL ARCHIVO EL BUENOOOOO
+    pInfoBuffer_byte_array = bytearray(c.string_at(pInfoBase, pInfoBuffer))
+    #print("byte array", pInfoBuffer_byte_array, type(pInfoBuffer_byte_array))
+    data = np.frombuffer(pInfoBuffer_byte_array, dtype=np.ubyte)
+    #print(data,'max', max(data), "min", min(data))
+    data = data.reshape(7000, 9344)
+    t_ini = time()
+    np.savetxt("prueba.csv", data)
+    t_final = time()
+    print(t_final-t_ini)
+
     if ( Stream_callback_func.copyingDataFlag == 0):
         Stream_callback_func.copyingDataFlag = 1
     
@@ -113,6 +113,7 @@ def Stream_callback_func_ellos(buffHandle, userContext):
     #print("KYFG_BufferToQueue_status: " + str(format(KYFG_BufferToQueue_status, '02x'))) 
     Stream_callback_func.copyingDataFlag = 0
     return
+
 Stream_callback_func.data = 0
 Stream_callback_func.copyingDataFlag = 0
 
@@ -183,8 +184,8 @@ if (cams_num < 1):
 if (KYFG_CameraOpen2_status == ky.FGSTATUS_OK):
     print("camara conectada correctamente")
 
-_, = ky.KYFG_SetCameraValueInt(camHandleArray[grabberIndex][0], "Width", 640)
-_, = ky.KYFG_SetCameraValueInt(camHandleArray[grabberIndex][0], "Height", 480)
+_, = ky.KYFG_SetCameraValueInt(camHandleArray[grabberIndex][0], "Width", 9344)
+_, = ky.KYFG_SetCameraValueInt(camHandleArray[grabberIndex][0], "Height", 7000)
 _, cameraStreamHandle = ky.KYFG_StreamCreate(camHandleArray[grabberIndex][0], 0)
 _, width = ky.KYFG_GetCameraValueInt(camHandleArray[grabberIndex][0], "Width")
 _, height = ky.KYFG_GetCameraValueInt(camHandleArray[grabberIndex][0], "Height")
