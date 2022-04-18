@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib import colors
+import matplotlib as mpl
 
 def areaCirculo(R, d):
     """calcula el área de interseccion entre dos circulos de radio R con centros a distancia d
@@ -114,7 +116,11 @@ for i in range(len(x)):
 
 print(radio)
 print(cuantos_hay)
-plt.imshow(cuantos_hay)
+#discrete_cmap = [(x, x, x) for x in range(1,)]
+cmap = plt.cm.viridis
+cmap_list = [cmap(i*33) for i in range(12)]
+cmap = mpl.colors.LinearSegmentedColormap.from_list('Custom cmap', cmap_list, 12)
+plt.imshow(cuantos_hay, cmap =cmap )
 plt.colorbar()
 plt.show()
 

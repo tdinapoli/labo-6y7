@@ -1,6 +1,5 @@
 import KYFGLib as ky
 import ctypes
-import time
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -53,11 +52,13 @@ class ImperexCamera(Camera):
         self._stream_callback_func.__func__.data = 0
         self._stream_callback_func.__func__.copyingDataFlag = 0
 
-        _, self.exposuretime =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
         ky.KYFGLib_Initialize(self.init_params)
         self._connect_to_grabber()
         self._connect_to_camera()
         self._set_roi(roi)
+
+        _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
+        _, self.gain = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
 
         _, self.camera_stream_handle = ky.KYFG_StreamCreate(self.cam_handle_array[self.grabber_index][0], 0)
 
@@ -142,15 +143,23 @@ class ImperexCamera(Camera):
         KYFG_CameraStart_status, = ky.KYFG_CameraStart(self.cam_handle_array[self.grabber_index][self.camera_index], self.camera_stream_handle, self.n_frames)
         return 0
 
-    def set_gain_exposure(self, exposure_time):
-        _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime"), exposure_time)
-        self.exposure_time = exposure_time
+    def set_gain_exposure(self, exposure_time, gain):
+        print(self.exposure_time)
+        _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime", exposure_time)
+        _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
+        print(self.exposure_time)
+        print(self.gain)
+        _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain", gain)
+        _, self.gain =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
+        print(self.gain)
         
         return
 
     def get_frame(self):
         sys.stdout.flush()
+        t0 = time()
         self._start_camera()
+        print(time() - t0)
 
         sleep(1)
         sys.stdout.flush()
@@ -171,6 +180,8 @@ class ImperexCamera(Camera):
         
 
 imperx = ImperexCamera()
+imperx.set_gain_exposure(5065.0, 1.25)
+sleep(1)
 imagen = imperx.get_frame()
 imperx.close()
 plt.imshow(imagen, cmap='gray', vmin=0, vmax=255)
