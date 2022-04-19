@@ -63,7 +63,7 @@ led1 = (1,1)
 led2 = (1,2)
 lmbd = 652e-9
 #dos = [0.05, 0.1, 0.15, 0.2, 0.25]
-dos = [0.1]
+dos = [0.05]
 dx = 0.006
 dy = 0.006
 NA = 0.1
@@ -95,6 +95,7 @@ for do in dos:
     plt.xlim([-1.25e6, 1.25e6])
     plt.ylim([-1.25e6, 1.25e6])
     plt.title(str(do))
+    plt.savefig("overlap_"+str(dos[0])+".png", dpi =1000)
     plt.show()
 
 ks = np.array(ks)
@@ -118,10 +119,12 @@ print(radio)
 print(cuantos_hay)
 #discrete_cmap = [(x, x, x) for x in range(1,)]
 cmap = plt.cm.viridis
-cmap_list = [cmap(i*33) for i in range(12)]
+cmap_list = [cmap(i*23) for i in range(12)]
 cmap = mpl.colors.LinearSegmentedColormap.from_list('Custom cmap', cmap_list, 12)
 plt.imshow(cuantos_hay, cmap =cmap )
+plt.title(str(do))
 plt.colorbar()
+plt.savefig("Overlap_colormap_"+str(dos[0])+".png", dpi = 1000)
 plt.show()
 
 
