@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 from abc import ABC, abstractmethod
 from typing import Tuple, Optional
 
-from time import sleep, time
+from time import sleep, time, perf_counter
 import sys
 
 Roi = Tuple[int, int]
@@ -27,6 +27,7 @@ class Camera(ABC):
 
 class ImperexCamera(Camera):
     def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
+        inicio_init = perf_counter()
         self.grabber_index = 0 #número del grabber de la lista de grabbers
         self.max_boards = 4
         self.max_cams = 4
@@ -51,20 +52,41 @@ class ImperexCamera(Camera):
         self.image = 0
         self._stream_callback_func.__func__.data = 0
         self._stream_callback_func.__func__.copyingDataFlag = 0
+        self._time_stamp = 0
 
         ky.KYFGLib_Initialize(self.init_params)
+        inicio_grabber = perf_counter()
         self._connect_to_grabber()
+        final_grabber = perf_counter()
+        print("grabber: ", final_grabber - inicio_grabber)
+        inicio_camera = perf_counter()
         self._connect_to_camera()
+        final_camera = perf_counter()
+        print("camara: ", final_camera - inicio_camera)
         self._set_roi(roi)
 
         _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
         _, self.gain = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
+
+        #La configuración de los bits del adc y del color puede cambiar si se abre la app de vision point
+        #si se quiere cambiar el bit depht o el pixel format hay que cambiar el tipo de dato que aparece
+        #en la función _stream_callback_func en data = np.frombuffer(buffer_byte_array, dtype=np.int16)
+        # a data = np.frombuffer(buffer_byte_array, dtype=np.uint8)
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "AdcBitDepth", "Bit12")
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "PixelFormat", "Mono12")
+        self.bit_depth = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "AdcBitDepth")
+        self.pixel_format = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "PixelFormat")
+        print("Bit Depth ADC:",self.bit_depth)
+        print("Bit PixelFormat:",self.pixel_format)
 
         _, self.camera_stream_handle = ky.KYFG_StreamCreate(self.cam_handle_array[self.grabber_index][0], 0)
 
         _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, self._stream_callback_func, ky.py_object(self.stream_info_struct))
 
         self._allocate_memory()
+
+        final_init = perf_counter()
+        print("tiempo init: ", final_init - inicio_init)
 
     def _connect_to_grabber(self):
         _, fg_amount = ky.KY_DeviceScan()
@@ -74,6 +96,8 @@ class ImperexCamera(Camera):
         except ky.KYException as err:
             print("Error al conectar con el frame grabber")
         return
+
+
 
     def _set_grabber_connection(self):
         self.handle
@@ -114,9 +138,12 @@ class ImperexCamera(Camera):
 
 
     def _stream_callback_func(self, buff_handle, user_context):
+
         if buff_handle == 0:
             self._stream_callback_func.__func__.copyingDataFlag = 0
             return
+
+        _, self._time_stamp, _, _ =  ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP)
 
         stream_info = ky.cast(user_context, ky.py_object).value
         stream_info.callbackCount = stream_info.callbackCount + 1
@@ -125,15 +152,17 @@ class ImperexCamera(Camera):
         _, buffer_size, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_SIZE)
 
         buffer_byte_array = bytearray(ctypes.string_at(pointer, buffer_size))
-        data = np.frombuffer(buffer_byte_array, dtype=np.ubyte)
+        #data = np.frombuffer(buffer_byte_array, dtype=np.ubyte)
+        data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
         self.image = data.reshape(self.image_height, self.image_width)
+
+        
 
         if self._stream_callback_func.__func__.copyingDataFlag == 0:
            self._stream_callback_func.__func__.copyingDataFlag = 1
 
         sys.stdout.flush()
         self._stream_callback_func.__func__.copyingDataFlag = 0
-
         return 
 
     def _start_camera(self):
@@ -144,27 +173,26 @@ class ImperexCamera(Camera):
         return 0
 
     def set_gain_exposure(self, exposure_time, gain):
-        print(self.exposure_time)
         _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime", exposure_time)
         _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
-        print(self.exposure_time)
-        print(self.gain)
         _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain", gain)
         _, self.gain =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
-        print(self.gain)
         
         return
 
     def get_frame(self):
         sys.stdout.flush()
-        t0 = time()
+        inicio_frame = perf_counter()
         self._start_camera()
-        print(time() - t0)
+        final_frame = perf_counter()
 
-        sleep(1)
+        print(self._time_stamp)
+        sleep(0.1)
         sys.stdout.flush()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
-        return self.image
+        final_get_frame = perf_counter()
+        return self.image, (inicio_frame-final_get_frame), self._time_stamp
+
 
     def close(self):
 
@@ -177,12 +205,40 @@ class ImperexCamera(Camera):
             self.height = 480
             self.callbackCount = 0
             return
-        
-
 imperx = ImperexCamera()
-imperx.set_gain_exposure(5065.0, 1.25)
-sleep(1)
-imagen = imperx.get_frame()
-imperx.close()
-plt.imshow(imagen, cmap='gray', vmin=0, vmax=255)
-plt.show()
+try: 
+    imperx.set_gain_exposure(3500.0, 1.25)
+    sleep(0.1)
+#sleep(git/labo6y7/scripts/config/270422_acq.xml
+    imagen = imperx.get_frame()
+    print(imagen)
+    plt.imshow(imagen[0], cmap='gray', vmin=0, vmax=4095)
+    plt.show()
+
+    exp_times = np.logspace(np.log10(15.0), np.log10(28500.0), 101)
+    index = 0
+    Time_Stamps = np.zeros(len(exp_times))
+#tiempos_reales = np.zeros(len(exp_times))
+#promedios = np.zeros(len(exp_times))
+    for i,t in enumerate(exp_times):
+        imperx.set_gain_exposure(t, 1.25)
+        sleep(0.1)
+        imagen, tiempo, time_stamp = imperx.get_frame()
+        Time_Stamps[i] = time_stamp
+
+        print("tiempo de exposicion", t)
+    plt.plot(exp_times, Time_Stamps - Time_Stamps[0], 'ko')
+    plt.show()
+#    promedios[i] = imagen[620, 480]
+#    #promedios[i] = np.mean(imagen)
+#    print(promedios[i])
+#
+    imperx.close()
+
+except:
+    imperx.close()
+#plt.plot(exp_times, promedios, "ok")
+#plt.show()
+#
+#np.save("pix_620_480_12bit", promedios)
+#np.save("pix_620_480_12bit_exp_time", exp_times)
