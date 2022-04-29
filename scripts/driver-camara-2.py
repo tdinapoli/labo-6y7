@@ -1,9 +1,9 @@
 import KYFGLib as ky
 import ctypes
+import traceback
 
 import numpy as np
-import matplotlib.pyplot as plt
-
+import matplotlib.pyplot as plt 
 from abc import ABC, abstractmethod
 from typing import Tuple, Optional
 
@@ -49,7 +49,7 @@ class ImperexCamera(Camera):
         self.image_height = 0
         self.n_frames = 1
         self.camera_index = 0
-        self.image = 0
+        self.image = 0 
         self._stream_callback_func.__func__.data = 0
         self._stream_callback_func.__func__.copyingDataFlag = 0
         self._time_stamp = 0
@@ -156,13 +156,13 @@ class ImperexCamera(Camera):
         data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
         self.image = data.reshape(self.image_height, self.image_width)
 
-        
+        print(self.image.shape)
 
         if self._stream_callback_func.__func__.copyingDataFlag == 0:
            self._stream_callback_func.__func__.copyingDataFlag = 1
 
         sys.stdout.flush()
-        self._stream_callback_func.__func__.copyingDataFlag = 0
+        #self._stream_callback_func.__func__.copyingDataFlag = 0
         return 
 
     def _start_camera(self):
@@ -182,17 +182,16 @@ class ImperexCamera(Camera):
 
     def get_frame(self):
         sys.stdout.flush()
-        inicio_frame = perf_counter()
         self._start_camera()
-        final_frame = perf_counter()
 
-        print(self._time_stamp)
-        sleep(0.1)
+        #espera a que la imagen se termine de copiar en el buffer
+        while self._stream_callback_func.__func__.copyingDataFlag == 0:
+            pass
+        self._stream_callback_func.__func__.copyingDataFlag = 1
         sys.stdout.flush()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
-        final_get_frame = perf_counter()
-        return self.image, (inicio_frame-final_get_frame), self._time_stamp
 
+        return self.image, self._time_stamp
 
     def close(self):
 
@@ -210,32 +209,39 @@ try:
     imperx.set_gain_exposure(3500.0, 1.25)
     sleep(0.1)
 #sleep(git/labo6y7/scripts/config/270422_acq.xml
-    imagen = imperx.get_frame()
-    print(imagen)
-    plt.imshow(imagen[0], cmap='gray', vmin=0, vmax=4095)
+
+    imagen, _ = imperx.get_frame()
+    plt.imshow(imagen, cmap="gray")
     plt.show()
 
-    exp_times = np.logspace(np.log10(15.0), np.log10(28500.0), 101)
+    #exp_times = np.logspace(np.log10(15.0), np.log10(28500.0), 101)
+    exp_times = np.linspace(15.0, 28500.0, 50)
+
     index = 0
     Time_Stamps = np.zeros(len(exp_times))
 #tiempos_reales = np.zeros(len(exp_times))
 #promedios = np.zeros(len(exp_times))
-    for i,t in enumerate(exp_times):
-        imperx.set_gain_exposure(t, 1.25)
-        sleep(0.1)
-        imagen, tiempo, time_stamp = imperx.get_frame()
-        Time_Stamps[i] = time_stamp
+#    for i,t in enumerate(exp_times):
+#        imperx.set_gain_exposure(t, 1.25)
+#        sleep(0.1)
+#        imagen, tiempo, time_stamp = imperx.get_frame()
+#        if i==0:
+#            Time_Stamps[i] = time_stamp
+#        else:
+#            Time_Stamps[i] = time_stamp - Time_Stamps[i- 1] 
 
-        print("tiempo de exposicion", t)
-    plt.plot(exp_times, Time_Stamps - Time_Stamps[0], 'ko')
-    plt.show()
+#    plt.plot(exp_times, Time_Stamps, 'o')
+#    plt.legend()
+#    plt.show()
 #    promedios[i] = imagen[620, 480]
 #    #promedios[i] = np.mean(imagen)
 #    print(promedios[i])
 #
     imperx.close()
 
-except:
+except Exception as e:
+    print("exception:", str(e))
+    print(traceback.format_exc())
     imperx.close()
 #plt.plot(exp_times, promedios, "ok")
 #plt.show()
