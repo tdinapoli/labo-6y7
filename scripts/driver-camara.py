@@ -1,233 +1,262 @@
 import KYFGLib as ky
-from time import sleep
-from time import time
-import ctypes as c
-import sys
+import ctypes
+import traceback
+
 import numpy as np
+import matplotlib.pyplot as plt 
+from abc import ABC, abstractmethod
+from typing import Tuple, Optional
 
+from time import sleep, time, perf_counter
+import sys
+import os
+import threading
+import queue
 
+Roi = Tuple[int, int]
 
-def connectToGrabber(grabberIndex):
-    global handle
-    (connected_fghandle,) = ky.KYFG_Open(grabberIndex)
-    connected = connected_fghandle.get()
-    handle[grabberIndex] = connected
+class Camera(ABC):
+    @abstractmethod
+    def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
+        pass
 
-    (KYFG_GetGrabberValueInt_status, dmadQueuedBufferCapable) = ky.KYFG_GetGrabberValueInt(handle[grabberIndex], DEVICE_QUEUED_BUFFERS_SUPPORTED)
+    @abstractmethod
+    def set_gain_exposure(self, gain: int, exposure: int):
+        pass
 
-    return 0
+    @abstractmethod
+    def get_frame(self) -> np.ndarray:
+        pass
 
-class StreamInfoStruct:
-    def __init__(self):
-        self.width = 640
-        self.height = 480
-        self.callbackCount = 0
+class ImperexCamera(Camera):
+    def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
+        inicio_init = perf_counter()
+        self.grabber_index = 0 #número del grabber de la lista de grabbers
+        self.max_boards = 4
+        self.max_cams = 4
+        self.device_queued_buffers_supported = "FW_DmaCapable_QueuedBuffers_Imp"
+
+        self.init_params = ky.KYFGLib_InitParameters()
+        self.connection = -1
+        self.stream_info_struct = self.StreamInfoStruct()
+        self.cam_handle_array = [[0 for x in range(0)] for y in range(self.max_boards)]
+        self.handle = [0 for i in range(self.max_boards)]
+        self.camera_stream_handle = 0
+        self.frame_data_size = 0
+        self.frame_data_aligment = 0
+        self.stream_buffer_handle = [0 for i in range(16)]
+        self.stream_alligned_buffer = [0 for i in range(16)]
+        self._max_image_width = 9344
+        self._max_image_height = 7000
+        self.image_width = 0
+        self.image_height = 0
+        self.n_frames = 1
+        self.camera_index = 0
+        self.image = 0 
+        self._stream_callback_func.__func__.data = 0
+        self._stream_callback_func.__func__.copyingDataFlag = 0
+        self._time_stamp = 0
+
+        #colas
+        self.queue = queue.Queue(10)
+
+        ky.KYFGLib_Initialize(self.init_params)
+        inicio_grabber = perf_counter()
+        self._connect_to_grabber()
+        final_grabber = perf_counter()
+        print("grabber: ", final_grabber - inicio_grabber)
+        inicio_camera = perf_counter()
+        self._connect_to_camera()
+        final_camera = perf_counter()
+        print("camara: ", final_camera - inicio_camera)
+        self._set_roi(roi)
+
+        _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
+        _, self.gain = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
+
+        #La configuración de los bits del adc y del color puede cambiar si se abre la app de vision point
+        #si se quiere cambiar el bit depht o el pixel format hay que cambiar el tipo de dato que aparece
+        #en la función _stream_callback_func en data = np.frombuffer(buffer_byte_array, dtype=np.int16)
+        # a data = np.frombuffer(buffer_byte_array, dtype=np.uint8)
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "AdcBitDepth", "Bit12")
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "PixelFormat", "Mono12")
+        self.bit_depth = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "AdcBitDepth")
+        self.pixel_format = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "PixelFormat")
+        print("Bit Depth ADC:",self.bit_depth)
+        print("Bit PixelFormat:",self.pixel_format)
+
+        _, self.camera_stream_handle = ky.KYFG_StreamCreate(self.cam_handle_array[self.grabber_index][0], 0)
+
+        _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, self._stream_callback_func, ky.py_object(self.stream_info_struct))
+
+        self._allocate_memory()
+
+        final_init = perf_counter()
+        print("tiempo init: ", final_init - inicio_init)
+
+    def _connect_to_grabber(self):
+        _, fg_amount = ky.KY_DeviceScan()
+        _, dev_info = ky.KY_DeviceInfo(self.grabber_index)
+        try:
+            self.connection = self._set_grabber_connection()
+        except ky.KYException as err:
+            print("Error al conectar con el frame grabber")
         return
 
-def startCamera(grabberIndex, cameraIndex, n_frames):
-    # put all buffers to input queue
-    KYFG_BufferQueueAll_status, = ky.KYFG_BufferQueueAll(cameraStreamHandle, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_UNQUEUED, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_INPUT)
-    print("KYFG_BufferQueueAll_status: " + str(format(KYFG_BufferQueueAll_status, '02x')))
-    
-    KYFG_CameraStart_status, = ky.KYFG_CameraStart(camHandleArray[grabberIndex][cameraIndex], cameraStreamHandle, n_frames)
-    print("KYFG_CameraStart_status: " + str(format(KYFG_CameraStart_status, '02x')))
-    return 0
 
-def Stream_callback_func(buffHandle, userContext): 
-    print("buffhandle", buffHandle)
-    if (buffHandle == 0 ):
-        Stream_callback_func.copyingDataFlag = 0
+
+    def _set_grabber_connection(self):
+        self.handle
+        connected_fghandle, = ky.KYFG_Open(self.grabber_index)
+        connected = connected_fghandle.get()
+        self.handle[self.grabber_index] = connected
+        ky.KYFG_GetGrabberValueInt(self.handle[self.grabber_index], self.device_queued_buffers_supported)
+        return 0
+
+    def _connect_to_camera(self):
+        _, self.cam_handle_array[self.grabber_index] = ky.KYFG_UpdateCameraList(self.handle[self.grabber_index])
+        cams_num = len(self.cam_handle_array[self.grabber_index])
+        if (cams_num < 1):
+            print("No se encontraron camaras")
+        KYFG_CameraOpen2_status, = ky.KYFG_CameraOpen2(self.cam_handle_array[self.grabber_index][0], None)
+        if KYFG_CameraOpen2_status == ky.FGSTATUS_OK:
+            print("Camara conectada correctamente")
+
+    def _set_roi(self, roi):
+        if roi is None:
+            _, = ky.KYFG_SetCameraValueInt(self.cam_handle_array[self.grabber_index][0], "Width", self._max_image_width)
+            _, = ky.KYFG_SetCameraValueInt(self.cam_handle_array[self.grabber_index][0], "Height", self._max_image_height)
+            self.image_height = self._max_image_height
+            self.image_width = self._max_image_width
+
+        else: 
+            _, = ky.KYFG_SetCameraValueInt(self.cam_handle_array[self.grabber_index][0], "Width", roi[0])
+            _, = ky.KYFG_SetCameraValueInt(self.cam_handle_array[self.grabber_index][0], "Height", roi[1])
+
+    def _allocate_memory(self):
+        _, payload_size, _, _ = ky.KYFG_StreamGetInfo(self.camera_stream_handle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_PAYLOAD_SIZE)
+
+        _, buf_allignment, _, _ = ky.KYFG_StreamGetInfo(self.camera_stream_handle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_BUF_ALIGNMENT)
+
+        for iFrame in range(len(self.stream_buffer_handle)):
+            self.stream_alligned_buffer[iFrame] = ky.aligned_array(buf_allignment, ky.c_ubyte, payload_size)
+            _, self.stream_buffer_handle[iFrame] = ky.KYFG_BufferAnnounce(self.camera_stream_handle, self.stream_alligned_buffer[iFrame], None)
+
+
+    def _stream_callback_func(self, buff_handle, user_context):
+
+
+        if buff_handle == 0:
+            self._stream_callback_func.__func__.copyingDataFlag = 0
+            return
+
+
+        _, self._time_stamp, _, _ =  ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP)
+
+        stream_info = ky.cast(user_context, ky.py_object).value
+        stream_info.callbackCount = stream_info.callbackCount + 1
+
+        _, pointer, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_BASE)
+        _, buffer_size, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_SIZE)
+
+        buffer_byte_array = bytearray(ctypes.string_at(pointer, buffer_size))
+        #data = np.frombuffer(buffer_byte_array, dtype=np.ubyte)
+        data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
+        self.image = data.reshape(self.image_height, self.image_width)
+        self.queue.put(self.image)
+
+
+        if self._stream_callback_func.__func__.copyingDataFlag == 0:
+           self._stream_callback_func.__func__.copyingDataFlag = 1
+
+        sys.stdout.flush()
+        self._stream_callback_func.__func__.copyingDataFlag = 0
+        return 
+
+    def _start_camera(self):
+        # put all buffers to input queue
+        KYFG_BufferQueueAll_status, = ky.KYFG_BufferQueueAll(self.camera_stream_handle, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_UNQUEUED, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_INPUT)
+        
+        KYFG_CameraStart_status, = ky.KYFG_CameraStart(self.cam_handle_array[self.grabber_index][self.camera_index], self.camera_stream_handle, self.n_frames)
+        return 0
+
+    def set_gain_exposure(self, exposure_time, gain):
+        _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime", exposure_time)
+        _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
+        _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain", gain)
+        _, self.gain =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
+        
         return
-    streamInfo = ky.cast(userContext, ky.py_object).value
-    
-    
-    _, width = ky.KYFG_GetCameraValueInt(camHandleArray[grabberIndex][0], "Width")
-    _, height = ky.KYFG_GetCameraValueInt(camHandleArray[grabberIndex][0], "Height")
-    #totalFrames = ky.KYFG_BufferValue(buffHandle, "RXFrameCounter")
-    #buffSize = ky.KYFG_BufferGetSize(buffHandle)
-    #_, buffIndex = ky.KYFG_StreamGetFrameIndex(buffHandle)
-    buffData = ky.KYFG_StreamGetPtr(buffHandle, 0)
 
-    _, pInfoBuffer, pInfoSize, pInfoType = ky.KYFG_BufferGetInfo(buffHandle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_SIZE) # SIZET devuelve el tamaño
-    print("\n INFO_SIZE", pInfoBuffer, pInfoSize, pInfoType)
-    _, pInfoPTR, pInfoSize, pInfoType = ky.KYFG_BufferGetInfo(buffHandle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_USER_PTR) # PTR NO devuelve informacion pertinetne
-    print("INFO_USER_PTR", pInfoPTR, pInfoSize, pInfoType)
-    _, pInfoBase, pInfoSize, pInfoType = ky.KYFG_BufferGetInfo(buffHandle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_BASE) # PTR Devuelve el POINTER
-    print("INFO_BASE", pInfoBase, pInfoSize, pInfoType)
-    _, pInfoID, pInfoSize, pInfoType = ky.KYFG_BufferGetInfo(buffHandle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_ID) # UINT32 Devuelve el ID de cada Frame
-    print("INFO_ID", pInfoID, pInfoSize, pInfoType)
-    
-    streamInfo.callbackCount = streamInfo.callbackCount + 1
+    def get_frame(self):
+        sys.stdout.flush()
 
 
-    #SEGUNDO INTENTO DE BUSCAR EL ARCHIVO EL BUENOOOOO
-    pInfoBuffer_byte_array = bytearray(c.string_at(pInfoBase, pInfoBuffer))
-    #print("byte array", pInfoBuffer_byte_array, type(pInfoBuffer_byte_array))
-    data = np.frombuffer(pInfoBuffer_byte_array, dtype=np.ubyte)
-    #print(data,'max', max(data), "min", min(data))
-    data = data.reshape(7000, 9344)
-    t_ini = time()
-    np.savetxt("prueba.csv", data)
-    t_final = time()
-    print(t_final-t_ini)
+        self._start_camera()
 
-    if ( Stream_callback_func.copyingDataFlag == 0):
-        Stream_callback_func.copyingDataFlag = 1
-    
-    sys.stdout.flush()
-    Stream_callback_func.copyingDataFlag = 0
-    return
+        self.image = self.queue.get()
 
-def Stream_callback_func_ellos(buffHandle, userContext): 
-    print("STREAM CALLBACK FUNC")
+        #while self._stream_callback_func.__func__.copyingDataFlag == 0:
+        #    pass
+        self._stream_callback_func.__func__.copyingDataFlag = 1
+        sys.stdout.flush()
+        _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
 
-    if (buffHandle == 0 ):
-        Stream_callback_func.copyingDataFlag = 0
-        return
-    streamInfo = ky.cast(userContext, ky.py_object).value
-    #print('buffer ' + str(format(buffHandle, '02x')) + ': height=' + str(streamInfo.height) + ', width=' + str(
-    #    streamInfo.width) + ', callback count=' + str(streamInfo.callbackCount))
-    streamInfo.callbackCount = streamInfo.callbackCount + 1
+        return self.image, self._time_stamp
 
-    # Example of retrieving buffer information
-    (KYFG_BufferGetInfo_status, pInfoBase, pInfoSize, pInfoType) = KYFG_BufferGetInfo(
-                                                                buffHandle, KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_BASE) # PTR
-    #print('Good callback streams buffer handle: ' + str(format(int(buffHandle), '02x')) + ", Buffer Info: " + str(pInfoBase), end='\r')
+    def close(self):
 
-    (KYFG_BufferGetInfo_status, pInfoSize, pInfoSize, pInfoType) = KYFG_BufferGetInfo(
-                                                                buffHandle, KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_SIZE) # SIZET
-    (KYFG_BufferGetInfo_status, pInfoPTR, pInfoSize, pInfoType) = KYFG_BufferGetInfo(
-                                                                buffHandle, KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_USER_PTR) # PTR
-    (KYFG_BufferGetInfo_status, pInfoTimestamp, pInfoSize, pInfoType) = KYFG_BufferGetInfo(
-                                                                buffHandle, KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP) # UINT64
-    (KYFG_BufferGetInfo_status, pInfoFPS, pInfoSize, pInfoType) = KYFG_BufferGetInfo(
-                                                                buffHandle, KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_INSTANTFPS) # FLOAT64
-    (KYFG_BufferGetInfo_status, pInfoID, pInfoSize, pInfoType) = KYFG_BufferGetInfo(
-                                                                buffHandle, KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_ID) # UINT32
-    # print("KYFG_BufferGetInfo_status: " + str(format(KYFG_BufferGetInfo_status, '02x')))
-    print("Buffer Info: Base " + str(pInfoBase) + ", Size " + str(pInfoSize) + ", Timestamp "+ str(pInfoTimestamp) + ", FPS " + str(pInfoFPS)
-          + ", ID " + str(pInfoID), end='\r')
+        _, = ky.KYFG_CameraClose(self.cam_handle_array[self.grabber_index][0])
+        _, = ky.KYFG_Close(self.handle[self.grabber_index])
 
-    sys.stdout.flush()
-    (KYFG_BufferToQueue_status,) = KYFG_BufferToQueue(buffHandle ,KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_INPUT)
-    #print("KYFG_BufferToQueue_status: " + str(format(KYFG_BufferToQueue_status, '02x'))) 
-    Stream_callback_func.copyingDataFlag = 0
-    return
+    class StreamInfoStruct:
+        def __init__(self):
+            self.width = 640
+            self.height = 480
+            self.callbackCount = 0
+            return
+imperx = ImperexCamera()
+try: 
+    imperx.set_gain_exposure(3500.0, 1.25)
+    sleep(0.1)
+#sleep(git/labo6y7/scripts/config/270422_acq.xml
 
-Stream_callback_func.data = 0
-Stream_callback_func.copyingDataFlag = 0
-
-#################################################### Defines #######################
-MAX_BOARDS = 4
-MAX_CAMS = 4
-
-handle = [0 for i in range(MAX_BOARDS)]
-
-detectedCameras = []
-
-grabberIndex = 0
-
-camHandleArray = [[0 for x in range(0)] for y in range(MAX_BOARDS)]
-
-buffHandle = ky.STREAM_HANDLE()
-print("Buff handle", buffHandle)
-
-cameraStreamHandle = 0
-
-frameDataSize = 0
-frameDataAligment = 0
-
-streamBufferHandle = [0 for i in range(16)]
-streamAllignedBuffer = [0 for i in range(16)]
-
-DEVICE_QUEUED_BUFFERS_SUPPORTED = "FW_Dma_Capable_QueuedBuffers_Imp"
-##################################################### Defines #######################
+    imagen, _ = imperx.get_frame()
+    plt.imshow(imagen, cmap="gray")
+    plt.show()
 
 
-#inicializa los parámetros (no sabemos de que ni para que sirven)
-initParams = ky.KYFGLib_InitParameters()
-ky.KYFGLib_Initialize(initParams)
+    #exp_times = np.logspace(np.log10(15.0), np.log10(28500.0), 101)
+    exp_times = np.linspace(15.0, 28500.0, 50)
 
-#escanea los grabbers (opcional)
-_, fgAmount = ky.KY_DeviceScan()
-print(fgAmount)
-_, dev_info = ky.KY_DeviceInfo(grabberIndex)
-print("DeviceDisplayName: " + dev_info.szDeviceDisplayName)
-print("Bus: " + str(dev_info.nBus))
-print("Slot: " + str(dev_info.nSlot))
-print("Function: " + str(dev_info.nFunction))
-print("DevicePID: " + str(dev_info.DevicePID))
-print("isVirtual: " + str(dev_info.isVirtual))
-print("Version: " + str(dev_info.version))
-print("Device Generation:" + str(dev_info.DeviceGeneration))
+    index = 0
+    Time_Stamps = np.zeros(len(exp_times))
+#tiempos_reales = np.zeros(len(exp_times))
+#promedios = np.zeros(len(exp_times))
+#    for i,t in enumerate(exp_times):
+#        imperx.set_gain_exposure(t, 1.25)
+#        sleep(0.1)
+#        imagen, tiempo, time_stamp = imperx.get_frame()
+#        if i==0:
+#            Time_Stamps[i] = time_stamp
+#        else:
+#            Time_Stamps[i] = time_stamp - Time_Stamps[i- 1] 
 
-#Crea instancia de stream Info struct
-streamInfoStruct = StreamInfoStruct()
-
-#Se conecta al grabber (necesario)
-connection = -1
-try:
-    connection = connectToGrabber(grabberIndex)
-except ky.KYException as err:
-    print('error')
-
-#if (connection == 0):
-#    (KYDeviceEventCallBackRegister_status,) = ky.KYDeviceEventCallBackRegister(handle[grabberIndex], Device_event_callback_func, 0)
-
-
-#Se conecta a la cámara
-_, camHandleArray[grabberIndex] = ky.KYFG_UpdateCameraList(handle[grabberIndex])
-cams_num = len(camHandleArray[grabberIndex])
-if (cams_num < 1):
-    print("no se encontraron camaras")
-(KYFG_CameraOpen2_status,) = ky.KYFG_CameraOpen2(camHandleArray[grabberIndex][0], None)
-if (KYFG_CameraOpen2_status == ky.FGSTATUS_OK):
-    print("camara conectada correctamente")
-
-_, = ky.KYFG_SetCameraValueInt(camHandleArray[grabberIndex][0], "Width", 9344)
-_, = ky.KYFG_SetCameraValueInt(camHandleArray[grabberIndex][0], "Height", 7000)
-_, cameraStreamHandle = ky.KYFG_StreamCreate(camHandleArray[grabberIndex][0], 0)
-_, width = ky.KYFG_GetCameraValueInt(camHandleArray[grabberIndex][0], "Width")
-_, height = ky.KYFG_GetCameraValueInt(camHandleArray[grabberIndex][0], "Height")
-streamInfoStruct.width = width
-streamInfoStruct.height = height
-
-_, = ky.KYFG_StreamBufferCallbackRegister(cameraStreamHandle, Stream_callback_func, ky.py_object(streamInfoStruct))
-
-
-_, payload_size, frameDataSize, pInfoType = ky.KYFG_StreamGetInfo(cameraStreamHandle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_PAYLOAD_SIZE)
-
-_, buf_allignment, frameDataAligment, pInfoType = ky.KYFG_StreamGetInfo(cameraStreamHandle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_BUF_ALIGNMENT)
-
-# allocate memory for desired number of frame buffers
-for iFrame in range(len(streamBufferHandle)):
-    streamAllignedBuffer[iFrame] = ky.aligned_array(buf_allignment, ky.c_ubyte, payload_size)
-    _, streamBufferHandle[iFrame] = ky.KYFG_BufferAnnounce(cameraStreamHandle, streamAllignedBuffer[iFrame], None)
-
-
-#Empieza a grabar
-n_frames = 1
-print('\r', end='')
-sys.stdout.flush()
-startCamera(grabberIndex, 0, n_frames)
-
-sleep(2)
-sys.stdout.flush()
-_, = ky.KYFG_CameraStop(camHandleArray[grabberIndex][0])
-
-(KYFG_CameraClose_status,) = ky.KYFG_CameraClose(camHandleArray[grabberIndex][0])
-(KYFG_Close_status,) = ky.KYFG_Close(handle[grabberIndex])
-###(StreamCreateAndAlloc_status, buffHandle) = ky.KYFG_StreamCreateAndAlloc(camHandleArray[grabberIndex][0], 16, 0)
-##(CallbackRegister_status) = ky.KYFG_StreamBufferCallbackRegister(buffHandle, Stream_callback_func, ky.py_object(streamInfoStruct))
-##cantidad_frames = 10
-##(CameraStart_status,) = ky.KYFG_CameraStart(camHandleArray[grabberIndex][0], buffHandle, cantidad_frames)
-##
-#width = ky.KYFG_GetCameraValue(buffHandle, "Width")
-#height = ky.KYFG_GetGrabberValue(buffHandle, "Heiht")
-#totalFrames = ky.KYFG_BufferValue(buffHandle, "RXFrameCounter")
-#buffSize = ky.KYFG_BufferGetSize(buffSize)
-#buffIndex = ky.KYFG_BufferGerFrameIndex(buffIndex)
-#buffData = ky.KYFG_StreamGetPtr(buffHandle, 0)
+#    plt.plot(exp_times, Time_Stamps, 'o')
+#    plt.legend()
+#    plt.show()
+#    promedios[i] = imagen[620, 480]
+#    #promedios[i] = np.mean(imagen)
+#    print(promedios[i])
 #
-#print("widht", width, "height",height, "tot frame", totalFrames, "buffSize", buffSize, "buffIndex", buffIndex, "buffData", buffData) 
-#streamInfo.callbackCount = streamInfo.callbackCount + 1
+    imperx.close()
+
+except Exception as e:
+    print("exception:", str(e))
+    print(traceback.format_exc())
+    imperx.close()
+#plt.plot(exp_times, promedios, "ok")
+#plt.show()
+#
+#np.save("pix_620_480_12bit", promedios)
+#np.save("pix_620_480_12bit_exp_time", exp_times)
