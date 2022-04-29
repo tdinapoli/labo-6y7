@@ -9,6 +9,9 @@ from typing import Tuple, Optional
 
 from time import sleep, time, perf_counter
 import sys
+import os
+import threading
+import queue
 
 Roi = Tuple[int, int]
 
@@ -53,6 +56,9 @@ class ImperexCamera(Camera):
         self._stream_callback_func.__func__.data = 0
         self._stream_callback_func.__func__.copyingDataFlag = 0
         self._time_stamp = 0
+
+        #colas
+        self.queue = queue.Queue(10)
 
         ky.KYFGLib_Initialize(self.init_params)
         inicio_grabber = perf_counter()
@@ -139,9 +145,11 @@ class ImperexCamera(Camera):
 
     def _stream_callback_func(self, buff_handle, user_context):
 
+
         if buff_handle == 0:
             self._stream_callback_func.__func__.copyingDataFlag = 0
             return
+
 
         _, self._time_stamp, _, _ =  ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP)
 
@@ -155,14 +163,14 @@ class ImperexCamera(Camera):
         #data = np.frombuffer(buffer_byte_array, dtype=np.ubyte)
         data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
         self.image = data.reshape(self.image_height, self.image_width)
+        self.queue.put(self.image)
 
-        print(self.image.shape)
 
         if self._stream_callback_func.__func__.copyingDataFlag == 0:
            self._stream_callback_func.__func__.copyingDataFlag = 1
 
         sys.stdout.flush()
-        #self._stream_callback_func.__func__.copyingDataFlag = 0
+        self._stream_callback_func.__func__.copyingDataFlag = 0
         return 
 
     def _start_camera(self):
@@ -182,11 +190,14 @@ class ImperexCamera(Camera):
 
     def get_frame(self):
         sys.stdout.flush()
+
+
         self._start_camera()
 
-        #espera a que la imagen se termine de copiar en el buffer
-        while self._stream_callback_func.__func__.copyingDataFlag == 0:
-            pass
+        self.image = self.queue.get()
+
+        #while self._stream_callback_func.__func__.copyingDataFlag == 0:
+        #    pass
         self._stream_callback_func.__func__.copyingDataFlag = 1
         sys.stdout.flush()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
@@ -213,6 +224,7 @@ try:
     imagen, _ = imperx.get_frame()
     plt.imshow(imagen, cmap="gray")
     plt.show()
+
 
     #exp_times = np.logspace(np.log10(15.0), np.log10(28500.0), 101)
     exp_times = np.linspace(15.0, 28500.0, 50)
