@@ -1,7 +1,8 @@
 import KYFGLib as ky
 import ctypes
 import traceback
-import numpy as np 
+
+import numpy as np
 import matplotlib.pyplot as plt 
 from abc import ABC, abstractmethod
 from typing import Tuple, Optional
@@ -30,7 +31,7 @@ class Camera(ABC):
         pass
 
 class ImperxCamera(Camera):
-    def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
+    def __init__(self, queue, stream_callback_func, bit_depth: int = 8, roi: Optional[Roi] = None):
         inicio_init = perf_counter()
         self.grabber_index = 0 #número del grabber de la lista de grabbers
         self.max_boards = 4
@@ -52,17 +53,13 @@ class ImperxCamera(Camera):
         self.n_frames = 1
         self.camera_index = 0
         self.image = 0 
-        self._stream_callback_func.__func__.data = 0
-        self._stream_callback_func.__func__.copyingDataFlag = 0
         self._time_stamp = 0
         self.image_offset_x = None
         self.image_offset_y = None
         self.image_width = None
         self.image_height = None
         self.image_array = np.array([])
-
-        #colas
-        self.queue = queue.Queue(10)
+        self.queue = queue
 
         ky.KYFGLib_Initialize(self.init_params)
         inicio_grabber = perf_counter()
@@ -98,11 +95,9 @@ class ImperxCamera(Camera):
         print(ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureAuto"))
         print(self.exposure_mode)
 
-        _, self.camera_stream_handle = ky.KYFG_StreamCreate(self.cam_handle_array[self.grabber_index][0], 0)
+        _, self.camera_stream_handle = ky.KYFG_StreamCreateAndAlloc(self.cam_handle_array[self.grabber_index][0], 1, 0)
 
-        _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, self._stream_callback_func, ky.py_object(self.stream_info_struct))
-
-        self._allocate_memory()
+        _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, stream_callback_func, ky.py_object(self.stream_info_struct))
 
         final_init = perf_counter()
         print("tiempo init: ", final_init - inicio_init)
@@ -160,52 +155,8 @@ class ImperxCamera(Camera):
             _, = ky.KYFG_SetCameraValueInt(self.cam_handle_array[self.grabber_index][0], "Height", self.image_height)
             
 
-    def _allocate_memory(self):
-        _, payload_size, _, _ = ky.KYFG_StreamGetInfo(self.camera_stream_handle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_PAYLOAD_SIZE)
-
-        _, buf_allignment, _, _ = ky.KYFG_StreamGetInfo(self.camera_stream_handle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_BUF_ALIGNMENT)
-
-        for iFrame in range(len(self.stream_buffer_handle)):
-            self.stream_alligned_buffer[iFrame] = ky.aligned_array(buf_allignment, ky.c_ubyte, payload_size)
-            _, self.stream_buffer_handle[iFrame] = ky.KYFG_BufferAnnounce(self.camera_stream_handle, self.stream_alligned_buffer[iFrame], None)
-
-
-    def _stream_callback_func(self, buff_handle, user_context):
-
-        print("hola")
-
-        if buff_handle == 0:
-            self._stream_callback_func.__func__.copyingDataFlag = 0
-            return
-
-
-        _, self._time_stamp, _, _ =  ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP)
-
-        stream_info = ky.cast(user_context, ky.py_object).value
-        stream_info.callbackCount = stream_info.callbackCount + 1
-
-        _, pointer, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_BASE)
-        _, buffer_size, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_SIZE)
-
-        buffer_byte_array = bytearray(ctypes.string_at(pointer, buffer_size))
-        data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
-        self.image = data.reshape(self.image_height, self.image_width)
-        self.queue.put(self.image)
-        print("QUEUE CALLBACK", len(self.queue.queue))
-
-
-        if self._stream_callback_func.__func__.copyingDataFlag == 0:
-           self._stream_callback_func.__func__.copyingDataFlag = 1
-
-        sys.stdout.flush()
-        self._stream_callback_func.__func__.copyingDataFlag = 0
-        return 
 
     def _start_camera(self, n_frames):
-        # put all buffers to input queue
-        print("Start cámera")
-        KYFG_BufferQueueAll_status, = ky.KYFG_BufferQueueAll(self.camera_stream_handle, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_UNQUEUED, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_INPUT)
-        
         KYFG_CameraStart_status, = ky.KYFG_CameraStart(self.cam_handle_array[self.grabber_index][self.camera_index], self.camera_stream_handle, n_frames)
         return 0
 
@@ -218,26 +169,22 @@ class ImperxCamera(Camera):
         return
 
     def get_frame(self, n_frames=1):
-        
-        sys.stdout.flush()
-
-
         self._start_camera(n_frames)
-
-#        self.image_array = []
-#        for index in range(n_frames):
-        print("QUEUE ANTES", len(self.queue.queue))
-        self.image = self.queue.get()
-        print("QUEUE DESPUES", len(self.queue.queue))
-        #self.queue.queue.clear()
-        #    self.image_array.append(self.image)
-
-        self._stream_callback_func.__func__.copyingDataFlag = 1
-        sys.stdout.flush()
+        sh = self.image_height, self.image_width
+        out = []
+        while len(out) < n_frames:
+            print("QUEUE ANTES", len(self.queue.queue))
+            try:
+                raw = self.queue.get(timeout=1)
+            except:
+                print("exception get_frame")
+                return
+            print("QUEUE DESPUES", len(self.queue.queue))
+            out.append(np.frombuffer(raw, dtype=np.uint16).reshape(sh))
+            print(len(out)) 
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
-        
 
-        return self.image
+        return np.stack(out)
 
     def close(self):
 
@@ -251,6 +198,21 @@ class ImperxCamera(Camera):
             self.callbackCount = 0
             return
 
+#colas
+queue = queue.Queue()
+
+def _stream_callback_func(buff_handle, user_context):
+    print("hola")
+    if buff_handle == 0:
+        return
+    _, pointer, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_BASE)
+    _, buffer_size, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_SIZE)
+
+    buffer_byte_array = bytearray(ctypes.string_at(pointer, buffer_size))
+    data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
+    queue.put(buffer_byte_array, timeout=2)
+    print("QUEUE CALLBACK", len(queue.queue))
+
 #IMPORTANTE: el offset en x va en múltiplos de 32 y el offset de y va en múltiplos de 2
 offset_x = int(3200)
 offset_y = int(3200)
@@ -259,35 +221,38 @@ height = int(offset_y + 480)
 roi_nuestro = ((offset_x,offset_y), (width, height))
 roi_nuestro = ((0,0), (512, 512))
 
-imperx = ImperxCamera(roi=roi_nuestro)
+imperx = ImperxCamera(queue, _stream_callback_func, roi=roi_nuestro)
 try: 
     exp_times = np.linspace(15.0, 2000.0, 50)
-    #exp_times = [15.0, 100.0, 1000.0, 15000.0, 25000.0, 40500.0]
+#exp_times = [15.0, 100.0, 1000.0, 15000.0, 25000.0, 40500.0]
     means = np.zeros(shape = (len(exp_times), 50))
     stds = np.zeros(shape = (len(exp_times), 50))
     for i in range(1000):
-        imagen = imperx.get_frame(2)
-        
+        imagen = imperx.get_frame(1)
         print(i)
-#    for i, tiempo_exp in enumerate(exp_times):
-#        imperx.set_gain_exposure(1.25, round(tiempo_exp, 0))
-#        sleep(0.1)
-#        _, exposure_time =  ky.KYFG_GetCameraValue(imperx.cam_handle_array[imperx.grabber_index][0], "ExposureTime")
-#        print(exposure_time)
-#        #imagen = imperx.get_frame(20)
-#        #print(imperx.image_array)
-#        #raise Exception
-#        for j in range(10):
-#            imagen = imperx.get_frame(3)
-#            means[i, j] = np.mean(imagen)
-#            stds[i, j] = np.std(imagen)
-#            print("imagen", j + 10*i, "tiempo de exposicion", i, round(tiempo_exp, 0))
-#
-   # np.save("means_oscuridad_2", means)
-   # np.save("stds_oscuridad_2", stds)
-   # np.save("tiempos_de_exposicion_oscuridad_2", exp_times)
+#        for i, tiempo_exp in enumerate(exp_times):
+#            # imperx.set_gain_exposure(1.25, round(tiempo_exp, 0))
+#            sleep(0.1)
+#            # _, exposure_time =  ky.KYFG_GetCameraValue(imperx.cam_handle_array[imperx.grabber_index][0], "ExposureTime")
+#            # print(exposure_time)
+#            #imagen = imperx.get_frame(20)
+#            #print(imperx.image_array)
+#            #raise Exception
+#            for j in range(50):
+#                imagen = imperx.get_frame(1)
+#                means[i, j] = np.mean(imagen)
+#                stds[i, j] = np.std(imagen)
+#                print("imagen", j, "tiempo de exposicion", i, j)#round(tiempo_exp, 0))
+       # np.save("means_oscuridad_2", means)
+       # np.save("stds_oscuridad_2", stds)
+       # np.save("tiempos_de_exposicion_oscuridad_2", exp_times)
 except Exception as e:
     print("exception:", str(e))
     print(traceback.format_exc())
 finally:
-        imperx.close()
+    imperx.close()
+#plt.plot(exp_times, promedios, "ok")
+#plt.show()
+#
+#np.save("pix_620_480_12bit", promedios)
+#np.save("pix_620_480_12bit_exp_time", exp_times)
