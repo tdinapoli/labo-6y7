@@ -1,1 +1,8 @@
 KAYA_Instruments/lib/__pycache__/
+KAYA_Instruments/Doc/_.py
+scripts/driver-camara/oscuridad_por_pixel_full/*.npy
+scripts/driver-camara/oscuridad_por_pixel_512/*.npy
+scripts/driver-camara/oscuridad_full_2/*.npy
+scripts/driver-camara/promedios_std_full/*.npy
+scripts/driver-camara/ruido_total/*.npy
+scripts/driver-camara/*.npy

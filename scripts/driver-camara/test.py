@@ -173,15 +173,18 @@ class ImperxCamera(Camera):
         sh = self.image_height, self.image_width
         out = []
         while len(out) < n_frames:
-            print("QUEUE ANTES", len(self.queue.queue))
+            #print("QUEUE ANTES", len(self.queue.queue))
             try:
                 raw = self.queue.get(timeout=1)
             except:
                 print("exception get_frame")
+                _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
+                with self.queue.mutex:
+                    self.queue.queue.clear()
                 return
-            print("QUEUE DESPUES", len(self.queue.queue))
+            #print("QUEUE DESPUES", len(self.queue.queue))
             out.append(np.frombuffer(raw, dtype=np.uint16).reshape(sh))
-            print(len(out)) 
+            #print(len(out)) 
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
 
         return np.stack(out)
@@ -202,7 +205,7 @@ class ImperxCamera(Camera):
 queue = queue.Queue()
 
 def _stream_callback_func(buff_handle, user_context):
-    print("hola")
+    #print("hola")
     if buff_handle == 0:
         return
     _, pointer, _, _ = ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_BASE)
@@ -211,7 +214,7 @@ def _stream_callback_func(buff_handle, user_context):
     buffer_byte_array = bytearray(ctypes.string_at(pointer, buffer_size))
     data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
     queue.put(buffer_byte_array, timeout=2)
-    print("QUEUE CALLBACK", len(queue.queue))
+    #print("QUEUE CALLBACK", len(queue.queue))
 
 #IMPORTANTE: el offset en x va en múltiplos de 32 y el offset de y va en múltiplos de 2
 offset_x = int(3200)

@@ -61,6 +61,7 @@ class ImperxCamera(Camera):
         self.image_height = None
         self.image_array = np.array([])
 
+
         #colas
         self.queue = queue.Queue(10)
 
@@ -77,6 +78,9 @@ class ImperxCamera(Camera):
 
         _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
         _, self.gain = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
+
+        #Para poder poner mayores tiempos de exposición
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "AcquisitionFrameRateEnable", True)
 
         #La configuración de los bits del adc y del color puede cambiar si se abre la app de vision point
         #si se quiere cambiar el bit depht o el pixel format hay que cambiar el tipo de dato que aparece
@@ -172,7 +176,7 @@ class ImperxCamera(Camera):
 
     def _stream_callback_func(self, buff_handle, user_context):
 
-        print("hola")
+        #print("hola")
 
         if buff_handle == 0:
             self._stream_callback_func.__func__.copyingDataFlag = 0
@@ -189,9 +193,9 @@ class ImperxCamera(Camera):
 
         buffer_byte_array = bytearray(ctypes.string_at(pointer, buffer_size))
         data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
-        self.image = data.reshape(self.image_height, self.image_width)
-        self.queue.put(self.image)
-        print("QUEUE CALLBACK", len(self.queue.queue))
+        #self.image = data.reshape(self.image_height, self.image_width)
+        self.queue.put(data.reshape(self.image_height, self.image_width))
+        #print("QUEUE CALLBACK", len(self.queue.queue))
 
 
         if self._stream_callback_func.__func__.copyingDataFlag == 0:
@@ -203,13 +207,15 @@ class ImperxCamera(Camera):
 
     def _start_camera(self, n_frames):
         # put all buffers to input queue
-        print("Start cámera")
         KYFG_BufferQueueAll_status, = ky.KYFG_BufferQueueAll(self.camera_stream_handle, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_UNQUEUED, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_INPUT)
         
         KYFG_CameraStart_status, = ky.KYFG_CameraStart(self.cam_handle_array[self.grabber_index][self.camera_index], self.camera_stream_handle, n_frames)
         return 0
 
     def set_gain_exposure(self,gain, exposure_time):
+        print("EXP TIME ", exposure_time)
+        exposure_time = round(float(exposure_time), 0)
+        #gain = round(float(gain)/100, 0) comento para probar cosas acá
         _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime", exposure_time)
         _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
         _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain", gain)
@@ -226,9 +232,9 @@ class ImperxCamera(Camera):
 
 #        self.image_array = []
 #        for index in range(n_frames):
-        print("QUEUE ANTES", len(self.queue.queue))
+        ##print("QUEUE ANTES", len(self.queue.queue))
         self.image = self.queue.get()
-        print("QUEUE DESPUES", len(self.queue.queue))
+        #print("QUEUE DESPUES", len(self.queue.queue))
         #self.queue.queue.clear()
         #    self.image_array.append(self.image)
 
@@ -252,40 +258,84 @@ class ImperxCamera(Camera):
             return
 
 #IMPORTANTE: el offset en x va en múltiplos de 32 y el offset de y va en múltiplos de 2
-offset_x = int(3200)
-offset_y = int(3200)
-width = int(offset_x + 640)
-height = int(offset_y + 480)
-roi_nuestro = ((offset_x,offset_y), (width, height))
-roi_nuestro = ((0,0), (512, 512))
+roi_nuestro = ((0,0), (9344, 7000))
 
-imperx = ImperxCamera(roi=roi_nuestro)
-try: 
-    exp_times = np.linspace(15.0, 2000.0, 50)
-    #exp_times = [15.0, 100.0, 1000.0, 15000.0, 25000.0, 40500.0]
-    means = np.zeros(shape = (len(exp_times), 50))
-    stds = np.zeros(shape = (len(exp_times), 50))
-    for i in range(1000):
+def tomar2(tiempo_exp):
+    imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
+    sleep(0.05)
+    imagenes = np.zeros(shape = (2, 7000,9344))
+    means = []
+    for i in range(2):
         imagen = imperx.get_frame(2)
-        
-        print(i)
-#    for i, tiempo_exp in enumerate(exp_times):
-#        imperx.set_gain_exposure(1.25, round(tiempo_exp, 0))
-#        sleep(0.1)
-#        _, exposure_time =  ky.KYFG_GetCameraValue(imperx.cam_handle_array[imperx.grabber_index][0], "ExposureTime")
-#        print(exposure_time)
-#        #imagen = imperx.get_frame(20)
-#        #print(imperx.image_array)
-#        #raise Exception
-#        for j in range(10):
-#            imagen = imperx.get_frame(3)
-#            means[i, j] = np.mean(imagen)
-#            stds[i, j] = np.std(imagen)
-#            print("imagen", j + 10*i, "tiempo de exposicion", i, round(tiempo_exp, 0))
-#
-   # np.save("means_oscuridad_2", means)
-   # np.save("stds_oscuridad_2", stds)
-   # np.save("tiempos_de_exposicion_oscuridad_2", exp_times)
+        imperx.queue.queue.clear()
+        imagenes[i] = imagen
+        means.append(np.mean(imagen)) 
+    
+    var = np.var(imagenes[0]- imagenes[1])/(2)
+    resta_means = means[0] - means[1]
+    return var, resta_means
+
+def toma1(tiempo_exp):
+    imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
+    sleep(0.05)
+    imagenes = np.zeros(shape = (2, 7000,9344))
+    imagen = imperx.get_frame(2)
+    imperx.queue.queue.clear()
+    mean = np.mean(imagen)
+    
+    var = np.var(imagen)
+
+    return var, mean
+
+n_imagenes = 50
+imperx = ImperxCamera(roi=roi_nuestro)
+
+
+try: 
+    exp_times = [15.0, 20000.0, 40000.0]
+    var_blanco = []
+    means_blanco = []
+    #exp_times = np.linspace(15.0, 40000.0, 100)
+    for i, tiempo_exp in enumerate(exp_times):
+      #  var, mean = toma1(tiempo_exp)
+      #  var_blanco.append(var)
+      #  means_blanco.append(mean)
+      #  print("t_exp", tiempo_exp)
+
+      #  im_mean = np.zeros(shape = (7000, 9344))
+      #  im_var = np.zeros(shape = (7000, 9344))
+      #  xcuad = np.zeros(shape = (7000, 9344))
+      for j in range(2):
+        imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
+        sleep(0.05)
+        imagen = imperx.get_frame(2)
+        imperx.queue.queue.clear()
+        np.save("ruido_total/uniforme_exp_time" + str(tiempo_exp) + "_" + str(j), imagen) 
+
+   # np.save("ruido_total/varianzas_1", var_blanco) 
+   # np.save("ruido_total/promedios_1", means_blanco) 
+   # np.save("ruido_total/tiempo_de_exp_1", exp_times) 
+
+   #     imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
+   #     sleep(0.05)
+   #     for j in range(n_imagenes):
+   #         imagen = imperx.get_frame(2)
+   #         imperx.queue.queue.clear()
+   #         im_mean = (imagen/n_imagenes + im_mean)
+   #         xcuad = np.multiply(imagen,imagen)/n_imagenes + xcuad 
+   #      #   np.save("oscuridad_por_pixel_full/im_exp_"+str(round(tiempo_exp, 0))+'_'+str(j+1), imagen)
+   #         print("imagen", j , "tiempo de exposicion", i, round(tiempo_exp, 0))
+   #     im_var = xcuad - np.multiply(im_mean,im_mean)
+
+   #     np.save("oscuridad_full_2/im_mean_" + str(tiempo_exp), im_mean)
+   #     np.save("oscuridad_full_2/im_var_"+ str(tiempo_exp), im_var)
+   # np.save("oscuridad_full_2/exp_times_2", exp_times)
+
+    #np.save("oscuridad_por_pixel_full/exp_times", np.round(exp_times, 0))
+   
+   # np.save("means_oscuridad_fullframe", means)
+   # np.save("stds_oscuridad_fullframe", stds)
+    #np.save("tiempos_de_exposicion_oscuridad_fullframe_1", exp_times)
 except Exception as e:
     print("exception:", str(e))
     print(traceback.format_exc())
