@@ -275,6 +275,22 @@ def tomar2(tiempo_exp):
     resta_means = means[0] - means[1]
     return var, resta_means
 
+def mean_movil(tiempo_exp, rep):
+    imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
+    sleep(0.05)
+    img_mean = np.zeros(shape=(7000, 9344))
+    img_var  = np.zeros(shape = (7000,9344))
+    xcuad = np.zeros(shape = (7000, 9344))
+    for i in range(rep):
+        print(i)
+        im = imperx.get_frame(2)
+        imperx.queue.queue.clear()
+        img_mean = img_mean + im/rep
+        xcuad = xcuad + np.multiply(im,im)/rep
+        img_var = xcuad - np.multiply(img_mean,img_mean)
+    return img_mean, img_var
+
+
 def toma1(tiempo_exp):
     imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
     sleep(0.05)
@@ -292,10 +308,9 @@ imperx = ImperxCamera(roi=roi_nuestro)
 
 
 try: 
-    exp_times = [15.0, 20000.0, 40000.0]
     var_blanco = []
     means_blanco = []
-    #exp_times = np.linspace(15.0, 40000.0, 100)
+    exp_times = np.linspace(6000.0, 40000.0, 6)
     for i, tiempo_exp in enumerate(exp_times):
       #  var, mean = toma1(tiempo_exp)
       #  var_blanco.append(var)
@@ -305,15 +320,12 @@ try:
       #  im_mean = np.zeros(shape = (7000, 9344))
       #  im_var = np.zeros(shape = (7000, 9344))
       #  xcuad = np.zeros(shape = (7000, 9344))
-      for j in range(2):
-        imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
-        sleep(0.05)
-        imagen = imperx.get_frame(2)
-        imperx.queue.queue.clear()
-        np.save("ruido_total/uniforme_exp_time" + str(tiempo_exp) + "_" + str(j), imagen) 
+        print(tiempo_exp)
+        im_mean, im_var = mean_movil(tiempo_exp, n_imagenes) 
+        #np.save("ruido_total/uniforme_exp_time" + str(tiempo_exp) + "_" + str(j), imagen) 
 
-   # np.save("ruido_total/varianzas_1", var_blanco) 
-   # np.save("ruido_total/promedios_1", means_blanco) 
+        np.save("matricesMVLD/light/var_"+str(round(tiempo_exp)), im_var) 
+        np.save("matricesMVLD/light/mean_"+str(round(tiempo_exp)), im_mean) 
    # np.save("ruido_total/tiempo_de_exp_1", exp_times) 
 
    #     imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))

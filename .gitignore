@@ -6,3 +6,7 @@ scripts/driver-camara/oscuridad_full_2/*.npy
 scripts/driver-camara/promedios_std_full/*.npy
 scripts/driver-camara/ruido_total/*.npy
 scripts/driver-camara/*.npy
+scripts/driver-camara/matricesMVLD/
+scripts/driver-camara/ruido_total
+scripts/driver-camara/promedios_std_512
+"scripts/calibracion-camara/comparacion FOV/"
