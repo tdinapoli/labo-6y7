@@ -10,3 +10,6 @@ scripts/driver-camara/matricesMVLD/
 scripts/driver-camara/ruido_total
 scripts/driver-camara/promedios_std_512
 "scripts/calibracion-camara/comparacion FOV/"
+*.npy
+*.gz
+*.tar

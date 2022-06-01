@@ -177,10 +177,12 @@ class ImperxCamera(Camera):
     def _stream_callback_func(self, buff_handle, user_context):
 
         #print("hola")
+        ti = time()
 
         if buff_handle == 0:
             self._stream_callback_func.__func__.copyingDataFlag = 0
             return
+        print(buff_handle)
 
 
         _, self._time_stamp, _, _ =  ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP)
@@ -196,6 +198,8 @@ class ImperxCamera(Camera):
         #self.image = data.reshape(self.image_height, self.image_width)
         self.queue.put(data.reshape(self.image_height, self.image_width))
         #print("QUEUE CALLBACK", len(self.queue.queue))
+        tf = time()
+        print(tf-ti)
 
 
         if self._stream_callback_func.__func__.copyingDataFlag == 0:
@@ -310,22 +314,32 @@ imperx = ImperxCamera(roi=roi_nuestro)
 try: 
     var_blanco = []
     means_blanco = []
-    exp_times = np.linspace(6000.0, 40000.0, 6)
+    exp_times = np.linspace(40000.0, 80000.0, 2)
     for i, tiempo_exp in enumerate(exp_times):
+        imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
+        sleep(0.5)
+        imagen = imperx.get_frame(2)
+        imperx.queue.queue.clear()
+        plt.imshow(imagen)
+        plt.show()
+        print(tiempo_exp)
+
+
+
+
+
       #  var, mean = toma1(tiempo_exp)
       #  var_blanco.append(var)
       #  means_blanco.append(mean)
       #  print("t_exp", tiempo_exp)
-
-      #  im_mean = np.zeros(shape = (7000, 9344))
-      #  im_var = np.zeros(shape = (7000, 9344))
-      #  xcuad = np.zeros(shape = (7000, 9344))
-        print(tiempo_exp)
-        im_mean, im_var = mean_movil(tiempo_exp, n_imagenes) 
+#  im_mean = np.zeros(shape = (7000, 9344))
+#  im_var = np.zeros(shape = (7000, 9344))
+#  xcuad = np.zeros(shape = (7000, 9344))
+   #     im_mean, im_var = mean_movil(tiempo_exp, n_imagenes) 
         #np.save("ruido_total/uniforme_exp_time" + str(tiempo_exp) + "_" + str(j), imagen) 
 
-        np.save("matricesMVLD/light/var_"+str(round(tiempo_exp)), im_var) 
-        np.save("matricesMVLD/light/mean_"+str(round(tiempo_exp)), im_mean) 
+        #np.save("matricesMVLD/light/var_"+str(round(tiempo_exp)), im_var) 
+        #np.save("matricesMVLD/light/mean_"+str(round(tiempo_exp)), im_mean) 
    # np.save("ruido_total/tiempo_de_exp_1", exp_times) 
 
    #     imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
