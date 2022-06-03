@@ -21,8 +21,8 @@ img = plt.imread('camara_vieja_cuadrado.png')
 plt.imshow(img)
 plt.show()
 
-anv = 5000
-alv = 4000
+anv = 5544
+alv = 3684
 resv = anv * alv
 dxv = 193 - 464
 dyv = 135 - 135 

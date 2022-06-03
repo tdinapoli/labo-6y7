@@ -92,6 +92,7 @@ class ImperxCamera(Camera):
         self.pixel_format = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "PixelFormat")
         print("Bit Depth ADC:",self.bit_depth)
         print("Bit PixelFormat:",self.pixel_format)
+        print("QUEUED POSSIBLE", ky.KYFG_GetGrabberValueInt(self.cam_handle_array[self.grabber_index][0], "DEVICE_QUEUED_BUFFERS_SUPPORTED"))
 
         #seteamos el modo de exposición
         ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureAuto", "Off")
@@ -104,6 +105,8 @@ class ImperxCamera(Camera):
         print("Exposure Mode:",self.exposure_mode)
 
         _, self.camera_stream_handle = ky.KYFG_StreamCreate(self.cam_handle_array[self.grabber_index][0], 0)
+        StreamCreateAndAlloc_status, buffHandle = KYFG_StreamCreateAndAlloc(camHandleArray[grabberIndex][0], 16, 0)
+
 
         _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, self._stream_callback_func, ky.py_object(self.stream_info_struct))
 
@@ -333,7 +336,7 @@ try:
     for i, tiempo_exp in enumerate(exp_times):
         imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
         sleep(0.5)
-        for j in range(600):
+        for j in range(1):
             imagen = imperx.get_frame(1)
             print(j)
         #imperx.queue.queue.clear()

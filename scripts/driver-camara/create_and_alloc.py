@@ -35,7 +35,7 @@ class ImperxCamera(Camera):
         self.grabber_index = 0 #número del grabber de la lista de grabbers
         self.max_boards = 4
         self.max_cams = 4
-        self.device_queued_buffers_supported = "FW_DmaCapable_QueuedBuffers_Imp"
+        #self.device_queued_buffers_supported = "FW_DmaCapable_QueuedBuffers_Imp"
 
         self.init_params = ky.KYFGLib_InitParameters()
         self.connection = -1
@@ -60,6 +60,8 @@ class ImperxCamera(Camera):
         self.image_width = None
         self.image_height = None
         self.image_array = np.array([])
+        self.buff_handle = ky.STREAM_HANDLE()
+        print('BUFF HANDLE', self.buff_handle)
 
 
         #colas
@@ -95,18 +97,17 @@ class ImperxCamera(Camera):
 
         #seteamos el modo de exposición
         ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureAuto", "Off")
-        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerMode", "Off")
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerMode", "On")
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerSource", "Software")
         ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureMode", "Timed")
         _, _, self.exposure_mode = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureMode")
         print(ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerMode"))
         print(ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureAuto"))
         print(self.exposure_mode)
 
-        _, self.camera_stream_handle = ky.KYFG_StreamCreate(self.cam_handle_array[self.grabber_index][0], 0)
+        _, self.camera_stream_handle = ky.KYFG_StreamCreateAndAlloc(self.cam_handle_array[self.grabber_index][0], 1, 0)
 
         _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, self._stream_callback_func, ky.py_object(self.stream_info_struct))
-
-        self._allocate_memory()
 
         final_init = perf_counter()
         print("tiempo init: ", final_init - inicio_init)
@@ -127,7 +128,7 @@ class ImperxCamera(Camera):
         connected_fghandle, = ky.KYFG_Open(self.grabber_index)
         connected = connected_fghandle.get()
         self.handle[self.grabber_index] = connected
-        ky.KYFG_GetGrabberValueInt(self.handle[self.grabber_index], self.device_queued_buffers_supported)
+        #print('Print Grabber', ky.KYFG_GetGrabberValueInt(self.handle[self.grabber_index], self.device_queued_buffers_supported))
         return 0
 
     def _connect_to_camera(self):
@@ -164,16 +165,6 @@ class ImperxCamera(Camera):
             _, = ky.KYFG_SetCameraValueInt(self.cam_handle_array[self.grabber_index][0], "Height", self.image_height)
             
 
-    def _allocate_memory(self):
-        _, payload_size, _, _ = ky.KYFG_StreamGetInfo(self.camera_stream_handle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_PAYLOAD_SIZE)
-
-        _, buf_allignment, _, _ = ky.KYFG_StreamGetInfo(self.camera_stream_handle, ky.KY_STREAM_INFO_CMD.KY_STREAM_INFO_BUF_ALIGNMENT)
-
-        for iFrame in range(len(self.stream_buffer_handle)):
-            self.stream_alligned_buffer[iFrame] = ky.aligned_array(buf_allignment, ky.c_ubyte, payload_size)
-            _, self.stream_buffer_handle[iFrame] = ky.KYFG_BufferAnnounce(self.camera_stream_handle, self.stream_alligned_buffer[iFrame], None)
-
-
     def _stream_callback_func(self, buff_handle, user_context):
 
         #print("hola")
@@ -182,8 +173,11 @@ class ImperxCamera(Camera):
         if buff_handle == 0:
             self._stream_callback_func.__func__.copyingDataFlag = 0
             return
-        #print(buff_handle)
+        #print('Buff handel Callback', buff_handle)
+        #print('Entré al callback')
 
+
+        #print(ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime"))
 
         _, self._time_stamp, _, _ =  ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP)
 
@@ -211,7 +205,6 @@ class ImperxCamera(Camera):
 
     def _start_camera(self, n_frames):
         # put all buffers to input queue
-        KYFG_BufferQueueAll_status, = ky.KYFG_BufferQueueAll(self.camera_stream_handle, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_UNQUEUED, ky.KY_ACQ_QUEUE_TYPE.KY_ACQ_QUEUE_INPUT)
         
         KYFG_CameraStart_status, = ky.KYFG_CameraStart(self.cam_handle_array[self.grabber_index][self.camera_index], self.camera_stream_handle, n_frames)
         return 0
@@ -231,20 +224,20 @@ class ImperxCamera(Camera):
         
         sys.stdout.flush()
 
-
         self._start_camera(n_frames)
+        
 
-#        self.image_array = []
+        ky.KYFG_CameraExecuteCommand(self.cam_handle_array[self.grabber_index][0], 'TriggerSoftware')
+        
+        self.image_array = []
 #        for index in range(n_frames):
         ##print("QUEUE ANTES", len(self.queue.queue))
         self.image = self.queue.get()
         #print("QUEUE DESPUES", len(self.queue.queue))
-        #self.queue.queue.clear()
-        #    self.image_array.append(self.image)
-
-        self._stream_callback_func.__func__.copyingDataFlag = 1
-        sys.stdout.flush()
+        self.queue.queue.clear()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
+        self.image_array.append(self.image)
+
         
 
         return self.image
@@ -314,17 +307,17 @@ imperx = ImperxCamera(roi=roi_nuestro)
 try: 
     var_blanco = []
     means_blanco = []
-    exp_times = np.linspace(40000.0, 80000.0, 2)
-    exp_times = [15.0]
+    exp_times = np.linspace(15.0, 1000000.0, 600)
+    exp_times = [15]
     for i, tiempo_exp in enumerate(exp_times):
+        imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
+        sleep(0.5)
         for j in range(600):
-            imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
-            sleep(0.5)
-            imagen = imperx.get_frame(2)
-            imperx.queue.queue.clear()
-            print(i)
-       # plt.imshow(imagen)
-       # plt.show()
+            imagen = imperx.get_frame(0)
+            print(j)
+        #print(imagen)
+        #plt.imshow(imagen, cmap = 'gray')
+        #plt.show()
 
 
 

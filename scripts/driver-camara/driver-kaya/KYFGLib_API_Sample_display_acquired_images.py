@@ -212,6 +212,7 @@ try:
 
             # Use the number of allocated frames per stream, in order to bound the number of saved and displayed images.
             (status, framesPerStream) = KYFG_GetGrabberValue(handle[grabberIndex], "FramesPerStream")
+            print("FPS", framesPerStream)
             streamInfoStruct.framesPerStream = framesPerStream
 
         elif (c == 'o'):
