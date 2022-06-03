@@ -229,14 +229,12 @@ class ImperxCamera(Camera):
 
         ky.KYFG_CameraExecuteCommand(self.cam_handle_array[self.grabber_index][0], 'TriggerSoftware')
         
-        self.image_array = []
 #        for index in range(n_frames):
         ##print("QUEUE ANTES", len(self.queue.queue))
         self.image = self.queue.get()
         #print("QUEUE DESPUES", len(self.queue.queue))
         self.queue.queue.clear()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
-        self.image_array.append(self.image)
 
         
 
@@ -263,7 +261,7 @@ def tomar2(tiempo_exp):
     imagenes = np.zeros(shape = (2, 7000,9344))
     means = []
     for i in range(2):
-        imagen = imperx.get_frame(2)
+        imagen = imperx.get_frame(0)
         imperx.queue.queue.clear()
         imagenes[i] = imagen
         means.append(np.mean(imagen)) 
@@ -280,7 +278,7 @@ def mean_movil(tiempo_exp, rep):
     xcuad = np.zeros(shape = (7000, 9344))
     for i in range(rep):
         print(i)
-        im = imperx.get_frame(2)
+        im = imperx.get_frame(0)
         imperx.queue.queue.clear()
         img_mean = img_mean + im/rep
         xcuad = xcuad + np.multiply(im,im)/rep
@@ -292,7 +290,7 @@ def toma1(tiempo_exp):
     imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
     sleep(0.05)
     imagenes = np.zeros(shape = (2, 7000,9344))
-    imagen = imperx.get_frame(2)
+    imagen = imperx.get_frame(0)
     imperx.queue.queue.clear()
     mean = np.mean(imagen)
     
@@ -307,18 +305,14 @@ imperx = ImperxCamera(roi=roi_nuestro)
 try: 
     var_blanco = []
     means_blanco = []
-    exp_times = np.linspace(15.0, 1000000.0, 600)
-    exp_times = [15]
+    exp_times = np.linspace(100000.0, 1000000.0, 5)
     for i, tiempo_exp in enumerate(exp_times):
         imperx.set_gain_exposure(1.25, int(round(tiempo_exp, 1)))
         sleep(0.5)
-        for j in range(600):
-            imagen = imperx.get_frame(0)
-            print(j)
-        #print(imagen)
-        #plt.imshow(imagen, cmap = 'gray')
-        #plt.show()
 
+        im_mean, im_var = mean_movil(tiempo_exp, n_imagenes) 
+        np.save("matricesMVLD/dark/var_"+str(round(tiempo_exp)), im_var) 
+        np.save("matricesMVLD/dark/mean_"+str(round(tiempo_exp)), im_mean) 
 
 
 
