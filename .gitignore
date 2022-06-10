@@ -13,3 +13,4 @@ scripts/driver-camara/promedios_std_512
 *.npy
 *.gz
 *.tar
+scripts/epi-iluminacion/FastLED-3.5.0*

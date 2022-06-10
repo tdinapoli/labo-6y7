@@ -64,6 +64,7 @@ void setup() {
   DDRC = DDRC | B00001111;
 
   disable_output();
+  //set_led(16,16, 4);
 }
 
 void serialEvent() {

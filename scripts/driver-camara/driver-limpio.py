@@ -31,10 +31,8 @@ class Camera(ABC):
 
 class ImperxCamera(Camera):
     def __init__(self, bit_depth: int = 8, roi: Optional[Roi] = None):
-        inicio_init = perf_counter()
         self.grabber_index = 0 #número del grabber de la lista de grabbers
         self.max_boards = 4
-        self.max_cams = 4
 
         self.init_params = ky.KYFGLib_InitParameters()
         self.connection = -1
@@ -42,25 +40,13 @@ class ImperxCamera(Camera):
         self.cam_handle_array = [[0 for x in range(0)] for y in range(self.max_boards)]
         self.handle = [0 for i in range(self.max_boards)]
         self.camera_stream_handle = 0
-        self.frame_data_size = 0
-        self.frame_data_aligment = 0
-        self.stream_buffer_handle = [0 for i in range(16)]
-        self.stream_alligned_buffer = [0 for i in range(16)]
         self._max_image_width = 9344
         self._max_image_height = 7000
         self.camera_index = 0
-        self.image = 0 
-        self._stream_callback_func.__func__.data = 0
-        self._stream_callback_func.__func__.copyingDataFlag = 0
-        self._time_stamp = 0
         self.image_offset_x = None
         self.image_offset_y = None
         self.image_width = None
         self.image_height = None
-        self.image_array = np.array([])
-        self.buff_handle = ky.STREAM_HANDLE()
-        print('BUFF HANDLE', self.buff_handle)
-
 
         #colas
         self.queue = queue.Queue(10)
@@ -69,18 +55,16 @@ class ImperxCamera(Camera):
         inicio_grabber = perf_counter()
         self._connect_to_grabber()
         final_grabber = perf_counter()
-        print("grabber: ", final_grabber - inicio_grabber)
+        print("Set grabber connection time:", final_grabber - inicio_grabber)
+
         inicio_camera = perf_counter()
         self._connect_to_camera()
         final_camera = perf_counter()
-        print("camara: ", final_camera - inicio_camera)
+        print("Camera connection time:", final_camera - inicio_camera)
         self._set_roi(roi)
 
-        _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
+        _, self.exposure =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
         _, self.gain = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
-
-        #Para poder poner mayores tiempos de exposición
-        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "AcquisitionFrameRateEnable", True)
 
         #La configuración de los bits del adc y del color puede cambiar si se abre la app de vision point
         #si se quiere cambiar el bit depht o el pixel format hay que cambiar el tipo de dato que aparece
@@ -90,7 +74,7 @@ class ImperxCamera(Camera):
         ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "PixelFormat", "Mono12")
         self.bit_depth = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "AdcBitDepth")
         self.pixel_format = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "PixelFormat")
-        print("Bit Depth ADC:",self.bit_depth)
+        print("ADC bit depth",self.bit_depth)
         print("Bit PixelFormat:",self.pixel_format)
 
         #seteamos el modo de exposición
@@ -98,27 +82,25 @@ class ImperxCamera(Camera):
         ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerMode", "On")
         ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerSource", "Software")
         ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureMode", "Timed")
-        _, _, self.exposure_mode = ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureMode")
-        print(ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerMode"))
-        print(ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureAuto"))
-        print(self.exposure_mode)
 
+        print("Camera trigger configuration:")
+        print("TriggerMode:",ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "TriggerMode"))
+        print("ExposureAuto:",ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureAuto"))
+        print("ExposureMode:",ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureMode"))
+
+        #Crea y pone el espacio en memoria para una imagen
         _, self.camera_stream_handle = ky.KYFG_StreamCreateAndAlloc(self.cam_handle_array[self.grabber_index][0], 1, 0)
-
+        #Registra la callback function
         _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, self._stream_callback_func, ky.py_object(self.stream_info_struct))
-
-        final_init = perf_counter()
-        print("tiempo init: ", final_init - inicio_init)
 
     def _connect_to_grabber(self):
         _, fg_amount = ky.KY_DeviceScan()
-        _, dev_info = ky.KY_DeviceInfo(self.grabber_index)
         try:
             self.connection = self._set_grabber_connection()
+            print("Grabber connected")
         except ky.KYException as err:
-            print("Error al conectar con el frame grabber")
+            print("Error connecting with the frame grabber")
         return
-
 
 
     def _set_grabber_connection(self):
@@ -132,10 +114,10 @@ class ImperxCamera(Camera):
         _, self.cam_handle_array[self.grabber_index] = ky.KYFG_UpdateCameraList(self.handle[self.grabber_index])
         cams_num = len(self.cam_handle_array[self.grabber_index])
         if (cams_num < 1):
-            print("No se encontraron camaras")
+            print("No cameras found")
         KYFG_CameraOpen2_status, = ky.KYFG_CameraOpen2(self.cam_handle_array[self.grabber_index][0], None)
         if KYFG_CameraOpen2_status == ky.FGSTATUS_OK:
-            print("Camara conectada correctamente")
+            print("Camera connected")
 
     def _set_roi(self, roi):
         if roi is None:
@@ -145,8 +127,6 @@ class ImperxCamera(Camera):
             self.image_offset_y = 0
             self.image_width = self._max_image_width
             self.image_height = self._max_image_height
-
-
         else: 
             self.image_offset_x = roi[0][0]
             self.image_offset_y = roi[0][1]
@@ -165,10 +145,7 @@ class ImperxCamera(Camera):
     def _stream_callback_func(self, buff_handle, user_context):
 
         if buff_handle == 0:
-            self._stream_callback_func.__func__.copyingDataFlag = 0
             return
-
-        _, self._time_stamp, _, _ =  ky.KYFG_BufferGetInfo(buff_handle, ky.KY_STREAM_BUFFER_INFO_CMD.KY_STREAM_BUFFER_INFO_TIMESTAMP)
 
         stream_info = ky.cast(user_context, ky.py_object).value
         stream_info.callbackCount = stream_info.callbackCount + 1
@@ -180,11 +157,6 @@ class ImperxCamera(Camera):
         data = np.frombuffer(buffer_byte_array, dtype=np.uint16)
         self.queue.put(data.reshape(self.image_height, self.image_width))
 
-        if self._stream_callback_func.__func__.copyingDataFlag == 0:
-           self._stream_callback_func.__func__.copyingDataFlag = 1
-
-        sys.stdout.flush()
-        self._stream_callback_func.__func__.copyingDataFlag = 0
         return 
 
     def _start_camera(self):
@@ -192,29 +164,27 @@ class ImperxCamera(Camera):
         KYFG_CameraStart_status, = ky.KYFG_CameraStart(self.cam_handle_array[self.grabber_index][self.camera_index], self.camera_stream_handle, 0)
         return 0
 
-    def set_gain_exposure(self,gain, exposure_time):
-        print("EXP TIME ", exposure_time)
-        exposure_time = round(float(exposure_time), 0)
-        #gain = round(float(gain)/100, 0) comento para probar cosas acá
-        _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime", exposure_time)
-        _, self.exposure_time =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
+    def set_gain_exposure(self,gain, exposure):
+        print("Exposure time:", exposure)
+        exposure = round(float(exposure), 0)
+        gain = round(float(gain)/100, 2) 
+        _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime", exposure)
+        _, self.exposure =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "ExposureTime")
         _,  = ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain", gain)
         _, self.gain =  ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "Gain")
         
         return
 
     def get_frame(self):
-        
-        sys.stdout.flush()
-        self._start_camera()
 
+        self._start_camera()
         ky.KYFG_CameraExecuteCommand(self.cam_handle_array[self.grabber_index][0], 'TriggerSoftware')
         
-        self.image = self.queue.get()
+        image = self.queue.get()
         self.queue.queue.clear()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
 
-        return self.image
+        return image
 
     def close(self):
 
@@ -230,11 +200,12 @@ class ImperxCamera(Camera):
 
 if __name__ == "__main__":
     camera = ImperxCamera()
-    camera.set_gain_exposure(1.0, 10000.0)
+    camera.set_gain_exposure(100.0, 100000.0)
 
-    imagen = campera.get_frame()
+    imagen = camera.get_frame()
     plt.imshow(imagen, cmap = 'gray')
     plt.show()
+    np.save("comparacion-igual-anillo_B", imagen)
 
     camera.close()
 
