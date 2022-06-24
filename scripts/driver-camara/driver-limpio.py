@@ -93,6 +93,13 @@ class ImperxCamera(Camera):
         #Registra la callback function
         _, = ky.KYFG_StreamBufferCallbackRegister(self.camera_stream_handle, self._stream_callback_func, ky.py_object(self.stream_info_struct))
 
+        print("sensor black level recommended", ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "SensorBlackLevelRecomended"))
+        print("black level", ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "BlackLevel"))
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "SensorBlackLevelRecomended", False)
+        ky.KYFG_SetCameraValue(self.cam_handle_array[self.grabber_index][0], "BlackLevel", -1300.0)
+        print("sensor black level recommended", ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "SensorBlackLevelRecomended"))
+        print("black level", ky.KYFG_GetCameraValue(self.cam_handle_array[self.grabber_index][0], "BlackLevel"))
+
     def _connect_to_grabber(self):
         _, fg_amount = ky.KY_DeviceScan()
         try:
@@ -203,9 +210,9 @@ if __name__ == "__main__":
     camera.set_gain_exposure(100.0, 1000.0)
 
     imagen = camera.get_frame()
-    plt.imshow(imagen, cmap = 'gray')
-    plt.show()
-    #np.save("oscuridad_1segexp", imagen)
+#    plt.imshow(imagen, cmap = 'gray')
+#    plt.show()
+    np.save("oscuridad_black_level", imagen)
 
     camera.close()
 
