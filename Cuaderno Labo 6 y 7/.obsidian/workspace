@@ -1,0 +1,107 @@
+{
+  "main": {
+    "id": "75fe5579543070b0",
+    "type": "split",
+    "children": [
+      {
+        "id": "b9260a8689840b81",
+        "type": "leaf",
+        "state": {
+          "type": "empty",
+          "state": {}
+        }
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f5cb1f93681546ac",
+    "type": "split",
+    "children": [
+      {
+        "id": "22903c7fd8d8547b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d88f4647a27ee314",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {}
+            }
+          },
+          {
+            "id": "dd42c30559d32be2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6e1fe455b268d2f7",
+    "type": "split",
+    "children": [
+      {
+        "id": "3c07ca4e290ce1e3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "db10515c657e67e3",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "9cd8846782b3d554",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {}
+            }
+          },
+          {
+            "id": "006c3177b07b9abd",
+            "type": "leaf",
+            "state": {
+              "type": "todo",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "active": "b9260a8689840b81",
+  "lastOpenFiles": [
+    "Untitled.md",
+    "Diario/2022-06-24.md",
+    "Herramientas/Chanoscopio.md"
+  ]
+}
