@@ -136,27 +136,50 @@ class FpmDataset:
         }
 
         return cls(path, colors, config, ordered_images)
-    def pr(self):
-        return self.images['r']
 
-    
     def get_image(self, x, y, color):
         return self.images[color][(x, y)]
 
-    #def calculate_led_pos(self, )
+    def calculate_led_pos(self):
+        centerx, centery = self.config.center
+        height = self.config.sample_height_mm
+        led_gap = self.config.led_gap_mm
+        led_positions = []
+        for led in self.images['r'].keys():
+            x = (centerx - led[0]) * led_gap
+            y = (centery - led[1]) * led_gap
+            z = height
+            led_positions.append((x,y,z))
+        return led_positions
+
+    def calculate_wavevector(self):
+        k_vectors = {}
+        for color in self.colors:
+            wavelength = self.config.wavelengths[color]
+            k_vectors[color]=[]
+            for pos in self.calculate_led_pos():
+                x,y,z = pos
+                k_versor = (x,y,-z)/(np.sqrt(x**2 +y**2 + z**2))
+                k = 2*np.pi/ wavelength
+                k_vectors[color].append(k*k_versor)
+        return k_vectors
+        
+
 
 import matplotlib.pyplot as plt
-from fpm.microscope.base import Microscope, Optics, Illumination
+#from fpmordered_images.microscope.base import Microscope, Optics, Illumination
 
 path = "/home/chanoscopio/fpm_samples/22_junio_V2"
 ds = FpmDataset.from_path(path)
-print(ds.pr())
+#print(ds.images)
 #img = ds.get_image(16, 16, "r")
-#x0, y0, x1, y1 = 3000, 3000, 4000, 4000
+x0, y0, x1, y1 = 3000, 3000, 4000, 4000
 #img = img.get_patch(x0, y0, x1, y1)
 ##plt.imshow(img)
 ##plt.show()
 config  = ds.config
+#print(ds.calculate_led_pos())
+print(ds.calculate_wavevector())
 
 Leds = np.arange(13,19)
 parches = []
@@ -167,10 +190,15 @@ for i in Leds:
         parches.append(img)
 
 
-print(config)
-opt = Optics(config['objective_na'], 1)
-il = Illumination(config['sample_hight'])
-#micro = Microscope(config)
+#print(parches)
+#opt = Optics(config['objective_na'], 1)
+#il = Illumination(config['sample_hight'], config['pixel_size_um']*8, config['wavelenght'])
+#cam = Camera(config['pixel_size_um'], config['image_size'], 2**12-1)
+#micro = Microscope(opt, il, cam)
+
+############## RECONSTRUCCION ##################
+
+
 
 
 @dataclass
