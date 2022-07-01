@@ -182,12 +182,12 @@ config  = ds.config
 print(ds.calculate_wavevector())
 
 Leds = np.arange(13,19)
-parches = []
+patch = []
 for i in Leds:
     for j in Leds:
         img = ds.get_image(i, j, "b")
         img = img.get_patch(x0, y0, x1, y1)
-        parches.append(img)
+        patch.append(img)
 
 
 #print(parches)
@@ -198,7 +198,62 @@ for i in Leds:
 
 ############## RECONSTRUCCION ##################
 
+import fpmsample.math as pmath
+from stitch import Patch, Picture
+from fpmsample.simicro import RealMicroscope
+from phaseopt.containers import Options, ResultsContainer
+from phaseopt.solver import solver_run
 
+import itertools as it
+from tifffile import imwrite
+from pathlib import Path
+import os
+
+dirname = Path("/home/chanoscopio/fpm_samples/22_junio_V2")
+rm = RealMicroscope.from_dirname(dirname=dirname, color='b')
+overlap = 15
+
+pic_hr = Picture.from_microscope(rm, overlap=overlap, outfile="ft_image.h5py")
+opts = Options(
+    record_rss=True,
+    record_angular_rss=True,
+    xt=None,
+    max_iter=7,
+)
+
+
+pupil = pmath.aberrated_pupil(1e-6, rm)
+rm.y0, rm.x0 = pic_hr.get_lr_center(patch.position)
+# rm._load_samples_dask()
+delta_gk = rm.get_phaseopt_input(background_matrix=10000, color=color)
+centers = rm.centers(mode="raw")
+centers = np.array((list(centers)))
+n = 16
+delta_gk = it.islice(delta_gk, n)
+
+
+
+res = solver_run(
+    delta_gk,
+    centers,
+    rm.no,
+    rm.patch,
+    rm.nsyn,
+    p0=pupil,
+    microscope=rm,
+    method="known_corrections",
+)
+
+
+
+mag = np.abs(res)
+mag = np.uint16(mag * (np.iinfo(np.uint16).max / np.max(mag)))  # Rescaling
+
+delta_gk = rm.get_phaseopt_input(background_matrix=1000)
+patch.image = np.flip(res, axis=0)
+
+plt.imshow(mag)
+plt.show(mag)
 
 
 @dataclass

@@ -207,12 +207,12 @@ class ImperxCamera(Camera):
 
 if __name__ == "__main__":
     camera = ImperxCamera()
-    camera.set_gain_exposure(100.0, 1000.0)
+    camera.set_gain_exposure(100.0, 10000.0)
 
     imagen = camera.get_frame()
-#    plt.imshow(imagen, cmap = 'gray')
-#    plt.show()
-    np.save("oscuridad_black_level", imagen)
+    plt.imshow(imagen, cmap = 'gray')
+    plt.show()
+#    np.save("oscuridad_black_level", imagen)
 
     camera.close()
 

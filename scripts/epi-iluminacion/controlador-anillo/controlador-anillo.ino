@@ -42,6 +42,9 @@ void serialEvent() {
     delay(exp_time*100);
     disable_output();
   }
+  set_led(0, 3);
+
+
 }
 
 void loop(){
