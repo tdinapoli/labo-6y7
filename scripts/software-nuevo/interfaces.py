@@ -2,25 +2,70 @@ from __future__ import annotations
 
 import json
 import pathlib
-from dataclasses import dataclass
+from dataclasses import dataclass, fields
 from typing import Dict, Literal, Optional, Sequence, Tuple, Union
 
 import numpy as np
 
 Color = Literal["r", "g", "b", "rgb"]
 
+@dataclass(frozen=True)
+class BaseFpmImageMetadata:
+    exposure: float
+    channel: str
+
+
+class LedMatrixFpmImageMetadata(BaseFpmImageMetadata):
+    led_no_x: int
+    led_no_y: int
+
+    @classmethod
+    def from_path(path: pathlib.Path)
+        parts = path.stem.split("_")
+        x = int(parts[0])
+        y = int(parts[1])
+        color = parts[2]
+        exposure = int(parts[3])
+        return cls(exposure, color, x, y)
+
 
 @dataclass
-class FpmConfig:
+class BaseFpmConfig:
+    objetive_na: float
+    image_size: Tuple[int, int]
+
+    @property
+    def image_metadata_class(self):
+        return BaseFpmImageMetadata
+        #retrunr LedMatrixFpmImageMetadata o correspondiente
+
+    def calculate_wavevector(self, metadata: LedMatrixFpmImageMetadata):
+        wavelength = self.wavelengths[metadata.channel]
+        x, y, z = self.calculate_led_pos
+        k_versor = (-x, -y, -z)/(np.sqrt(x**2 +y**2 + z**2))
+        k = 2*np.pi/ wavelength
+        k_vector = k*k_versor
+        return np.array(k_vector)
+
+    @abstractmethod
+    def calculate_led_pos(self) ->  Tuple(float, float, float)
+        pass
+    
+
+@dataclass
+class LedMatrixFpmConfig(BaseFpmConfig):
     wavelengths: Dict[Color, float]
     sample_height_mm: float
     center: Tuple[int, int]
     matrix_size: int
     led_gap_mm: float
-    objetive_na: float
     pixel_size_um: float
-    image_size: Tuple[int, int]
 
+    @property
+    def image_metadata_class(self):
+        return LedMatrixFpmImageMetadata
+
+    ## cambiar con dataclass wizard
     @classmethod
     def from_json(cls, json_string: str) -> FpmConfig:
         data = json.loads(json_string)
@@ -50,52 +95,41 @@ class FpmConfig:
         cfg = FpmConfig.from_json(data)
         return cfg
 
+    def calculate_led_pos(self, metadata: LedMatrixFpmImageMetadata):
+        centerx, centery = self.config.center
+        height = self.config.sample_height_mm
+        led_gap = self.config.led_gap_mm
+        posx, posy = metadata.led_no_x, metadata.led_no_y
+        x = (centerx - posx) * led_gap
+        y = (centery - posy) * led_gap
+        z = height
+        return led_positions
+
 
 @dataclass
 class FpmImage:
-    frame: np.ndarray
-    x: int
-    y: int
-    color: Color
-    exposure: Union[int, float]
+    path: pathlib.Path
+    metadata: BaseFpmImageMetadata
 
-    def __str__(self):
-        return (
-            f"{self.x:02d}_"
-            f"{self.y:02d}_"
-            f"{self.color}_"
-            f"{self.exposure:d}"
-        )
+    @property
+    def image(self):
+        return np.load(str(self.path))
 
-    def get_name(self) -> str:
-        return self.__str__() + ".npy"
 
-    @classmethod
-    def from_file(
-        cls, path: Union[str, pathlib.Path], mmap: Optional[str] = "r"
-    ) -> FpmImage:
-        if isinstance(path, str):
-            path = pathlib.Path(path)
-        if not path.exists():
-            raise FileNotFoundError(str(path))
-        if not path.is_file():
-            raise IsADirectoryError(str(path))
+@dataclass(frozen=True)
+class FpmChannel:
+    path: pathlib.Path
+    config: FpmConfig
+    images: dict[k, FpmImage] = fields(default_factory=dict)
 
-        parts = path.stem.split("_")
-        x = int(parts[0])
-        y = int(parts[1])
-        color = parts[2]
-        exposition = int(parts[3])
-        frame = np.load(str(path), mmap_mode=mmap)
-        return cls(frame, x, y, color, exposition)
+    def __post_init__():
+        for p in self.path.glob("*.npy"):
+            fpim = FpmImage(p, config.image_metadata_class(p))
+            k = config.calculate_wavevector(fpim.metadata)
+            images[k] = fpim
 
-    def save(self, path: Union[str, pathlib.Path]) -> str:
-        name = path.joinpath(self.get_name())
-        np.save(name, self.frame)
-        return name
-
-    def get_patch(self, x0, y0, x1, y1):
-        return self.frame[x0:x1, y0:y1]
+    def iter_images(self):
+        yield from self.images.items()
 
 
 @dataclass
@@ -104,6 +138,7 @@ class FpmDataset:
     colors: Sequence[Color]
     config: FpmConfig
     images: Dict[Color, Dict[Tuple[int, int], FpmImage]]
+    channels: dict[str, FpmChannel]
 
     @classmethod
     def from_path(
@@ -140,17 +175,6 @@ class FpmDataset:
     def get_image(self, x, y, color):
         return self.images[color][(x, y)]
 
-    def calculate_led_pos(self):
-        centerx, centery = self.config.center
-        height = self.config.sample_height_mm
-        led_gap = self.config.led_gap_mm
-        led_positions = []
-        for led in self.images['r'].keys():
-            x = (centerx - led[0]) * led_gap
-            y = (centery - led[1]) * led_gap
-            z = height
-            led_positions.append((x,y,z))
-        return led_positions
 
     def calculate_wavevector(self):
         k_vectors = {}
@@ -165,6 +189,24 @@ class FpmDataset:
         return k_vectors
         
 
+def process(fpim):
+    img = fpim.image
+    img(img>mx) = np.nan
+    img(img<mn) = np.nan
+    img = img - background
+    return img / fpim.exp
+
+
+avg = None
+ds = FpmDataset.from_path()
+for chname, channel in ds.channels.items():
+    print(chname)
+    for k, fpim in channel.iter_images():
+        image = process(fpim)
+        if avg is None:
+            avg = image
+        else:
+            avg += image
 
 import matplotlib.pyplot as plt
 #from fpmordered_images.microscope.base import Microscope, Optics, Illumination
