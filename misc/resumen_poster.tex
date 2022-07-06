@@ -1,0 +1,52 @@
+\documentclass[11pt]{article}
+\usepackage[a4paper, total={7in, 10in}]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage{caption}
+%\usepackage[font=small,labelfont=bf]{caption}
+%\usepackage[margin=10pt,font=footnotesize,labelfont=bf]{caption}
+\usepackage{subcaption}
+%\usepackage[spanish]{babel}
+\usepackage{float}
+\usepackage{wrapfig}
+\usepackage[usenames]{color}
+\usepackage[spanish,es-tabla]{babel}
+%\documentclass[a4paper,openright,12pt]{report}
+\usepackage[spanish]{babel}
+\usepackage[spaces,hyphens]{url}
+\usepackage{multicol}
+\usepackage{amsmath}
+%\usepackage[style=numeric-comp]{biblatex}
+\usepackage[]{caption}
+\usepackage{upgreek}
+\usepackage[font=scriptsize,labelfont=bf]{caption}
+\usepackage[style=numeric, sorting=none]{biblatex}
+\addbibresource{biblio.bib}
+
+
+\title{resumen poster}
+\author{alemildiner26 }
+\date{July 2022}
+
+\begin{document}
+
+\maketitle
+
+Para todo sistema óptico de un microscopio existe un compromiso entre el campo de visión (FOV) y su resolución, limitado por el producto espacio-ancho de banda (SBP, del inglés space-bandiwdth product) que determina la cantidad de información que puede contener una imagen tomada con dicho sistema óptico. Para microscopios con partes fijas este número suele ser del orden de los megapixels, lo cual es un problema para el análisis de muestras biomédicas o petrográficas en las que se deben estudian muestras grandes (aproximadamente 1 cm de diámetro) con alta resolución (menor a 1 $\mu$m). \newline
+\indent La Pticografía de Fourier es un método desarrollado en 2013 [zheng] que permite aumentar el SBP del sistema óptico hasta el orden del gigapixel, y recuperar no sólo la amplitud sino también la fase de la imagen a través de un algoritmo computacional de reconstrucción[FINEUP]. Para aplicar el algoritmo se necesita tomar múltiples imágenes con iluminación por ondas planas con distintos vectores de onda $\mathbf{k}$. \newline
+\indent En el Laboratorio de Electrónica Cuántica del blabla(preguntar) estamos desarrollando un microscopio que aplica dicha técnica. Nuestro sistema óptico está formado por un objetivo con corrección a infinito, una lente de tubo, una cámara CMOS y una fuente de iluminación por transmisión dada por matriz de LEDs plana. Para cada LED de la matriz se asocia un vector de onda $\mathbf{k}$ incidente en la muestra, cuyas componentes en $\mathbf{x} (k_x)$ e $\mathbf{y} (k_y)$ son perpendiculares al eje óptico $\mathbf{z}$. Las imágenes se toman prendiendo un LED a la vez. Éstas se representan en el espacio de Fourier como un círculo centrado en $(k_x, k_y)$ con radio $\frac{2\pi NA}{\lambda}$ donde $NA$ es la apertura numérica del objetivo y $\lambda$ la longitud de onda del LED prendido.
+
+\newline
+
+cual es el problema?
+cuales son las motivaciones para resolverlo (aplicaciones de fpm)?
+cual es la solucion?
+cómo se lleva a cabo esa solución?
+que hacemos nosotros al respecto?
+
+
+
+\end{document}
+
