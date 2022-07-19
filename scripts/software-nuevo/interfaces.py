@@ -18,6 +18,15 @@ Channel = Literal["r", "g", "b"] #falta gene3rar carpetas de transmision y refle
 class BaseFpmImageMetadata(ABC):
     exposure: float
     channel: str
+    
+    @abstractmethod
+    def from_path(self, path: pathlib.Path) -> BaseFpmImageMetadata:
+        pass
+
+    @property
+    @abstractmethod
+    def file_name(self) -> str:
+        pass
 
 @dataclass(frozen=True)
 class BaseFpmConfig(ABC):
@@ -54,6 +63,15 @@ class LedMatrixFpmImageMetadata(BaseFpmImageMetadata):
         color = parts[2]
         exposure = int(parts[3])
         return cls(exposure, color, x, y)
+
+    @property
+    def file_name(self):
+        ledx = str(self.led_no_x)
+        ledy = str(self.led_no_y)
+        exposure = str(self.exposure)
+        channel = str(self.channel)
+        file_name = ledx+"_"+ledy+"_"+channel+"_"+exposure+".npy"
+        return file_name
     
 
 @dataclass(frozen=True)
@@ -115,6 +133,13 @@ class FpmImage:
     path: pathlib.Path
     metadata: BaseFpmImageMetadata
 
+    @classmethod
+    def from_array(cls, image: np.ndarray, path: pathlib.Path, metadata: BaseFpmImageMetadata):
+        path = path/metadata.file_name
+        print("PATH", path, type(path))
+        np.save(path, image)
+        return cls(path, metadata)
+
     @property
     def image(self):
         return np.load(str(self.path))
@@ -135,6 +160,11 @@ class FpmChannel:
             fpim = FpmImage(p, self.config.image_metadata_class.from_path(p))
             k = self.config.calculate_wavevector(fpim.metadata)
             self.images[tuple(k)] = fpim
+
+    def add_images(self, images: np.ndarray[FpmImage], config: BaseFpmConfig):
+        for image in images:
+            wavevector = config.calculate_wavevector(image.metadata)
+            self.images[wavevector] = image
 
     def iter_images(self):
         for k, fpim in self.images.items():
@@ -172,163 +202,22 @@ class FpmDataset:
 
         return cls(path, config, channels)
 
+imagen_nueva = np.ones(shape=(3, 3))
+print(imagen_nueva)
 
-#for k, fpim in ds.channels[0].iter_images():
-#    print(k, fpim.mmap_image.shape, fpim.mmap_image.dtype)
+exposure = 10
+channel = "r"
+led_no_x = 12
+led_no_y = 16
+img_metadata = LedMatrixFpmImageMetadata(exposure, channel, led_no_x, led_no_y)
+print(img_metadata)
 
+path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/software-nuevo")
+fpm_image = FpmImage.from_array(imagen_nueva, path,img_metadata)
 
-
-#def process(fpim):
-#    img = fpim.image
-#    img(img>mx) = np.nan
-#    img(img<mn) = np.nan
-#    img = img - background
-#    return img / fpim.exp
-
-
-
-
-#ds = FpmDataset.from_path()
-#for chname, channel in ds.channels.items():
-#    print(chname)
-#    for k, fpim in channel.iter_images():
-#        image = process(fpim)
-#        if avg is None:
-#            avg = image
-#        else:
-#            avg += image
-#
-#import matplotlib.pyplot as plt
-##from fpmordered_images.microscope.base import Microscope, Optics, Illumination
-#
-#path = "/home/chanoscopio/fpm_samples/22_junio_V2"
-#ds = FpmDataset.from_path(path)
-##print(ds.images)
-##img = ds.get_image(16, 16, "r")
-#x0, y0, x1, y1 = 3000, 3000, 4000, 4000
-##img = img.get_patch(x0, y0, x1, y1)
-###plt.imshow(img)
-###plt.show()
-#config  = ds.config
-##print(ds.calculate_led_pos())
-#print(ds.calculate_wavevector())
-#
-#Leds = np.arange(13,19)
-#patch = []
-#for i in Leds:
-#    for j in Leds:
-#        img = ds.get_image(i, j, "b")
-#        img = img.get_patch(x0, y0, x1, y1)
-#        patch.append(img)
-
-
-#print(parches)
-#opt = Optics(config['objective_na'], 1)
-#il = Illumination(config['sample_hight'], config['pixel_size_um']*8, config['wavelenght'])
-#cam = Camera(config['pixel_size_um'], config['image_size'], 2**12-1)
-#micro = Microscope(opt, il, cam)
-
-############## RECONSTRUCCION ##################
-
-#import fpmsample.math as pmath
-#from stitch import Patch, Picture
-#from fpmsample.simicro import RealMicroscope
-#from phaseopt.containers import Options, ResultsContainer
-#from phaseopt.solver import solver_run
-#
-#import itertools as it
-#from tifffile import imwrite
-#from pathlib import Path
-#import os
-#
-#dirname = Path("/home/chanoscopio/fpm_samples/22_junio_V2")
-#rm = RealMicroscope.from_dirname(dirname=dirname, color='b')
-#overlap = 15
-#
-#pic_hr = Picture.from_microscope(rm, overlap=overlap, outfile="ft_image.h5py")
-#opts = Options(
-#    record_rss=True,
-#    record_angular_rss=True,
-#    xt=None,
-#    max_iter=7,
-#)
-#
-#
-#pupil = pmath.aberrated_pupil(1e-6, rm)
-#rm.y0, rm.x0 = pic_hr.get_lr_center(patch.position)
-## rm._load_samples_dask()
-#delta_gk = rm.get_phaseopt_input(background_matrix=10000, color=color)
-#centers = rm.centers(mode="raw")
-#centers = np.array((list(centers)))
-#n = 16
-#delta_gk = it.islice(delta_gk, n)
-#
-#
-#
-#res = solver_run(
-#    delta_gk,
-#    centers,
-#    rm.no,
-#    rm.patch,
-#    rm.nsyn,
-#    p0=pupil,
-#    microscope=rm,
-#    method="known_corrections",
-#)
-#
-#
-#
-#mag = np.abs(res)
-#mag = np.uint16(mag * (np.iinfo(np.uint16).max / np.max(mag)))  # Rescaling
-#
-#delta_gk = rm.get_phaseopt_input(background_matrix=1000)
-#patch.image = np.flip(res, axis=0)
-#
-#plt.imshow(mag)
-#plt.show(mag)
-
-
-#avg = None
-#path = "/home/chanoscopio/fpm_samples/22_junio_V2/"
-#path = pathlib.Path(path)
-#json_string = "config.json"
-#cfg = LedMatrixFpmConfig.from_path(path)
-#ch = FpmChannel(path, cfg, "b")
-#avg = None
-#
-#def process(fpim):
-#    return fpim.mmap_image[5000:5600, 5000:5600] / fpim.metadata.exposure
-#
-#def myfft(k, im):
-#    sh = im.shape
-#    pix_size = 3.2e-3
-#    plane_x, plane_y = np.meshgrid(range(sh[0]), range(sh[1]))
-#    return np.fft.fftshift(np.fft.fft2(im)) * np.exp(1j*(k[0]*plane_x*pix_size + k[1]*plane_y*pix_size))
-#
-#
-#for k, fpim in ch.iter_images():
-#    #print(k, fpim.mmap_image.shape, fpim.mmap_image.dtype)
-#    image = process(fpim)
-#    image = myfft(k, image)
-#    if avg is None:
-#        avg = image
-#    else:
-#        avg += image
-#
-#import matplotlib.pyplot as plt
-#plt.imshow(np.abs(avg))
-#plt.show()
-
-
-path = "/home/chanoscopio/fpm_samples/22_junio_V2/"
-path = pathlib.Path(path)
-json_string = "config.json"
-colors = ["r"]
-ds = FpmDataset.from_path(LedMatrixFpmConfig, path, colors)
-print(ds.channels)
-
-#generate_reconstruction_dirs()
-
+imagen_2 = np.zeros(shape=(3,3))
+print(imagen_2)
+imagen_2
 
 
 @dataclass
