@@ -1,0 +1,22 @@
+{
+    "fpm_config": {
+        "wavelengths": {
+        "r":650e-9,
+        "g":550e-9,
+        "b":464e-9
+    },
+    "sample_height_mm":132,
+    "center":[
+    16,
+    16
+    ],
+    "matrix_size": 7,
+    "led_gap_mm": 6e-3,
+    "objetive_na": 0.1,
+    "pixel_size_um": 3.2e-6,
+    "image_size": [
+        9344,
+        7000
+    ]
+    }
+}

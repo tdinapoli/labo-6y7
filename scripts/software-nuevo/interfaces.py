@@ -48,7 +48,7 @@ class BaseFpmConfig(ABC):
         k_versor = (-x, -y, -z)/(np.sqrt(x**2 +y**2 + z**2))
         k = 2*np.pi/ wavelength
         k_vector = k*k_versor
-        return np.array(k_vector)
+        return tuple(k_vector)
 
 @dataclass(frozen=True)
 class LedMatrixFpmImageMetadata(BaseFpmImageMetadata):
@@ -136,7 +136,6 @@ class FpmImage:
     @classmethod
     def from_array(cls, image: np.ndarray, path: pathlib.Path, metadata: BaseFpmImageMetadata):
         path = path/metadata.file_name
-        print("PATH", path, type(path))
         np.save(path, image)
         return cls(path, metadata)
 
@@ -156,15 +155,14 @@ class FpmChannel:
     images: dict[Tuple(float, float), FpmImage] = field(default_factory=dict)
 
     def __post_init__(self):
-        for p in self.path.glob("*_"+self.channel+"_*.npy"): #cambiar a solo *.npy y fijarse si se puede sacar de la metadata el path
+        for p in self.path.glob("*_"+self.channel+"_*.npy"): 
             fpim = FpmImage(p, self.config.image_metadata_class.from_path(p))
             k = self.config.calculate_wavevector(fpim.metadata)
             self.images[tuple(k)] = fpim
 
-    def add_images(self, images: np.ndarray[FpmImage], config: BaseFpmConfig):
-        for image in images:
-            wavevector = config.calculate_wavevector(image.metadata)
-            self.images[wavevector] = image
+    def add_image(self, image: FpmImage):
+        wavevector = self.config.calculate_wavevector(image.metadata)
+        self.images[wavevector] = image
 
     def iter_images(self):
         for k, fpim in self.images.items():
@@ -202,6 +200,14 @@ class FpmDataset:
 
         return cls(path, config, channels)
 
+
+
+path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/software-nuevo")
+
+config = LedMatrixFpmConfig.from_path(path)
+fpmch = FpmChannel(path, config, 'r', {})
+print("FPMCH ANTES",fpmch)
+
 imagen_nueva = np.ones(shape=(3, 3))
 print(imagen_nueva)
 
@@ -211,14 +217,26 @@ led_no_x = 12
 led_no_y = 16
 img_metadata = LedMatrixFpmImageMetadata(exposure, channel, led_no_x, led_no_y)
 print(img_metadata)
-
-path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/software-nuevo")
 fpm_image = FpmImage.from_array(imagen_nueva, path,img_metadata)
 
 imagen_2 = np.zeros(shape=(3,3))
 print(imagen_2)
-imagen_2
 
+exposure = 1
+channel = "r"
+led_no_x = 11
+led_no_y = 15
+img_metadata_2 = LedMatrixFpmImageMetadata(exposure, channel, led_no_x, led_no_y)
+print(img_metadata)
+
+fpm_image_2 = FpmImage.from_array(imagen_2, path, img_metadata_2)
+
+images_arr = np.array([fpm_image, fpm_image_2])
+print(images_arr)
+
+
+fpmch.add_image(fpm_image)
+print("FPMCH DESP",fpmch)
 
 @dataclass
 class FpmAcquisitionSetup:
