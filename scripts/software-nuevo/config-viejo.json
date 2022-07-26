@@ -1,6 +1,10 @@
 {
     "fpm_config": {
-    "wavelength": 650e-9,
+        "wavelengths": {
+        "r":650e-9,
+        "g":550e-9,
+        "b":464e-9
+    },
     "sample_height_mm":132,
     "center":[
     16,
