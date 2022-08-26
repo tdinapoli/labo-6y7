@@ -134,7 +134,7 @@ z0 = 0
 R = 100
 tita_max = np.pi/3
 fi0 = 2*np.pi/60
-n_leds = 6
+n_leds = 20
 wavelength = 500e-9
 NA = 0.1
 n_steps = 1
@@ -151,14 +151,14 @@ freq_per_pix=4e3
 k_vectors_sph = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_steps, wavelength)
 k_vectors_matrix = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y) 
 
-fig = plt.figure()
-ax = fig.add_subplot(projection='3d')
-ax.set_xlim([-100, 100])
-ax.set_ylim([-100, 100])
-ax.set_zlim([-250, -50])
-ax.scatter(0,0,0, color="k", s=30)
-
-graph_led_positions_sph(k_vectors_sph, z0, R, tita_max, fi0, n_leds, n_steps, ax)
+#fig = plt.figure()
+#ax = fig.add_subplot(projection='3d')
+#ax.set_xlim([-100, 100])
+#ax.set_ylim([-100, 100])
+#ax.set_zlim([-250, -50])
+#ax.scatter(0,0,0, color="k", s=30)
+#
+#graph_led_positions_sph(k_vectors_sph, z0, R, tita_max, fi0, n_leds, n_steps, ax)
 #plt.show()
 
 #fig = plt.figure()
@@ -168,7 +168,7 @@ graph_led_positions_sph(k_vectors_sph, z0, R, tita_max, fi0, n_leds, n_steps, ax
 #ax.set_zlim([-250, -50])
 
 
-graph_led_positions_matrix(k_vectors_matrix, z0_matrix, dx, dy, ax, range_x = range_x, range_y=range_y)
+#graph_led_positions_matrix(k_vectors_matrix, z0_matrix, dx, dy, ax, range_x = range_x, range_y=range_y)
 
 plt.show()
 
