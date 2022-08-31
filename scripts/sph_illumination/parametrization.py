@@ -131,10 +131,10 @@ def graph_led_positions_matrix(k_vectors, z0, dx, dy, ax, range_x=range(-2, 3, 1
 
         
 z0 = 0
-R = 100
+R = 130
 tita_max = np.pi/3
 fi0 = 2*np.pi/60
-n_leds = 20
+n_leds = 6
 wavelength = 500e-9
 NA = 0.1
 n_steps = 1
