@@ -28,7 +28,7 @@ class BaseFpmImageMetadata(ABC):
     def file_name(self) -> str:
         pass
 
-@dataclass(frozen=True)
+@dataclass()
 class BaseFpmConfig(ABC):
     objective_na: float
     image_size: Tuple[int, int]
@@ -80,7 +80,7 @@ class LedMatrixFpmImageMetadata(BaseFpmImageMetadata):
         return file_name
     
 
-@dataclass(frozen=True)
+@dataclass()
 class LedMatrixFpmConfig(BaseFpmConfig):
     wavelength: float
     sample_height_mm: float
@@ -156,7 +156,7 @@ class SphericalModuleMetadata(BaseFpmImageMetadata):
         return file_name
 
 
-@dataclass(frozen=True)
+@dataclass()
 class SphericalModuleConfig(BaseFpmConfig):
     wavelength: float
     max_theta_rad: float

@@ -34,7 +34,7 @@ def overlap(k_vectors, NA, freq_per_pix=1.6e4, shape=(1000,1000)):
     fig, ax = plt.subplots(1)
     k_vectors = np.array(k_vectors)/freq_per_pix
     radius = NA * np.linalg.norm(k_vectors[0])
-    img = np.zeros(shape=shape)
+    img = np.zeros(shape=shape, dtype=int)
     shapex, shapey = shape
     for k_vector in k_vectors:
         kx, ky, kz = k_vector
@@ -70,7 +70,7 @@ def calculate_mat(led_amount, c_x, c_y):
     return k_vecs_mat, led_pos_mat
 
 c_x, c_y = mat_cfg.center
-led_amount = 10
+led_amount = 0
 k_vecs_mat, led_pos_mat = calculate_mat(led_amount, c_x, c_y)
 
 ########################### calculo vectores y posiciones esfera ###################
@@ -79,8 +79,8 @@ def calculate_sph(phi_steps, n_leds):
     k_vecs_sph = []
     led_pos_sph = []
 
-    for step in range(sph_cfg.phi_steps):
-        for led in range(sph_cfg.n_leds):
+    for step in range(phi_steps):
+        for led in range(n_leds):
             led_pos = sph_cfg.calculate_led_pos(led, step)
             k_vec = np.array(sph_cfg.calculate_wavevector(
                 led_pos,
@@ -119,9 +119,35 @@ plt.show()
 
 ########################### gráfico overlap ##############################
 
-freq_per_pix=2.5e4
-shape=(1000,1000)
-overlap(k_vecs_sph, sph_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
-plt.show()
+#freq_per_pix=2.5e4
+#shape=(1000,1000)
+#overlap(k_vecs_sph, sph_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
+#plt.show()
 #overlap(k_vecs_mat, mat_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
 #plt.show()
+
+########################### Overlap para radios ##############################
+
+max_leds = 20
+n_leds_list = np.arange(1, max_leds + 1, 1, dtype=int)
+
+fpp = 2.5e4
+ol_pcts = []
+
+for n_leds in n_leds_list:
+    sph_cfg.n_leds = n_leds
+    k_vecs_sph, led_pos_sph = calculate_sph(1, n_leds)
+    ol = overlap(k_vecs_sph, sph_cfg.objective_na, freq_per_pix=fpp)
+    ol_pct = []
+    covered_area = np.count_nonzero(ol >= 1)
+    for ol_n in range(1, np.max(ol)):
+        ol_pct.append(np.count_nonzero(ol > ol_n)/ covered_area) 
+    ol_pcts.append(ol_pct)
+plt.show()
+
+for ol_pct in ol_pcts:
+    plt.plot(np.arange(1, len(ol_pct) + 1, 1, dtype=int), ol_pct)
+plt.show()
+
+
+
