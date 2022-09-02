@@ -129,16 +129,16 @@ class LedMatrixFpmConfig(BaseFpmConfig):
         ledx, ledy = led_no
         x = -(centerx - ledx) * led_gap
         y = -(centery - ledy) * led_gap
-        z = height
+        z = -height
         return np.asarray([x, y, z])
 
 @dataclass(frozen=True)
-class SphericalModuleMetadata():
+class SphericalModuleMetadata(BaseFpmImageMetadata):
     n_led: int
     angle: float
 
     @classmethod
-    def from_path(cls, path: pathlib.Path)
+    def from_path(cls, path: pathlib.Path):
         parts = path.stem.split("_")
         led = int(parts[0])
         angle = int(parts[1])
@@ -157,9 +157,61 @@ class SphericalModuleMetadata():
 
 
 @dataclass(frozen=True)
-class SphericalModuleConfig():
+class SphericalModuleConfig(BaseFpmConfig):
     wavelength: float
+    max_theta_rad: float
+    phi_steps: int
+    radius_mm: float
+    sample_height_mm: float
+    n_leds: int
 
+    @property
+    def image_metadata_class(self):
+        return SphericalModuleMetadata
+
+    ## cambiar con dataclass wizard
+    @classmethod
+    def from_json(cls, json_string: str):
+        data = json.loads(json_string)
+        return cls(**data["fpm_config"])
+
+    def to_json(self, json_string: str):
+        data = {"fpm_comfig": self.to_dict()}
+        with open(json_string, "w") as f:
+            json.dump(data, f, ensure_ascii=False, indent=4)
+
+    @classmethod
+    def from_path(cls, path):
+        path = pathlib.Path(path) / "config.json"
+        with path.open(mode="r", encoding="utf-8") as f:
+            return cls.from_json(f.read())
+
+    def to_dict(self) -> dict:
+        data = {
+            "wavelength": self.wavelength,
+            "sample_height_mm": self.sample_height_mm,
+            "n_leds": self.n_leds,
+            "phi_steps": self.phi_steps,
+            "max_theta_rad": self.max_theta_rad,
+            "radius_mm": self.radius_mm,
+            "objetive_na": self.objetive_na,
+            "pixel_size_um": self.pixel_size_um,
+            "image_size": self.image_size,
+        }
+        return data
+
+    def calculate_led_pos(self, led_no: int, step: int):
+        height = self.sample_height_mm
+        n_leds = self.n_leds
+        radius = self.radius_mm
+        max_theta = self.max_theta_rad
+        theta = np.pi - max_theta * led_no / n_leds
+        phi_steps = self.phi_steps
+        phi = 2*np.pi * step/phi_steps
+        x = radius * np.cos(phi) * np.sin(theta)
+        y = radius * np.sin(phi) * np.sin(theta)
+        z = -height + radius * np.cos(theta)
+        return np.asarray([x, y, z])
 
 @dataclass
 class FpmImage:
