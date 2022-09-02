@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from interfaces_mod import LedMatrixFpmImageMetadata, LedMatrixFpmConfig
+from interfaces_mod import LedMatrixFpmImageMetadata, LedMatrixFpmConfig, SphericalModuleMetadata, SphericalModuleConfig
 import pathlib
 import sys
 
@@ -109,10 +109,13 @@ z0_matrix = 100
 dx = 6
 dy = 6
 
-path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/fourier-overlap/sph_illumination")
+path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/fourier-overlap/configs")
 
-mat_cfg = LedMatrixFpmConfig.from_path(path)
+mat_cfg = LedMatrixFpmConfig.from_path(path/"mat")
 print(mat_cfg)
+
+sph_cfg = SphericalModuleConfig.from_path(path / "sph")
+print(sph_cfg)
 
 ########################### gráfico 3d MATRIZ ###############################
 fig = plt.figure()
@@ -137,4 +140,20 @@ for i in range(c_x-led_graph_amount, c_x+ led_graph_amount+1):
                 ))
         kx, ky, kz = vector_length * k_vec / np.linalg.norm(k_vec)
         ax.quiver(x, y, z, kx, ky, kz, linewidth=1, color="tab:blue")
+
+########################### gráfico 3d ESFERA ###############################
+
+for step in range(sph_cfg.phi_steps):
+    for led in range(sph_cfg.n_leds):
+        led_pos = sph_cfg.calculate_led_pos(led, step)
+        x, y, z = led_pos
+        ax.scatter(x, y, z, color="tab:red")
+
+        k_vec = np.array(sph_cfg.calculate_wavevector(
+            led_pos,
+            patch_center_px=(sph_cfg.image_size[0]//2, sph_cfg.image_size[1]//2)
+            ))
+        kx, ky, kz = vector_length * k_vec/np.linalg.norm(k_vec)
+        ax.quiver(x, y, z, kx, ky, kz, linewidth=1, color="tab:blue")
+
 plt.show()
