@@ -109,7 +109,7 @@ z0_matrix = 100
 dx = 6
 dy = 6
 
-path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/sph_illumination")
+path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/fourier-overlap/sph_illumination")
 
 mat_cfg = LedMatrixFpmConfig.from_path(path)
 print(mat_cfg)

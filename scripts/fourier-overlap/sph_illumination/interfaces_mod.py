@@ -132,6 +132,34 @@ class LedMatrixFpmConfig(BaseFpmConfig):
         z = height
         return np.asarray([x, y, z])
 
+@dataclass(frozen=True)
+class SphericalModuleMetadata():
+    n_led: int
+    angle: float
+
+    @classmethod
+    def from_path(cls, path: pathlib.Path)
+        parts = path.stem.split("_")
+        led = int(parts[0])
+        angle = int(parts[1])
+        color = parts[2]
+        exposure = int(parts[3])
+        return cls(color, exposure, led, angle)
+
+    @property
+    def file_name(self):
+        n_led = str(self.n_led)
+        angle = str(self.angle)
+        exposure = str(self.exposure)
+        channel = str(self.channel)
+        file_name = n_led+"_"+angle+"_"+channel+"_"+exposure+".npy"
+        return file_name
+
+
+@dataclass(frozen=True)
+class SphericalModuleConfig():
+    wavelength: float
+
 
 @dataclass
 class FpmImage:
