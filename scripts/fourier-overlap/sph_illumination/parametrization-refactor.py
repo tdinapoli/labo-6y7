@@ -4,55 +4,6 @@ from interfaces_mod import LedMatrixFpmImageMetadata, LedMatrixFpmConfig, Spheri
 import pathlib
 import sys
 
-
-def calculate_position_sph(z0, R, tita_max, fi0, n_leds, m, n): # units in mm
-    fim = m * fi0
-    titan = np.pi - tita_max* n/n_leds
-    x = R * np.cos(m*fi0) * np.sin(titan)
-    y = R * np.sin(m*fi0) * np.sin(titan)
-    z = -z0 + R*np.cos(titan)
-    return (x, y, z)
-
-
-def calculate_k_vector_general(led_position, wavelength):
-    x, y, z = led_position
-    #k_0 = 2*np.pi/wavelength
-    k_0 = 1/wavelength
-    module = np.linalg.norm(np.array([x,y,z]))
-    kx = -x/module
-    ky = -y/module
-    kz = -z/module
-    k_vector = np.array([kx,ky,kz])*k_0
-    return k_vector
-
-
-def calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_steps, wavelength):
-    k_vectors = []
-    max_steps = int(2*np.pi/fi0)
-
-    pos_0 = calculate_position_sph(z0, R, tita_max, fi0, n_leds, 0, 0)
-    k_vectors.append(calculate_k_vector_general(pos_0, wavelength))
-
-    for m in range(0, max_steps, n_steps):
-        for n in range(1, n_leds + 1):
-            led_pos = calculate_position_sph(z0, R, tita_max, fi0, n_leds, m, n)
-            k_vectors.append(calculate_k_vector_general(led_pos, wavelength))
-    return k_vectors
-
-def calculate_position_matrix(z0, dx, dy, i, j, led_0_0_offset=(0,0)):
-    x, y = j*dx + led_0_0_offset[0], i*dy + led_0_0_offset[1]
-    z = -z0
-    return (x, y, z)
-
-def calculate_k_vectors_matrix(z0, dx, dy, wavelength, x_range=range(-2, 3, 1), y_range=range(-2, 3, 1) ,led_0_0_offset=(0,0)):
-    k_vectors = []
-    for i in x_range:
-        for j in y_range:
-            led_pos = calculate_position_matrix(z0, dx, dy, i, j, led_0_0_offset=led_0_0_offset)
-            k_vector = calculate_k_vector_general(led_pos, wavelength)
-            k_vectors.append(k_vector)
-    return k_vectors
-
 def graph_support(k_vectors, NA):
     fig, ax = plt.subplots(1)
     radio = NA * np.linalg.norm(k_vectors[0])
@@ -62,7 +13,6 @@ def graph_support(k_vectors, NA):
         circle = plt.Circle((kx, ky), radio, alpha=0.2, linewidth=0.2)
         ax.set_aspect(1)
         ax.add_artist(circle)
-    ax.set_title("wavelength="+str(wavelength))
     k_vectors = np.array(k_vectors)
     ax.set_xlim([min(k_vectors[:, 0]) - radio, max(k_vectors[:,0]) + radio])
     ax.set_ylim([min(k_vectors[:, 1]) - radio, max(k_vectors[:,1]) + radio])
@@ -92,22 +42,7 @@ def overlap(k_vectors, NA, freq_per_pix=1.6e4, shape=(1000,1000)):
         img[msk] = img[msk] + 1
     pos = ax.imshow(img)
     fig.colorbar(pos, ax=ax)
-    ax.set_title("wavelength="+str(wavelength)+"m\nfreq_per_pix="+str(freq_per_pix)+"$m^{-1}$"+"\n n_fotos="+str(len(k_vectors)))
     return img
-
-        
-z0 = 0
-R = 130
-tita_max = np.pi/3
-fi0 = 2*np.pi/60
-n_leds = 6
-wavelength = 500e-9
-NA = 0.1
-n_steps = 1
-
-z0_matrix = 100
-dx = 6
-dy = 6
 
 path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/fourier-overlap/configs")
 
@@ -117,6 +52,46 @@ print(mat_cfg)
 sph_cfg = SphericalModuleConfig.from_path(path / "sph")
 print(sph_cfg)
 
+########################### calculo vectores y posiciones matriz ###################
+
+def calculate_mat(led_amount, c_x, c_y):
+    k_vecs_mat = []
+    led_pos_mat = []
+
+    for i in range(c_x-led_amount, c_x+ led_amount+1):
+        for j in range(c_y-led_amount, c_y+ led_amount+1):
+            led_pos = mat_cfg.calculate_led_pos((i, j))
+            k_vec = np.array(mat_cfg.calculate_wavevector(
+                    led_pos,
+                    patch_center_px=(mat_cfg.image_size[0]//2, mat_cfg.image_size[1]//2)
+                    ))
+            k_vecs_mat.append(k_vec)
+            led_pos_mat.append(led_pos)
+    return k_vecs_mat, led_pos_mat
+
+c_x, c_y = mat_cfg.center
+led_amount = 10
+k_vecs_mat, led_pos_mat = calculate_mat(led_amount, c_x, c_y)
+
+########################### calculo vectores y posiciones esfera ###################
+
+def calculate_sph(phi_steps, n_leds):
+    k_vecs_sph = []
+    led_pos_sph = []
+
+    for step in range(sph_cfg.phi_steps):
+        for led in range(sph_cfg.n_leds):
+            led_pos = sph_cfg.calculate_led_pos(led, step)
+            k_vec = np.array(sph_cfg.calculate_wavevector(
+                led_pos,
+                patch_center_px=(sph_cfg.image_size[0]//2, sph_cfg.image_size[1]//2)
+                ))
+            k_vecs_sph.append(k_vec)
+            led_pos_sph.append(led_pos)
+    return k_vecs_sph, led_pos_sph
+
+k_vecs_sph, led_pos_sph = calculate_sph(sph_cfg.phi_steps, sph_cfg.n_leds)
+
 ########################### gráfico 3d MATRIZ ###############################
 fig = plt.figure()
 ax = fig.add_subplot(projection='3d')
@@ -125,35 +100,28 @@ ax.set_ylim([-100, 100])
 ax.set_zlim([-250, -50])
 ax.scatter(0,0,0, color="k", s=30)
 
-c_x, c_y = mat_cfg.center
 vector_length = 10
-led_graph_amount = 4
-for i in range(c_x-led_graph_amount, c_x+ led_graph_amount+1):
-    for j in range(c_y-led_graph_amount, c_y+ led_graph_amount+1):
-        led_pos = mat_cfg.calculate_led_pos((i, j))
-        x, y, z = led_pos
-        ax.scatter(x, y, z, color="tab:orange")
-
-        k_vec = np.array(mat_cfg.calculate_wavevector(
-                led_pos,
-                patch_center_px=(mat_cfg.image_size[0]//2, mat_cfg.image_size[1]//2)
-                ))
-        kx, ky, kz = vector_length * k_vec / np.linalg.norm(k_vec)
-        ax.quiver(x, y, z, kx, ky, kz, linewidth=1, color="tab:blue")
+for led_pos, k_vec in zip(led_pos_mat, k_vecs_mat):
+    x, y, z = led_pos
+    kx, ky, kz = vector_length * k_vec / np.linalg.norm(k_vec)
+    ax.scatter(x, y, z, color="tab:orange")
+    ax.quiver(x, y, z, kx, ky, kz, linewidth=1, color="tab:blue")
 
 ########################### gráfico 3d ESFERA ###############################
 
-for step in range(sph_cfg.phi_steps):
-    for led in range(sph_cfg.n_leds):
-        led_pos = sph_cfg.calculate_led_pos(led, step)
-        x, y, z = led_pos
-        ax.scatter(x, y, z, color="tab:red")
-
-        k_vec = np.array(sph_cfg.calculate_wavevector(
-            led_pos,
-            patch_center_px=(sph_cfg.image_size[0]//2, sph_cfg.image_size[1]//2)
-            ))
-        kx, ky, kz = vector_length * k_vec/np.linalg.norm(k_vec)
-        ax.quiver(x, y, z, kx, ky, kz, linewidth=1, color="tab:blue")
+for led_pos, k_vec in zip(led_pos_sph, k_vecs_sph):
+    x, y, z = led_pos
+    kx, ky, kz = vector_length * k_vec / np.linalg.norm(k_vec)
+    ax.scatter(x,y,z, color="tab:red")
+    ax.quiver(x,y,z,kx,ky,kz, color="tab:blue")
 
 plt.show()
+
+########################### gráfico overlap ##############################
+
+freq_per_pix=2.5e4
+shape=(1000,1000)
+overlap(k_vecs_sph, sph_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
+plt.show()
+#overlap(k_vecs_mat, mat_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
+#plt.show()

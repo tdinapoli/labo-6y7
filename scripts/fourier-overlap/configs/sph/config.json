@@ -6,7 +6,7 @@
     "radius_mm": 130,
     "phi_steps": 30,
     "max_theta_rad": 1.0471975512,
-    "objetive_na": 0.1,
+    "objective_na": 0.1,
     "pixel_size_um": 3.2e-6,
     "image_size": [
         9344,

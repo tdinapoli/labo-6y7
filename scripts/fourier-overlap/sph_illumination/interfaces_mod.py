@@ -30,7 +30,7 @@ class BaseFpmImageMetadata(ABC):
 
 @dataclass(frozen=True)
 class BaseFpmConfig(ABC):
-    objetive_na: float
+    objective_na: float
     image_size: Tuple[int, int]
     pixel_size_um: float
 

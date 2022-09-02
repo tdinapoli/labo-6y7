@@ -8,7 +8,7 @@
     ],
     "matrix_size": 32,
     "led_gap_mm": 6,
-    "objetive_na": 0.1,
+    "objective_na": 0.1,
     "pixel_size_um": 3.2e-6,
     "image_size": [
         9344,
