@@ -1,13 +1,11 @@
 {
     "fpm_config": {
     "wavelength": 500e-9,
-    "sample_height_mm":-150,
-    "center":[
-    16,
-    16
-    ],
-    "matrix_size": 32,
-    "led_gap_mm": 6,
+    "sample_height_mm": 0,
+    "n_leds": 6,
+    "radius_mm": 130,
+    "phi_steps": 30,
+    "max_theta_rad": 1.0471975512,
     "objetive_na": 0.1,
     "pixel_size_um": 3.2e-6,
     "image_size": [
