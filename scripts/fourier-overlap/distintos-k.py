@@ -152,8 +152,8 @@ freq_per_pix=4e3
 
 k_vectors_sph = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_steps, wavelength)
 k_vectors_sph_offset = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_steps, wavelength, offset)
-#k_vectors_matrix = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y) 
-#k_vectors_matrix_offset = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y, offset=offset) 
+k_vectors_matrix = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y) 
+k_vectors_matrix_offset = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y, offset=offset) 
 
 #fig = plt.figure()
 #ax = fig.add_subplot(projection='3d')
@@ -185,8 +185,8 @@ k_vectors_sph_offset = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_s
 n_samples = 1000
 ol_sph = overlap(k_vectors_sph, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
 ol_sph_offset = overlap(k_vectors_sph_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
-#ol_mat = overlap(k_vectors_matrix, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
-#ol_mat_offset = overlap(k_vectors_matrix_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+ol_mat = overlap(k_vectors_matrix, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+ol_mat_offset = overlap(k_vectors_matrix_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
 
 plt.show()
 

@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from interfaces_mod import LedMatrixFpmImageMetadata, LedMatrixFpmConfig, SphericalModuleMetadata, SphericalModuleConfig
 import pathlib
-import sys
 
 def graph_support(k_vectors, NA):
     fig, ax = plt.subplots(1)
@@ -40,11 +39,14 @@ def overlap(k_vectors, NA, freq_per_pix=1.6e4, shape=(1000,1000)):
         kx, ky, kz = k_vector
         msk = create_circular_mask(shapex, shapey, center=(kx, ky), radius=radius)
         img[msk] = img[msk] + 1
+
+    img[:,img.shape[1]//2 ] = 0
     pos = ax.imshow(img)
     fig.colorbar(pos, ax=ax)
     return img
 
-path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/fourier-overlap/configs")
+path = pathlib.Path("./configs/")
+print(path.absolute())
 
 mat_cfg = LedMatrixFpmConfig.from_path(path/"mat")
 print(mat_cfg)
@@ -63,14 +65,14 @@ def calculate_mat(led_amount, c_x, c_y):
             led_pos = mat_cfg.calculate_led_pos((i, j))
             k_vec = np.array(mat_cfg.calculate_wavevector(
                     led_pos,
-                    patch_center_px=(mat_cfg.image_size[0]//2, mat_cfg.image_size[1]//2)
+                    patch_center_px=(0, 0)
                     ))
             k_vecs_mat.append(k_vec)
             led_pos_mat.append(led_pos)
     return k_vecs_mat, led_pos_mat
 
 c_x, c_y = mat_cfg.center
-led_amount = 0
+led_amount = 5
 k_vecs_mat, led_pos_mat = calculate_mat(led_amount, c_x, c_y)
 
 ########################### calculo vectores y posiciones esfera ###################
@@ -117,16 +119,16 @@ for led_pos, k_vec in zip(led_pos_sph, k_vecs_sph):
 
 plt.show()
 
-########################### gráfico overlap ##############################
+########################### gráfico overlap sph y mat ##############################
 
-#freq_per_pix=2.5e4
-#shape=(1000,1000)
-#overlap(k_vecs_sph, sph_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
-#plt.show()
-#overlap(k_vecs_mat, mat_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
-#plt.show()
+freq_per_pix=2.5e4
+shape=(1000,1000)
+overlap(k_vecs_sph, sph_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
+plt.show()
+overlap(k_vecs_mat, mat_cfg.objective_na, freq_per_pix=freq_per_pix, shape=shape)
+plt.show()
 
-########################### Overlap para radios ##############################
+########################### Overlap para radios ############################## (HAY QUE BORRAR FROZEN=TRUE)
 
 max_leds = 20
 n_leds_list = np.arange(1, max_leds + 1, 1, dtype=int)

@@ -28,7 +28,7 @@ class BaseFpmImageMetadata(ABC):
     def file_name(self) -> str:
         pass
 
-@dataclass(frozen=True)
+@dataclass()
 class BaseFpmConfig(ABC):
     objective_na: float
     image_size: Tuple[int, int]
@@ -49,8 +49,8 @@ class BaseFpmConfig(ABC):
 
         x, y, z = led_pos_mm
         patch_center_x_px, patch_center_y_px = patch_center_px
-        patch_center_x_mm = patch_center_x_px * self.pixel_size_um*1e-3
-        patch_center_y_mm = patch_center_y_px * self.pixel_size_um*1e-3
+        patch_center_x_mm = patch_center_x_px * self.pixel_size_um*1e3
+        patch_center_y_mm = patch_center_y_px * self.pixel_size_um*1e3
         k_versor = (-(x - patch_center_x_mm), -(y - patch_center_y_mm), -z)/(np.sqrt((x - patch_center_x_mm)**2 + (y - patch_center_y_mm)**2 + z**2))
         k = 2*np.pi/ self.wavelength
         k_vector = k*k_versor
@@ -80,7 +80,7 @@ class LedMatrixFpmImageMetadata(BaseFpmImageMetadata):
         return file_name
     
 
-@dataclass(frozen=True)
+@dataclass()
 class LedMatrixFpmConfig(BaseFpmConfig):
     wavelength: float
     sample_height_mm: float
@@ -156,7 +156,7 @@ class SphericalModuleMetadata(BaseFpmImageMetadata):
         return file_name
 
 
-@dataclass(frozen=True)
+@dataclass()
 class SphericalModuleConfig(BaseFpmConfig):
     wavelength: float
     max_theta_rad: float
