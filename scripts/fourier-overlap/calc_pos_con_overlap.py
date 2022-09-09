@@ -39,6 +39,23 @@ def overlap(k_vectors, NA, freq_per_pix=1e3, shape=(3000,3000)):
     #ax.set_title("wavelength="+str(wavelength)+"m\nfreq_per_pix="+str(freq_per_pix)+"$m^{-1}$"+"\n n_fotos="+str(len(k_vectors)))
     return img
 
+def overlap_w_image(k_vectors, NA, freq_per_pix=1e3, shape=(3000,3000)):
+    #fig, ax = plt.subplots(1)
+    k_vectors = np.array(k_vectors)/freq_per_pix
+    radius = NA * np.linalg.norm(k_vectors[0])
+    img = np.zeros(shape=shape)
+    shapex, shapey = shape
+    for k_vector in k_vectors:
+        kx, ky, kz = k_vector
+        msk = create_circular_mask(shapex, shapey, center=(kx, ky), radius=radius)
+        img[msk] = img[msk] + 1
+    img[:, 499:501] = 0
+    #pos = plt.figure.canvas.imshow(img)
+    #fig.colorbar(pos, ax=ax)
+    #plt.show()
+    #ax.set_title("wavelength="+str(wavelength)+"m\nfreq_per_pix="+str(freq_per_pix)+"$m^{-1}$"+"\n n_fotos="+str(len(k_vectors)))
+    return img
+
 def create_circular_mask(h, w, center=None, radius=None):
 
     if center is None: # use the middle of the image
@@ -101,13 +118,14 @@ for i in range(5):
     ks = [k_nuevo, k_nuevo]
 #    ks[0] = ks[1]
 #    ks[1] = guess_k
-    ol = overlap(ks, NA)
+    ol = overlap_w_image(ks, NA)
     ol_pct = np.count_nonzero(ol>1)/covered_area
 #    print("KAS",ks)
 #    print("TITA", tita)
+plt.show()
 
 print("OL PCTs", ol_pcts)
-print("TITAS", titas) 
+print("TITAS", np.diff(titas) )
 
 
 

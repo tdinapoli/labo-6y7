@@ -207,12 +207,13 @@ class ImperxCamera(Camera):
 
 if __name__ == "__main__":
     camera = ImperxCamera()
-    camera.set_gain_exposure(100.0, 500000.0)
-
+    camera.set_gain_exposure(100.0, 2500.0)
     imagen = camera.get_frame()
     plt.imshow(imagen, cmap = 'gray')
     plt.show()
-#    np.save("oscuridad_black_level", imagen)
+    print(np.max(imagen))
+    print(np.min(imagen))
+    #np.save("/home/chanoscopio/git/labo-6y7/scripts/corrimiento-circulo/imagenes/18_cm", imagen)
 
     camera.close()
 
