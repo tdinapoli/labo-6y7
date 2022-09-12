@@ -1,6 +1,7 @@
 import numpy as np 
 from pathlib import Path
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 p = Path(".")
 
@@ -8,9 +9,9 @@ leds = ["07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17"]
 leds_2 = ["10", "11", "12", "13", "14", "15", "16", "17"]
 
 px_x_guardar = []
-for led in leds_2:
-    #path_chico = "corrimiento-circulo/imagenes/18_"+led+".npy"
-    path_chico = "corrimiento-circulo/imagenes/18_"+led+"_12cm.npy"
+for led in leds:
+    path_chico = "corrimiento-circulo/imagenes/18_"+led+".npy"
+    #path_chico = "corrimiento-circulo/imagenes/18_"+led+"_12cm.npy"
     img = np.load(p/path_chico)
     img[img < 150] = 0
     img[img >= 150] = 1
@@ -21,23 +22,41 @@ for led in leds_2:
     px_x_guardar.append(px_x)
 
 print(px_x_guardar)
-print(np.diff(px_x_guardar))
 dif = np.diff(px_x_guardar)
 print(np.mean(dif), np.std(dif))
 print(type(px_x_guardar))
-plt.hist(dif, edgecolor = 'k')
-plt.show()
 
 def calculo_y(array):
     distancias = []
     for i in range(len(array)):
-        dist = np.sqrt(12**2 + np.abs(array[i]-16)*6) ## calculo en mm
+        dist = 6*(array[i] - 16)
         distancias.append(dist)
-    return distancias
+    return np.array(distancias)
 
-dist = calculo_y(px_x_guardar) # dist z  = 275mm
-plt.plot(px_x_guardar, dist, 'ko')
-plt.xlabel('corrimiento en x[px]')
-plt.ylabel('distancias [mm]')
+def lineal(x,m,b):
+    y = m*x+b
+    return y
+
+L = 275
+#L = 180 o 165
+wavelength = 500e-6
+px_size = 3.2*1e-3
+dist_sensor_x = px_size * (np.array(px_x_guardar) - 9344/2)
+dist = calculo_y(np.arange(7, 18, 1)) # dist z  = 275mm
+#dist = calculo_y(np.arange(10, 18, 1)) # dist z  = 165mm
+kx = (1/np.sqrt((L/dist)**2 + 1))
+kx = (np.cos(np.arctan2(L, dist)))
+print(px_x_guardar)
+
+popt, pcov = curve_fit(lineal,kx, dist_sensor_x )
+m, b = popt
+print(popt)
+
+plt.plot(kx, dist_sensor_x, 'ko')
+plt.plot(kx, lineal(kx, m, b), 'r', label=f"pendiente = {np.round(m)} mm\n ordenada = {np.round(b, 1)} mm")
+plt.xlabel('kx/|k|')
+plt.ylabel('x sensor [mm]')
+plt.legend()
 plt.show()
+
 
