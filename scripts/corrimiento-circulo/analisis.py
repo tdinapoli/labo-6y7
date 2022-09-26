@@ -61,14 +61,12 @@ def lineal(x,m,b):
     return y
 
 def calc_kx(L, px_x, arange):
-    
     wavelength = 500e-6
     px_size = 3.2*1e-3
     dist_sensor_x = px_size * (np.array(px_x) - 9344/2)
     dist = calculo_y(arange) # dist z  = 165mm
     #kx = (1/np.sqrt((L/dist)**2 + 1))
     kx = (np.cos(np.arctan2(L, dist)))
-    
     return kx, dist_sensor_x
 #L = 275
 ##L = 180 o 165
