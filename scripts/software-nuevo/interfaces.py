@@ -209,13 +209,14 @@ class FpmDataset:
 
 
 
-path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/software-nuevo")
+if __name__ == "__main__":
+    path = pathlib.Path("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/software-nuevo")
 
-config = LedMatrixFpmConfig.from_path(path)
-metadata = LedMatrixFpmImageMetadata('b', exposure=10, led_no_x =6, led_no_y=6)
-img = FpmImage.from_array(path, metadata, np.ones(shape=(2,2)) )
-fpmch = FpmChannel(path, config, 'r', {})
-fpmch.add_fpmimage(img)
+    config = LedMatrixFpmConfig.from_path(path)
+    metadata = LedMatrixFpmImageMetadata('b', exposure=10, led_no_x =6, led_no_y=6)
+    img = FpmImage.from_array(path, metadata, np.ones(shape=(2,2)) )
+    fpmch = FpmChannel(path, config, 'r', {})
+    fpmch.add_fpmimage(img)
 
 @dataclass
 class FpmAcquisitionSetup:

@@ -1,6 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pathlib
+import sys
+import os
+
+sys.path.append("/home/chanoscopio/git/labo-6y7/scripts/fourier-overlap/sph_illumination/")
+
+from interfaces_mod import SphericalModuleConfig
 
 
 def calculate_position_sph(z0, R, tita, fi0, n_leds, m, n): # units in mm
@@ -8,6 +14,12 @@ def calculate_position_sph(z0, R, tita, fi0, n_leds, m, n): # units in mm
     x = R * np.cos(m*fi0) * np.sin(tita)
     y = R * np.sin(m*fi0) * np.sin(tita)
     z = -z0 + R*np.cos(tita)
+    return np.array([x, y, z])
+
+def calculate_position_sph_any(z0, R, tita, fi): # units in mm
+    x = R * np.cos(fi) * np.sin(tita)
+    y = R * np.sin(fi) * np.sin(tita)
+    z = -z0 - R*np.cos(tita)
     return np.array([x, y, z])
 
 def calculate_k_vector_general(led_position, wavelength, offset=np.array([0,0,0])):
@@ -70,7 +82,7 @@ def create_circular_mask(h, w, center=None, radius=None):
     return mask
 
 z0 = 0
-R = 130
+R = 90
 tita = 0
 fi0 = 0
 m = 0
@@ -84,13 +96,13 @@ tita_max = np.pi/3
 pos = calculate_position_sph(z0, R, tita, fi0, n_leds, m, n)
 k = calculate_k_vector_general(pos, wavelength=wavelength)
 
-radius = NA * np.linalg.norm(k)
+radius = NA * np.linalg.norm(k)/(2*np.pi)
 
 ks = [k]
 
 expected_overlap = 0.3
 tolerance = 0.01
-jump = 0.005 * tita_max
+jump = 0.0005 * tita_max
 tita = tita + jump
 guess = calculate_position_sph(z0, R, tita, fi0,n_leds, m, n)
 guess_k = calculate_k_vector_general(guess, wavelength=wavelength)
@@ -100,8 +112,8 @@ covered_area = np.count_nonzero(ol >= 1)
 ol_pct = np.count_nonzero(ol>1)/covered_area
 titas = []
 ol_pcts = []
-for i in range(5):
-    while np.abs(ol_pct - expected_overlap) > tolerance:
+for i in range(10):
+    while np.abs(ol_pct - expected_overlap) > tolerance and tita < tita_max:
         tita = tita + jump
         pos_nueva = calculate_position_sph(z0, R, tita, fi0,n_leds, m, n)
         k_nuevo = calculate_k_vector_general(pos_nueva, wavelength = wavelength)
@@ -122,11 +134,27 @@ for i in range(5):
     ol_pct = np.count_nonzero(ol>1)/covered_area
 #    print("KAS",ks)
 #    print("TITA", tita)
-plt.show()
+#plt.show()
+
 
 print("OL PCTs", ol_pcts)
-print("TITAS", np.diff(titas) )
+print("TITAS", titas )
 
+## Graficar posicioens de los leds para los titas calculados
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.set_xlim([-100, 100])
+ax.set_ylim([-100, 100])
+ax.set_zlim([-250, -50])
+ax.scatter(0,0,0, color="k", s=30)
+fi = 0
+R = 130
+z0 = 0
+for tita in titas:
+    print(tita, *pos)
+    pos = calculate_position_sph_any(z0, R, tita, fi)
+    ax.scatter(*pos, color="tab:orange")
+plt.show()
 
 
 
