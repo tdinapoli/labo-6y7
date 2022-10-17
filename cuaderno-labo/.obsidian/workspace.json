@@ -1,0 +1,130 @@
+{
+  "main": {
+    "id": "75fe5579543070b0",
+    "type": "split",
+    "children": [
+      {
+        "id": "10e0020e5f8836a3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a990a544186c13db",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "2022-10-17.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "f5cb1f93681546ac",
+    "type": "split",
+    "children": [
+      {
+        "id": "22903c7fd8d8547b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d88f4647a27ee314",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "dd42c30559d32be2",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "esfera",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "6e1fe455b268d2f7",
+    "type": "split",
+    "children": [
+      {
+        "id": "3c07ca4e290ce1e3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "db10515c657e67e3",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "2022-10-17.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "9cd8846782b3d554",
+            "type": "leaf",
+            "state": {
+              "type": "calendar",
+              "state": {}
+            }
+          },
+          {
+            "id": "006c3177b07b9abd",
+            "type": "leaf",
+            "state": {
+              "type": "todo",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "ribbon": {
+    "mostRecentAction": ""
+  },
+  "active": "a990a544186c13db",
+  "lastOpenFiles": [
+    "Diario/2022-10-13.md",
+    "Diario/2022-09-09.md",
+    "Diario/2022-09-12.md",
+    "Diario/2022-09-23.md",
+    "Diario/2022-09-26.md",
+    "Diario/2022-07-01.md",
+    "Diario/2022-07-06.md",
+    "Diario/2022-07-08.md",
+    "Diario/2022-08-22.md",
+    "Diario/2022-07-18.md"
+  ]
+}
