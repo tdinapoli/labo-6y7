@@ -22,6 +22,8 @@ void setup() {
   Serial.begin(BAUDRATE);
   Serial.println("Chanoscopio v0.2");
   stepper.begin(RPM, MICROSTEPS);
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
 }
 
 void set_rpm(float rpm) {
@@ -38,25 +40,80 @@ void serialFlush(){
   }
 }
 
+long getLong(){
+    int byteArray[4];
+    for (int i=0; i<4; i++){
+        byteArray[i] = Serial.read();
+        Serial.write(byteArray[i]);
+        }
+    for (int i=0; i<4; i++){
+      Serial.write(byteArray[i]);
+    }
+    
+    long combined;
+    long x1 = (long)byteArray[0] << 0;
+    long x2 = (long)byteArray[1] << 8;
+    long x3 = (long)byteArray[2] << 16;
+    long x4 = (long)byteArray[3] << 24;
+    combined = x1 | x2 | x3 | x4;
+    return combined;
+    }
+
+float getFloat(){
+    }
+
+void blinkSignal(){
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(200);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(200);
+
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(200);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(200);
+
+  digitalWrite(LED_BUILTIN, HIGH);
+  delay(200);
+  digitalWrite(LED_BUILTIN, LOW);
+  delay(200);
+}
+
 void serialEvent() {
   if (Serial.available() > 0) {
     unsigned char function_byte = (char) Serial.read();
     
-    int parameter_byte = (int) Serial.read();
 
     if (function_byte & B000001) {
-
-      stepper.setRPM(parameter_byte);
+        //int parameter = Serial.read(); 
+        //int parameter = (int) Serial.read();
+        int parameter = (int) Serial.parseInt();
+        if (parameter == 100){
+          blinkSignal();
+        }
+        Serial.write(parameter);
+//        Serial.write(parameter);
+        if (parameter == 100){
+          blinkSignal();
+        }
+        stepper.setRPM(parameter);
     }
     else if (function_byte & B000010) {
-//      stepper.rotate(90);
-//      delay(1000);
-      stepper.rotate(parameter_byte);
+        //long parameter = getLong();
+        //int parameter = (int) Serial.parseInt();
+        
+        int parameter = (int) Serial.read();
+        blinkSignal();
+//        long parameter = (long) Serial.parseInt();
+        
+        stepper.move(parameter);
     }
-    serialFlush();
+    else {
+        serialFlush();
+        }
   }
 }
 
 void loop() {
-//  stepper.move(-MOTOR_STEPS * MICROSTEPSSTEPS);
+
 }
