@@ -102,7 +102,7 @@ ks = [k]
 
 expected_overlap = 0.3
 tolerance = 0.01
-jump = 0.0005 * tita_max
+jump = 0.001 * tita_max
 tita = tita + jump
 guess = calculate_position_sph(z0, R, tita, fi0,n_leds, m, n)
 guess_k = calculate_k_vector_general(guess, wavelength=wavelength)
@@ -113,6 +113,7 @@ ol_pct = np.count_nonzero(ol>1)/covered_area
 titas = []
 ol_pcts = []
 for i in range(10):
+    print(i)
     while np.abs(ol_pct - expected_overlap) > tolerance and tita < tita_max:
         tita = tita + jump
         pos_nueva = calculate_position_sph(z0, R, tita, fi0,n_leds, m, n)
@@ -121,7 +122,7 @@ for i in range(10):
 
         ol = overlap(ks, NA)
         ol_pct = np.count_nonzero(ol > 1)/covered_area
-        print(i, ol_pct)
+        #print(i, ol_pct)
 
     titas.append(tita)
     ol_pcts.append(ol_pct)
@@ -148,11 +149,11 @@ ax.set_ylim([-100, 100])
 ax.set_zlim([-250, -50])
 ax.scatter(0,0,0, color="k", s=30)
 fi = 0
-R = 130
+R = 80
 z0 = 0
 for tita in titas:
-    print(tita, *pos)
     pos = calculate_position_sph_any(z0, R, tita, fi)
+    print(tita, *pos)
     ax.scatter(*pos, color="tab:orange")
 plt.show()
 

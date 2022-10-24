@@ -8,7 +8,7 @@
 // Since microstepping is set externally, make sure this matches the selected mode
 // If it doesn't, the motor will move at a different RPM than chosen
 // 1=full step, 2=half step etc.
-#define MICROSTEPS 2
+#define MICROSTEPS 1
 
 // All the wires needed for full functionality
 #define DIR 13
@@ -80,32 +80,23 @@ void blinkSignal(){
 }
 
 void serialEvent() {
-  if (Serial.available() > 0) {
+  if (Serial.available() > 1) {
     unsigned char function_byte = (char) Serial.read();
     
 
     if (function_byte & B000001) {
-        //int parameter = Serial.read(); 
-        //int parameter = (int) Serial.read();
-        int parameter = (int) Serial.parseInt();
-        if (parameter == 100){
-          blinkSignal();
-        }
-        Serial.write(parameter);
-//        Serial.write(parameter);
+        int parameter = Serial.read(); 
         if (parameter == 100){
           blinkSignal();
         }
         stepper.setRPM(parameter);
     }
     else if (function_byte & B000010) {
-        //long parameter = getLong();
-        //int parameter = (int) Serial.parseInt();
-        
         int parameter = (int) Serial.read();
-        blinkSignal();
-//        long parameter = (long) Serial.parseInt();
-        
+        //blinkSignal();
+        if (parameter == 100){
+            blinkSignal();
+            }
         stepper.move(parameter);
     }
     else {
@@ -115,5 +106,6 @@ void serialEvent() {
 }
 
 void loop() {
-
+  //stepper.move(360);
+  delay(1000);
 }
