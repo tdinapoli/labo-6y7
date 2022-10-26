@@ -26,7 +26,7 @@ axs.imshow(img, cmap ='gray')
 axs.get_xaxis().set_visible(False)
 axs.get_yaxis().set_visible(False)
 #ax3.imshow(cor)
-plt.savefig('zoom_poster.pdf')
+#plt.savefig('zoom_poster.pdf')
 plt.show()
 
 print(np.max(img), np.min(img), np.mean(img), np.std(img))

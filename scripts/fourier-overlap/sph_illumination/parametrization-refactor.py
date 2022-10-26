@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from interfaces_mod import LedMatrixFpmImageMetadata, LedMatrixFpmConfig, SphericalModuleMetadata, SphericalModuleConfig
 import pathlib
 
+#Plotea círculos de centros k_vectors y radios NA*|k|
 def graph_support(k_vectors, NA):
     fig, ax = plt.subplots(1)
     radio = NA * np.linalg.norm(k_vectors[0])
@@ -16,6 +17,7 @@ def graph_support(k_vectors, NA):
     ax.set_xlim([min(k_vectors[:, 0]) - radio, max(k_vectors[:,0]) + radio])
     ax.set_ylim([min(k_vectors[:, 1]) - radio, max(k_vectors[:,1]) + radio])
 
+#Máscara circular a matriz de alto h y ancho w, con centro center y radio radius
 def create_circular_mask(h, w, center=None, radius=None):
 
     if center is None: # use the middle of the image
@@ -29,6 +31,8 @@ def create_circular_mask(h, w, center=None, radius=None):
     mask = dist_from_center <= radius
     return mask
 
+#Crea una matriz de tamaño shape, a cada pixel que lo toque un círculo
+#de centro k_vector en k_vectors y radio NA*|k_vector| le suma 1
 def overlap(k_vectors, NA, freq_per_pix=1.6e4, shape=(1000,1000)):
     fig, ax = plt.subplots(1)
     k_vectors = np.array(k_vectors)/freq_per_pix

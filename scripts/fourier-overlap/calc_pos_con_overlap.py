@@ -4,7 +4,7 @@ import pathlib
 import sys
 import os
 
-sys.path.append("/home/chanoscopio/git/labo-6y7/scripts/fourier-overlap/sph_illumination/")
+sys.path.append("/home/dina/facultad/labo-6y7/git-ale-dina/scripts/fourier-overlap/sph_illumination/")
 
 from interfaces_mod import SphericalModuleConfig
 
@@ -82,15 +82,25 @@ def create_circular_mask(h, w, center=None, radius=None):
     return mask
 
 z0 = 0
-R = 90
+print("z0 ",z0 )
+R = 80
+print("R ",R )
 tita = 0
+print("tita ",tita )
 fi0 = 0
+print("fi0 ",fi0 )
 m = 0
+print("m ",m )
 n = 0
+print("n ",n )
 n_leds = 5
+print("n_leds ",n_leds )
 wavelength=500e-9
+print("wavelength",wavelength)
 NA = 0.1
+print("NA ",NA )
 tita_max = np.pi/3
+print("tita_max ",tita_max )
 
 
 pos = calculate_position_sph(z0, R, tita, fi0, n_leds, m, n)
@@ -148,11 +158,8 @@ ax.set_xlim([-100, 100])
 ax.set_ylim([-100, 100])
 ax.set_zlim([-250, -50])
 ax.scatter(0,0,0, color="k", s=30)
-fi = 0
-R = 80
-z0 = 0
 for tita in titas:
-    pos = calculate_position_sph_any(z0, R, tita, fi)
+    pos = calculate_position_sph_any(z0, R, tita, fi0)
     print(tita, *pos)
     ax.scatter(*pos, color="tab:orange")
 plt.show()
