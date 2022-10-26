@@ -1,0 +1,81 @@
+
+La idea de este markdown es explicar qué hay en cada carpeta del repo https://github.com/SoyDina/labo-6y7. Por defecto, el repo ignora los archivos .npy, así que hay muchas imágenes que no estan subidas y sólo se encuentran en la computadora del chanoscopio.
+
+### Carpetas principales:
+
+- cuaderno-labo
+	- Es una vault de obsidian conteniendo todos los archivos de markdown que fuimos escribiendo a lo largo de labo 6 y 7
+- diseno-esferico
+	- Tiene algunas cosas relacionadas al diseño del módulo de iluminación esférico, pero no tiene todas.
+- imagenes
+	- algunas imagenes sacadas con el microscopio y algunas de simulaciones
+- KAYA_Instruments
+	- Los archivos de la librería de KAYA, la marca del framegrabber, que sirven para controlar la cámara. Originalmente lo habíamos subido sólo para poder tenerlo en sync con nuestras computadoras.
+- misc
+	- Tiene el resumen del poster que mandamos a la rafa
+- Perfil intensidad
+	- Un análisis muy simple que hicimos para ver si el círculo de iluminación en las imágenes del microscopio estaba dado por los vectores **k** o por el frente de intensidad de los leds
+- scripts
+	- La carpeta más importante del repo donde estan todos los códigos que calculan cosas y explicaré más detalladamente a continuación.
+
+### Scripts
+
+- **driver-camara**
+	- camara_viejo.py
+		- intento de driver viejo. Borrable
+	- camdriver.py
+		- Este también creo que es viejo y borrable
+	- camera-cli.py
+		- Script para manejar la cámara desde la command-line. Genera una instancia de imperx y te da opciones con input() de python
+	- create_and_alloc.py
+		- Alguna prueba que hicimos mientras hacíamos el driver. Borrable
+	- driver-camara.py
+		- version antigua del driver. Creo que funciona pero tiene cosas al pedo.
+	- driver-limpio.py
+		- Este es el driver que funciona y que usamos actualmente para la cámara
+	- Illumination.py
+		- Una copia del driver de iluminación de la matriz que hizo ale mazzeo
+	- oscuridad_pixel.py
+		- Calcula varianzas y promedios de muchas imágenes de oscuridad. Lo usamos para calibrar el ruido de oscuridad de la cámara.
+	- trigger-driver.py
+		- driver viejo. Borrable
+	- test.py
+		- un ejemplo de algo que nos había mostrado hernán una vez sobre el driver. borrable
+	- El resto de archivos son trivialidades
+- **epi-iluminación**
+	- anillo_driver.py
+		- Parte de python del controlador del anillo de leds para iluminación por reflexión
+	- controlador-anillo/controlador-anillo.ino
+		- Parte de arduino del controlador del anillo
+	- El resto de archivos son pruebas triviales de imágenes y cosas así. Borrables
+- **espectros**
+	- Plot y mediciones de los espectros de emisión de los leds q usamos
+- **fourier-overlap**
+	- area-interseccion-led.py
+		- Tiene funciones que calculan el overlap en el espacio de fourier para dos leds de la matriz
+	- calc_pos_con_overlap.py
+		- calcula la posición que tienen que tener los leds en el módulo esférico para que tengan x% de overlap. Tiene muchas funciones repetidas de interfaces que no usa.
+	- distintos-k.py
+		- Calcula cómo se ve el espacio de fourier con distintas configuraciones de iluminación. Puede calcular para distintos parches de reconstrucción tanto para la matriz como para la esfera.
+	- out.log
+		- el output de correr calc_pos_con_overlap.py
+	- sph_illumination/interfaces_mod.py
+		- Tiene los objetos config y metadata tanto para la matriz como para la esférica, pero sin el frozen=True de dataclass, así podíamos cambiar los parámetros y usar los objetos en calc_pos_con_overlap.py y distintos-k.py.
+	- sph_illumination/parametrization-refactor.py
+		- Funciones para parametrizar las posiciones de los leds en la iluminación esférica. Calcula overlaps.
+	- sph_illumination/parametrization.py
+		- lo mismo q refactor pero peor implementado
+	- configs y overlap tienen configuraciones e imagenes respectivamente
+- **reconstruction**
+	- stitch_reconstruction_dev.py
+		- Ejemplo del paquete de juan que usamos para reconstruir imágenes
+- **rgb32x32**
+	- rgb32x32.ino
+		- copia del driver de arduino de la matriz que hizo ale mazzeo
+- **software-nuevo**
+	- interfaces.py
+		- El refactor que le hicimos a interfaces. Sólo tiene los objetos config y metadata de la matriz
+- **calibracion-camara**
+	- Imagenes y algunos archivos .py para hacer promedios de calibración de la cámara, tanto en oscuridad como en luz
+- **corrimiento-circulo**
+	- imágenes y archivos para tratar de entender la razón física del círculo que vemos en las imágenes. El análisis todavía no está terminado as of [[2022-10-25]].
