@@ -135,7 +135,7 @@ z0 = 0
 R = 80
 tita_max = np.pi/3
 fi0 = 2*np.pi/60
-n_leds = 6
+n_leds = 7
 wavelength = 500e-9
 NA = 0.1
 n_steps = 1
@@ -155,26 +155,24 @@ k_vectors_sph_offset = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_s
 k_vectors_matrix = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y) 
 k_vectors_matrix_offset = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y, offset=offset) 
 
-#fig = plt.figure()
-#ax = fig.add_subplot(projection='3d')
-#ax.set_xlim([-100, 100])
-#ax.set_ylim([-100, 100])
-#ax.set_zlim([-250, -50])
-#ax.scatter(0,0,0, color="k", s=30)
-#
-#graph_led_positions_sph(k_vectors_sph, z0, R, tita_max, fi0, n_leds, n_steps, ax)
-#plt.show()
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.set_xlim([-100, 100])
+ax.set_ylim([-100, 100])
+ax.set_zlim([-250, -50])
+ax.scatter(0,0,0, color="k", s=30)
 
-#fig = plt.figure()
-#ax = fig.add_subplot(projection='3d')
-#ax.set_xlim([-100, 100])
-#ax.set_ylim([-100, 100])
-#ax.set_zlim([-250, -50])
+graph_led_positions_sph(k_vectors_sph, z0, R, tita_max, fi0, n_leds, n_steps, ax)
+
+ax.set_xlim([-100, 100])
+ax.set_ylim([-100, 100])
+ax.set_zlim([-250, -50])
 
 
-#graph_led_positions_matrix(k_vectors_matrix, z0_matrix, dx, dy, ax, range_x = range_x, range_y=range_y)
+graph_led_positions_matrix(k_vectors_matrix, z0_matrix, dx, dy, ax, range_x = range_x, range_y=range_y)
 
-#plt.show()
+plt.savefig("representacion_3d.png")
+plt.show()
 
 #
 #graph_support(k_vectors_sph, NA)
@@ -184,9 +182,13 @@ k_vectors_matrix_offset = calculate_k_vectors_matrix(z0_matrix, dx, dy, waveleng
 #erres = np.arange()
 n_samples = 1000
 ol_sph = overlap(k_vectors_sph, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+#plt.savefig("ol_sph.png")
 ol_sph_offset = overlap(k_vectors_sph_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+#plt.savefig("ol_sph_offset.png")
 ol_mat = overlap(k_vectors_matrix, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+#plt.savefig("ol_mat.png")
 ol_mat_offset = overlap(k_vectors_matrix_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+#plt.savefig("ol_mat_parche.png")
 
 plt.show()
 
@@ -210,6 +212,7 @@ plt.xticks(bin_bound)
 plt.xlabel("n_circulos", fontsize=15)
 plt.ylabel("Proporcion de pixeles", fontsize=15)
 plt.title("proporcion de pixeles cubiertos por al menos n_circulos", fontsize=15)
+#plt.savefig("proporcion_pix_cubiertos_n_circulos.png")
 plt.show()
 
 ol_sph = ol_sph.flatten()
@@ -221,6 +224,7 @@ plt.xticks(bin_bound)
 plt.ylabel("Frecuencia", fontsize=15)
 plt.xlabel("Número de círculos tocando el pixel", fontsize=15)
 plt.title("histograma de overlaps por pixel", fontsize=15)
+#plt.savefig("histograma_ol_por_pix.png")
 plt.show()
 
 #kxy = np.linspace(-freq_per_pix * n_samples/2, freq_per_pix * n_samples/2, n_samples)

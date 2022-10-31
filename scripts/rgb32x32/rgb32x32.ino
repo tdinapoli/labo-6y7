@@ -64,12 +64,11 @@ void setup() {
   DDRC = DDRC | B00001111;
 
   disable_output();
-  //set_led(16,17,2);
+  //set_led(16,16,7);
   }
 
 void serialEvent() {
-  if (Serial.available() == 2){
-    unsigned char x1 = (char) Serial.read();
+  if (Serial.available() == 2){    unsigned char x1 = (char) Serial.read();
     unsigned char x2 = (char) Serial.read();
     unsigned char x = x1 & B00011111;
     unsigned char y = x2 & B00011111;

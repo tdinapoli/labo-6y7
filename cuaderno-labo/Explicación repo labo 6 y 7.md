@@ -56,7 +56,7 @@ La idea de este markdown es explicar qué hay en cada carpeta del repo https://g
 	- calc_pos_con_overlap.py
 		- calcula la posición que tienen que tener los leds en el módulo esférico para que tengan x% de overlap. Tiene muchas funciones repetidas de interfaces que no usa.
 	- distintos-k.py
-		- Calcula cómo se ve el espacio de fourier con distintas configuraciones de iluminación. Puede calcular para distintos parches de reconstrucción tanto para la matriz como para la esfera.
+		- Calcula cómo se ve el espacio de fourier con distintas configuraciones de iluminación. Puede calcular para distintos parchjkes de reconstrucción tanto para la matriz como para la esfera.
 	- out.log
 		- el output de correr calc_pos_con_overlap.py
 	- sph_illumination/interfaces_mod.py

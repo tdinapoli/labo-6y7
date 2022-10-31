@@ -28,9 +28,21 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "70bc9756234a2d43",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Diario/2022-06-24.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -88,7 +100,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Explicación repo labo 6 y 7.md",
+                "file": "Diario/2022-06-24.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -122,20 +134,17 @@
     "direction": "horizontal",
     "width": 300
   },
-  "ribbon": {
-    "mostRecentAction": ""
-  },
-  "active": "94eddf50339d51ea",
+  "active": "70bc9756234a2d43",
   "lastOpenFiles": [
-    "images/Pasted image 20221017105057.png",
-    "Diario/2022-10-24.md",
-    "Diario/2022-10-17.md",
-    "Diario/2022-10-13.md",
-    "Diario/2022-09-09.md",
-    "Diario/2022-09-12.md",
-    "Diario/2022-09-23.md",
-    "Diario/2022-09-26.md",
-    "Diario/2022-07-01.md",
-    "Diario/2022-07-06.md"
+    "Diario/2022-04-27.md",
+    "Diario/2022-04-18.md",
+    "Diario/2022-04-08.md",
+    "Diario/2022-08-25.md",
+    "Diario/2022-07-06.md",
+    "Diario/2022-07-08.md",
+    "Diario/2022-06-29.md",
+    "Diario/2022-04-20.md",
+    "notas-presentacion-labo-6.md",
+    "Diario/2022-08-22.md"
   ]
 }
