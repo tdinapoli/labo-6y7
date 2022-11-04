@@ -18,14 +18,16 @@ class Illumination(ABC):
     def turn_off_leds(self):
         pass
 
-@dataclass(frozen=True)
 class MotorIllumination(Illumination):
-    _port: str
-    _baudrate: int = BAUDRATE
-    _color_values: dict = {'r':0, 'g':1, 'b':2}
-    _led_pins = dict = {'r':(), 'g':(9, 10, 11, 12, 13), 'b':()}
+    def __init__(self, port: str, led_pins: dict = None):
+        self._port = port
+        self._baudrate = BAUDRATE
+        self._color_values = {'r':0, 'g':1, 'b':2}
+        self._led_pins = led_pins
 
-    def __init__(self, port: str, led_pins: dict = {'r':(), 'g':(9, 10, 11, 12, 13), 'b':()}):
+        if not self._led_pins:
+            self._led_pins = {'r':(), 'g':(9, 10, 11, 12, 13), 'b':()} 
+
         self._serial = self._open_serial()
 
     def turn_off_leds(self):

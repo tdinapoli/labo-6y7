@@ -26,7 +26,7 @@ void setup() {
   user_setup();
 
   Serial.begin(BAUD_RATE);
-  Serial.println("Chanoscopio")
+  Serial.write("Chanoscopio");
 }
 
 void loop() {

@@ -35,7 +35,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Diario/2022-06-24.md",
+                "file": "Diario/2022-11-04.md",
                 "mode": "source",
                 "source": false
               }
@@ -100,7 +100,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Diario/2022-06-24.md",
+                "file": "Diario/2022-11-04.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -136,6 +136,7 @@
   },
   "active": "70bc9756234a2d43",
   "lastOpenFiles": [
+    "Diario/2022-06-24.md",
     "Diario/2022-04-27.md",
     "Diario/2022-04-18.md",
     "Diario/2022-04-08.md",
@@ -144,7 +145,6 @@
     "Diario/2022-07-08.md",
     "Diario/2022-06-29.md",
     "Diario/2022-04-20.md",
-    "notas-presentacion-labo-6.md",
-    "Diario/2022-08-22.md"
+    "notas-presentacion-labo-6.md"
   ]
 }

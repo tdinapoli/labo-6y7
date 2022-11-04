@@ -55,9 +55,10 @@ class MotorEsferico(Motor):
 
 
 if __name__ == "__main__":
-    motor = MotorEsferico("/dev/ttyACM1")
+    motor = MotorEsferico("/dev/ttyACM0")
     while True:
         response = motor.rotate(360)
-        time.sleep(0.5)
+        print(motor._serial.readline().decode('ascii'))
+        time.sleep(1)
         print(response)
 
