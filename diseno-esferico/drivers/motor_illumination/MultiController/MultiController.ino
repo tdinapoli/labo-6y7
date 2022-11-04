@@ -18,7 +18,7 @@
 #include "inodriver_bridge.h"
 #include "inodriver_user.h"
 
-#define BAUD_RATE 9600
+#define BAUD_RATE 115200
 
 void setup() {
   bridge_setup();

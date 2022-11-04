@@ -52,7 +52,7 @@ void bridge_setup() {
 
   sCmd.addCommand("LED ON", wrapperSet_LED);
 
-  sCmd.addCommand("LEDS OFF", wrapperTurn_Off_LEDS)
+  sCmd.addCommand("LEDS OFF", wrapperTurn_Off_LEDS);
 
 }
 

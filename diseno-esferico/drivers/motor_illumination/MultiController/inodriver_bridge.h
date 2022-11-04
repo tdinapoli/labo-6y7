@@ -29,6 +29,8 @@ void bridge_setup();
 
 void getInfo();
 void unrecognized(const char *);
+void wrapperSet_LED();
+void wrapperTurn_Off_LEDS();
 
 
 #endif // inodriver_bridge_h

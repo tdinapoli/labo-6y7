@@ -13,29 +13,10 @@
 #ifndef inodriver_user_h
 #define inodriver_user_h
 
-#include "shutter.h"
-#include "step_motor.h"
-#include "wheel.h"
-#include "temperature.h"
-
 void user_setup();
 void user_loop();
 
-int call_INITIALIZE(); 
-int call_FINALIZE(); 
-int get_POW(int); 
-int set_POW(int, int); 
-float get_SETPOINT(); 
-int set_SETPOINT(float); 
-float get_THETA(); 
-int set_THETA(float); 
-int get_TEMPCTRL(); 
-int set_TEMPCTRL(int); 
-int get_FW(int); 
-int set_FW(int, int); 
-int get_SHUT(int); 
-int set_SHUT(int, int); 
-float get_TEMP(); 
-
+int turn_off_LEDS();
+int set_LED(int);
 
 #endif // inodriver_user_h
