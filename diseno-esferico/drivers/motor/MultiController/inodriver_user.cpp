@@ -19,7 +19,7 @@ StepMotor angular_controller;
 
 void user_setup() {
 
-  angular_controller = StepMotor(AccelStepper::DRIVER, 12, 13, 400.0/360.0);
+  angular_controller = StepMotor(AccelStepper::DRIVER, 12, 13, 408.0/360.0);
 
 }
 

@@ -52,13 +52,35 @@ class MotorEsferico(Motor):
         self._serial.write(f"THETA {degrees}\n".encode("ascii"))
         response = self._serial.readline().decode("ascii")
         return response
+    
+    def clean_serial(self):
+        while self._serial.in_waiting:
+            self._serial.readline().decode('ascii')
+
+    def get_theta(self):
+        self.clean_serial()
+        self._serial.write("THETA?\n".encode('ascii'))
+        response = self._serial.readline().decode('ascii')
+        return response
+
 
 
 if __name__ == "__main__":
     motor = MotorEsferico("/dev/ttyACM0")
-    while True:
-        response = motor.rotate(360)
-        print(motor._serial.readline().decode('ascii'))
+    for i in range(10):
+        response = motor.rotate(180)
+        #print(response)
+        print("THETA: ", motor.get_theta())
         time.sleep(1)
-        print(response)
+        response = motor.rotate(10)
+        time.sleep(1)
+        #print(motor._serial.readline().decode('ascii'))
+        #print(response)
+        print("THETA: ", motor.get_theta())
+
+#    while True:
+#        response = motor.rotate(360)
+#        print(motor._serial.readline().decode('ascii'))
+#        time.sleep(1)
+#        print(response)
 
