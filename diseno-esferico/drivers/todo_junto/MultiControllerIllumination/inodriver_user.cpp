@@ -15,15 +15,12 @@
 #include "inodriver_user.h"
 #include <Arduino.h>
 
-#define MIN_PIN 2
-#define MAX_PIN 10 // EN REALIDAD ESTO ESTA MAL
+#define MIN_PIN 9
+#define MAX_PIN 13
 
 
 
 void user_setup() {
-  for (int i=MIN_PIN; i < MAX_PIN + 1; i++){ // EN REALIDAD ESTO ESTA MAL
-    pinMode(i, OUTPUT);
-  }
 }
 
 void user_loop() {
@@ -31,7 +28,7 @@ void user_loop() {
 
 
 int turn_off_LEDS(){
-  for (int i=MIN_PIN; i < MAX_PIN + 1; i++){ // EN REALIDAD ESTO ESTA MAL
+  for (int i=MIN_PIN; i < MAX_PIN + 1; i++){
     digitalWrite(i, LOW);
   }
   return 0;

@@ -21,13 +21,12 @@
 #define BAUD_RATE 115200
 
 void setup() {
-  
-  Serial.begin(BAUD_RATE);
-  Serial.write("Chanoscopio");
   bridge_setup();
   
   user_setup();
 
+  Serial.begin(BAUD_RATE);
+  Serial.println("Chanoscopio")
 }
 
 void loop() {

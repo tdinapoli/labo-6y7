@@ -50,9 +50,9 @@ void bridge_setup() {
 
   sCmd.setDefaultHandler(unrecognized); 
 
-  sCmd.addCommand("ON", wrapperSet_LED);
+  sCmd.addCommand("LED ON", wrapperSet_LED);
 
-  sCmd.addCommand("OFF", wrapperTurn_Off_LEDS);
+  sCmd.addCommand("LEDS OFF", wrapperTurn_Off_LEDS);
 
 }
 

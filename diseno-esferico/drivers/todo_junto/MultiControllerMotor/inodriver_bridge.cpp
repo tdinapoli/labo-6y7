@@ -50,10 +50,38 @@ void bridge_setup() {
 
   sCmd.setDefaultHandler(unrecognized); 
 
-  sCmd.addCommand("ON", wrapperSet_LED);
 
-  sCmd.addCommand("OFF", wrapperTurn_Off_LEDS);
+  // initialize
 
+  // Call:
+  //   INITIALIZE
+  // Returns: OK or ERROR  
+  sCmd.addCommand("INITIALIZE", wrapperCall_INITIALIZE); 
+
+  // finalize
+
+  // Call:
+  //   FINALIZE
+  // Returns: OK or ERROR  
+  sCmd.addCommand("FINALIZE", wrapperCall_FINALIZE); 
+
+  // theta
+  // <F> float as string 
+
+  // Getter:
+  //   THETA? 
+  // Returns: <F> 
+  sCmd.addCommand("THETA?", wrapperGet_THETA); 
+
+  // Setter:
+  //   THETA <F> 
+  // Returns: OK or ERROR    
+  sCmd.addCommand("THETA", wrapperSet_THETA); 
+
+  // Setter:
+  //   STEP <F> 
+  // Returns: OK or ERROR    
+  sCmd.addCommand("STEP", wrapperSet_STEP); 
 }
 
 //// Code 
@@ -66,8 +94,56 @@ void getInfo() {
 void unrecognized(const char *command) {
   error("Unknown command");
 }
+//// Auto generated Feat and DictFeat Code
+// COMMAND: INITIALIZE, Action: initialize
 
-void wrapperSet_LED() {
+void wrapperCall_INITIALIZE() {
+  int err = call_INITIALIZE();
+  if (err == 0) {
+    ok();
+  } else {
+    error_i(err);
+  }
+};
+
+// COMMAND: FINALIZE, Action: finalize
+
+void wrapperCall_FINALIZE() {
+  int err = call_FINALIZE();
+  if (err == 0) {
+    ok();
+  } else {
+    error_i(err);
+  }
+};
+
+
+// COMMAND: THETA, FEAT: theta
+
+void wrapperGet_THETA() { 
+  Serial.println(get_THETA()); 
+}; 
+
+
+void wrapperSet_THETA() {
+  char *arg;
+  
+  arg = sCmd.next();
+  if (arg == NULL) {
+    error("No value stated");
+    return;
+  }
+  float value = atof(arg);
+
+  int err = set_THETA(value);
+  if (err == 0) {
+    ok();
+  } else {
+    error_i(err);
+  }
+};
+
+void wrapperSet_STEP() {
   char *arg;
   
   arg = sCmd.next();
@@ -77,7 +153,7 @@ void wrapperSet_LED() {
   }
   int value = atoi(arg);
 
-  int err = set_LED(value);
+  int err = set_STEP(value);
   if (err == 0) {
     ok();
   } else {
@@ -85,12 +161,3 @@ void wrapperSet_LED() {
   }
 };
 
-void wrapperTurn_Off_LEDS() {
-
-  int err = turn_off_LEDS();
-  if (err == 0) {
-    ok();
-  } else {
-    error_i(err);
-  }
-};

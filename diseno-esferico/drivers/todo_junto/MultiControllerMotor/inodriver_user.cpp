@@ -13,32 +13,40 @@
 
 
 #include "inodriver_user.h"
-#include <Arduino.h>
 
-#define MIN_PIN 2
-#define MAX_PIN 10 // EN REALIDAD ESTO ESTA MAL
-
+StepMotor angular_controller;
 
 
 void user_setup() {
-  for (int i=MIN_PIN; i < MAX_PIN + 1; i++){ // EN REALIDAD ESTO ESTA MAL
-    pinMode(i, OUTPUT);
-  }
+
+  angular_controller = StepMotor(AccelStepper::DRIVER, 12, 13, 408.0/360.0);
+
 }
 
 void user_loop() {
 }
 
-
-int turn_off_LEDS(){
-  for (int i=MIN_PIN; i < MAX_PIN + 1; i++){ // EN REALIDAD ESTO ESTA MAL
-    digitalWrite(i, LOW);
-  }
+int call_INITIALIZE() {
+  angular_controller.initialize();
   return 0;
-}
+};
 
-int set_LED(int pin) {  
-  turn_off_LEDS();
-  digitalWrite(pin, HIGH);
+int call_FINALIZE() {
   return 0;
-}
+};
+
+
+// COMMAND: THETA, FEAT: theta
+float get_THETA() { 
+  return angular_controller.getAngle();
+};
+
+int set_THETA(float value) {
+  angular_controller.moveTo(value);
+  return 0;
+};
+
+int set_STEP(int value) {
+  angular_controller.moveUntilDone(value);
+  return 0;
+};
