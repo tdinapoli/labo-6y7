@@ -12,7 +12,9 @@
 
 #ifndef inodriver_user_h
 #define inodriver_user_h
+#define NUM_LEDS 7
 
+const int led_pins[NUM_LEDS] = {2, 3, 4, 5, 6, 7, 10};
 void user_setup();
 void user_loop();
 

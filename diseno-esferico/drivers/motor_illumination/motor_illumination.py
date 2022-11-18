@@ -26,18 +26,18 @@ class MotorIllumination(Illumination):
         self._led_pins = led_pins
 
         if not self._led_pins:
-            self._led_pins = {'r':(), 'g':(9, 10, 11, 12, 13), 'b':()} 
+            self._led_pins = {'r':(), 'g':(2, 3, 4, 5, 6, 7, 10), 'b':()} 
 
         self._serial = self._open_serial()
 
     def turn_off_leds(self):
-        self._serial.write("LEDS OFF\n".encode('ascii'))
+        self._serial.write("OFF\n".encode('ascii'))
         response = self._serial.readline().decode('ascii')
         return response
 
     def turn_on_led(self, led_no: int, color: str, time: int = 0):
         color = self._color_values[color]
-        self._serial.write(f"LED ON {led_no}\n".encode('ascii'))
+        self._serial.write(f"ON {led_no}\n".encode('ascii'))
         response = self._serial.readline().decode('ascii')
         return response
 
@@ -62,6 +62,7 @@ class MotorIllumination(Illumination):
 
 if __name__ == "__main__":
     motor_ill = MotorIllumination("/dev/ttyACM0")
-    print(motor_ill)
+    resp = motor_ill.turn_on_led(5, "g")
+    print(resp)
 
 
