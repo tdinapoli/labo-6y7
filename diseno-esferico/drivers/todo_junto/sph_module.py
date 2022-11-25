@@ -135,7 +135,7 @@ if __name__ == "__main__":
     sph = SphericalController("/dev/ttyACM0")
     sph.set_origin()
 
-    phis = np.arange(0.0, 360.0, 40, dtype=float)
+    phis = np.linspace(0.0, 360.0, 40, dtype=float)
     for phi in phis:
         print(phi)
         sph.rotate(phi)
@@ -144,8 +144,9 @@ if __name__ == "__main__":
         for led, time in zip(sph.led_pins["g"], times):
             camera.set_gain_exposure(100.0, time*1000.0)
             sph.turn_on_led(led, "g", time)
+            pytime.sleep(0.05) 
             imagen = camera.get_frame()
-            np.save(f'imagenes/led_{led}_angulo_{phi}.npy', imagen)
+            np.save(f'prueba_lentitud/led_{led}_angulo_{phi}.npy', imagen)
             #plt.imshow(imagen, cmap = 'gray')
             #plt.show()
 

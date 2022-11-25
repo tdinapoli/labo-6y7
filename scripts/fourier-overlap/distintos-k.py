@@ -131,10 +131,10 @@ def graph_led_positions_matrix(k_vectors, z0, dx, dy, ax, range_x=range(-2, 3, 1
 
 
         
-z0 = 0
+z0 = -10
 R = 80
 tita_max = np.pi/3
-fi0 = 2*np.pi/60
+fi0 = 2*np.pi/40
 n_leds = 7
 wavelength = 500e-9
 NA = 0.1
@@ -151,28 +151,28 @@ vector_length=10
 freq_per_pix=4e3
 
 k_vectors_sph = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_steps, wavelength)
-k_vectors_sph_offset = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_steps, wavelength, offset)
-k_vectors_matrix = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y) 
-k_vectors_matrix_offset = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y, offset=offset) 
+#k_vectors_sph_offset = calculate_k_vectors_sph(z0, R, tita_max, fi0, n_leds, n_steps, wavelength, offset)
+#k_vectors_matrix = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y) 
+#k_vectors_matrix_offset = calculate_k_vectors_matrix(z0_matrix, dx, dy, wavelength, x_range=range_x, y_range=range_y, offset=offset) 
 
-fig = plt.figure()
-ax = fig.add_subplot(projection='3d')
-ax.set_xlim([-100, 100])
-ax.set_ylim([-100, 100])
-ax.set_zlim([-250, -50])
-ax.scatter(0,0,0, color="k", s=30)
-
-graph_led_positions_sph(k_vectors_sph, z0, R, tita_max, fi0, n_leds, n_steps, ax)
-
-ax.set_xlim([-100, 100])
-ax.set_ylim([-100, 100])
-ax.set_zlim([-250, -50])
-
-
-graph_led_positions_matrix(k_vectors_matrix, z0_matrix, dx, dy, ax, range_x = range_x, range_y=range_y)
-
-plt.savefig("representacion_3d.png")
-plt.show()
+#fig = plt.figure()
+#ax = fig.add_subplot(projection='3d')
+#ax.set_xlim([-100, 100])
+#ax.set_ylim([-100, 100])
+#ax.set_zlim([-250, -50])
+#ax.scatter(0,0,0, color="k", s=30)
+#
+#graph_led_positions_sph(k_vectors_sph, z0, R, tita_max, fi0, n_leds, n_steps, ax)
+#
+#ax.set_xlim([-100, 100])
+#ax.set_ylim([-100, 100])
+#ax.set_zlim([-250, -50])
+#
+#
+#graph_led_positions_matrix(k_vectors_matrix, z0_matrix, dx, dy, ax, range_x = range_x, range_y=range_y)
+#
+#plt.savefig("representacion_3d.png")
+#plt.show()
 
 #
 #graph_support(k_vectors_sph, NA)
@@ -183,56 +183,56 @@ plt.show()
 n_samples = 1000
 ol_sph = overlap(k_vectors_sph, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
 #plt.savefig("ol_sph.png")
-ol_sph_offset = overlap(k_vectors_sph_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+#ol_sph_offset = overlap(k_vectors_sph_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
 #plt.savefig("ol_sph_offset.png")
-ol_mat = overlap(k_vectors_matrix, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
-#plt.savefig("ol_mat.png")
-ol_mat_offset = overlap(k_vectors_matrix_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+#ol_mat = overlap(k_vectors_matrix, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
+##plt.savefig("ol_mat.png")
+#ol_mat_offset = overlap(k_vectors_matrix_offset, NA, freq_per_pix=freq_per_pix, shape=(1000,1000))
 #plt.savefig("ol_mat_parche.png")
 
 plt.show()
 
 
-n_pix = n_samples**2
-n_nonzero_sph = np.count_nonzero(ol_sph > 0)
-n_nonzero_mat = np.count_nonzero(ol_mat > 0)
-nums_ol = np.arange(1, 21, 1)
-ols_sph = []
-ols_mat = []
-for num_ol in nums_ol:
-    ols_sph.append(np.count_nonzero(ol_sph >= num_ol)/n_pix)
-    ols_mat.append(np.count_nonzero(ol_mat >= num_ol)/n_pix)
-
-bin_bound = np.arange(1, 21, 1)
-
-plt.plot(nums_ol, ols_sph, 'o', label="Esférica")
-plt.plot(nums_ol, ols_mat, 'o', label="Matriz")
-plt.legend()
-plt.xticks(bin_bound)
-plt.xlabel("n_circulos", fontsize=15)
-plt.ylabel("Proporcion de pixeles", fontsize=15)
-plt.title("proporcion de pixeles cubiertos por al menos n_circulos", fontsize=15)
-#plt.savefig("proporcion_pix_cubiertos_n_circulos.png")
-plt.show()
-
-ol_sph = ol_sph.flatten()
-ol_mat = ol_mat.flatten()
-
-plt.hist(ol_sph, bins=bin_bound ,alpha=0.5, density=True, label="Esférica")
-plt.hist(ol_mat, bins=bin_bound,alpha=0.5, density=True,label="Matriz")
-plt.xticks(bin_bound)
-plt.ylabel("Frecuencia", fontsize=15)
-plt.xlabel("Número de círculos tocando el pixel", fontsize=15)
-plt.title("histograma de overlaps por pixel", fontsize=15)
-#plt.savefig("histograma_ol_por_pix.png")
-plt.show()
-
-#kxy = np.linspace(-freq_per_pix * n_samples/2, freq_per_pix * n_samples/2, n_samples)
-#KX, KY = np.meshgrid(kxy, kxy)
+#n_pix = n_samples**2
+#n_nonzero_sph = np.count_nonzero(ol_sph > 0)
+#n_nonzero_mat = np.count_nonzero(ol_mat > 0)
+#nums_ol = np.arange(1, 21, 1)
+#ols_sph = []
+#ols_mat = []
+#for num_ol in nums_ol:
+#    ols_sph.append(np.count_nonzero(ol_sph >= num_ol)/n_pix)
+#    ols_mat.append(np.count_nonzero(ol_mat >= num_ol)/n_pix)
 #
-#modk = np.sqrt(KX**2 + KY**2)
-#modk = modk.flatten()
-
-
-
-
+#bin_bound = np.arange(1, 21, 1)
+#
+#plt.plot(nums_ol, ols_sph, 'o', label="Esférica")
+#plt.plot(nums_ol, ols_mat, 'o', label="Matriz")
+#plt.legend()
+#plt.xticks(bin_bound)
+#plt.xlabel("n_circulos", fontsize=15)
+#plt.ylabel("Proporcion de pixeles", fontsize=15)
+#plt.title("proporcion de pixeles cubiertos por al menos n_circulos", fontsize=15)
+##plt.savefig("proporcion_pix_cubiertos_n_circulos.png")
+#plt.show()
+#
+#ol_sph = ol_sph.flatten()
+#ol_mat = ol_mat.flatten()
+#
+#plt.hist(ol_sph, bins=bin_bound ,alpha=0.5, density=True, label="Esférica")
+#plt.hist(ol_mat, bins=bin_bound,alpha=0.5, density=True,label="Matriz")
+#plt.xticks(bin_bound)
+#plt.ylabel("Frecuencia", fontsize=15)
+#plt.xlabel("Número de círculos tocando el pixel", fontsize=15)
+#plt.title("histograma de overlaps por pixel", fontsize=15)
+##plt.savefig("histograma_ol_por_pix.png")
+#plt.show()
+#
+##kxy = np.linspace(-freq_per_pix * n_samples/2, freq_per_pix * n_samples/2, n_samples)
+##KX, KY = np.meshgrid(kxy, kxy)
+##
+##modk = np.sqrt(KX**2 + KY**2)
+##modk = modk.flatten()
+#
+#
+#
+#
