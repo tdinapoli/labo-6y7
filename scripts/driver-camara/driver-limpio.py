@@ -188,7 +188,6 @@ class ImperxCamera(Camera):
         ky.KYFG_CameraExecuteCommand(self.cam_handle_array[self.grabber_index][0], 'TriggerSoftware')
         
         image = self.queue.get()
-        self.queue.queue.clear()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
 
         return image
