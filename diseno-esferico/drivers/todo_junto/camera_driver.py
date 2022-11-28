@@ -188,7 +188,6 @@ class ImperxCamera(Camera):
         ky.KYFG_CameraExecuteCommand(self.cam_handle_array[self.grabber_index][0], 'TriggerSoftware')
         
         image = self.queue.get()
-        self.queue.queue.clear()
         _, = ky.KYFG_CameraStop(self.cam_handle_array[self.grabber_index][0])
 
         return image
@@ -216,17 +215,25 @@ if __name__ == "__main__":
     while inp != "q":
         inp = input("Input... \ns=empezar a guardar imagenes \nc=tomar imagen \nq=salir\n\n")
         if inp == "s":
-            for led in leds:
-                led_name = str(led).zfill(2)
-                input(f"led {led_name}, enter...")
-                imagen = camera.get_frame()
-                np.save(f"/home/chanoscopio/git/labo-6y7/scripts/corrimiento-circulo/imagenes_nuevas/16_{led_name}_6cm", imagen)
-                plt.imshow(imagen, cmap = 'gray')
-                plt.show()
+            exp = input('Exp time: ')
+            camera.set_gain_exposure(100.0, exp)
+            imagen = camera.get_frame()
+            path = "/home/chanoscopio/git/labo-6y7/diseno-esferico/exp-time/imagenes/" 
+            path += input(path)
+            np.save(path, imagen)
+            print(np.mean(imagen))
+            print('max', np.max(imagen))
+            print('min', np.min(imagen))
+            plt.imshow(imagen, cmap="gray")
+            plt.show()
         elif inp=="c":
+            camera.set_gain_exposure(100.0, exp)
             imagen = camera.get_frame()
             plt.imshow(imagen, cmap="gray")
             plt.show()
+            print(np.mean(imagen))
+            print('max', np.max(imagen))
+            print('min', np.min(imagen))
         else:
             print("comando no valido\n")
 
