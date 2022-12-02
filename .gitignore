@@ -17,3 +17,4 @@ scripts/epi-iluminacion/FastLED-3.5.0*
 imagenes/
 cuaderno-labo/.obsidian/workspace
 *__pycache__/
+dask_cache/

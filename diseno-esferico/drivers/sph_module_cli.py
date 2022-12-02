@@ -13,6 +13,7 @@ def commands():
         'i: inicializar camara',
         's: guardar foto',
         'c: visualizar foto',
+        'e: cambiar tiempo de exposición',
         'q: salir'
     ]
     texto = ''
@@ -25,7 +26,7 @@ def commands():
 if __name__ == "__main__":
     from todo_junto.sph_module import SphericalController
 
-    sph = SphericalController("/dev/ttyACM0")
+    #sph = SphericalController("/dev/ttyACM0")
 
     comando = ''
 
@@ -57,10 +58,8 @@ if __name__ == "__main__":
             camera = ImperxCamera()
 
         elif comando == "s":
-            exp = input("Exp time: ")
-            camera.set_gain_exposure(100.0, exp)
             imagen = camera.get_frame()
-            path = f"/home/chanoscopio/git/labo-6y7/diseno-esferico/exp-time/imagenes/{exp}_oscuridad" 
+            path = f"/home/chanoscopio/git/labo-6y7/diseno-esferico/exp-time/imagenes/{exp}_HP" 
             print(path)
             np.save(path, imagen)
             print(np.mean(imagen))
@@ -68,6 +67,10 @@ if __name__ == "__main__":
             print('min', np.min(imagen))
             plt.imshow(imagen, cmap="gray")
             plt.show()
+        
+        elif comando == "e":
+            exp = input("Exp time: ")
+            camera.set_gain_exposure(100.0, exp)
 
         elif comando == "c":
             imagen = camera.get_frame()

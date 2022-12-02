@@ -226,6 +226,7 @@ if __name__ == "__main__":
             imagen = camera.get_frame()
             plt.imshow(imagen, cmap="gray")
             plt.show()
+            print(np.mean(img),'max', np.max(img))
         else:
             print("comando no valido\n")
 
